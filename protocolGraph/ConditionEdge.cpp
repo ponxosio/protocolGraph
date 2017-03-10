@@ -35,7 +35,7 @@ bool ConditionEdge::isPhyscal() {
 }
 
 bool ConditionEdge::hasCondition(ComparisonOperable* comparison) {
-	return this->comparison.get()->equal(comparison);
+    return this->comparison.get()->equals(comparison);
 }
 
 bool ConditionEdge::equals(const Edge& e) {
@@ -43,11 +43,11 @@ bool ConditionEdge::equals(const Edge& e) {
 	if (Utils::IsType<ConditionEdge, Edge> (&e)) {
 		const ConditionEdge* cast = dynamic_cast<const ConditionEdge*>(&e);
 		vuelta = ((Edge::equals(e))
-				&& (cast->comparison.get()->equal(this->comparison.get())));
+                && (cast->comparison.get()->equals(this->comparison.get())));
 	}
 	return vuelta;
 }
 
 std::string ConditionEdge::toText() {
-	return patch::to_string(idSource) + "->" + patch::to_string(idTarget) + "[label = \"" + comparison.get()->toString()  + "\"];";
+    return std::to_string(idSource) + "->" + std::to_string(idTarget) + "[label = \"" + comparison.get()->toString()  + "\"];";
 }

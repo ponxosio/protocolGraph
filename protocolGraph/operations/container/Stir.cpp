@@ -7,36 +7,39 @@
 
 #include "Stir.h"
 
-Stir::Stir() : ContainerOperation() {
+Stir::Stir() : ActuatorsOperation() {
 	this->sourceId = -1;
 	this->intensity = std::shared_ptr<MathematicOperable>();
+    this->intensityUnits = units::Hz;
 }
 
 Stir::Stir(const Stir& node) :
-		ContainerOperation(node) {
+		ActuatorsOperation(node) {
 	this->sourceId = node.sourceId;
 	this->intensity = node.intensity;
+    this->intensityUnits = node.intensityUnits;
 }
 
-Stir::Stir(int containerId, int sourceId,
-		std::shared_ptr<MathematicOperable> intensity) :
-		ContainerOperation(containerId) {
+Stir::Stir(
+        int containerId,
+        int sourceId,
+        std::shared_ptr<MathematicOperable> intensity,
+        units::Frequency intensityUnits) :
+    ActuatorsOperation(containerId)
+{
 	this->sourceId = sourceId;
 	this->intensity = intensity;
+    this->intensityUnits = intensityUnits;
 }
 
 Stir::~Stir() {}
 
 std::string Stir::toText() {
-	return patch::to_string(containerID) + "[label=\"applyTemperature("
-			+ patch::to_string(sourceId) + ", " + intensity.get()->toString()
+    return std::to_string(containerID) + "[label=\"applyTemperature("
+            + std::to_string(sourceId) + ", " + intensity.get()->toString()
 			+ ")\"];";
 }
 
-void Stir::loadNode(const std::string& line) throw (std::invalid_argument) {
-	//TODO: JSON
-}
-
-void Stir::execute() throw(std::invalid_argument) {
-    getMapping()->stir(sourceId, intensity.get()->getValue());
+void Stir::execute(ActuatorsExecutionInterface* actuatorsInterface) throw(std::invalid_argument) {
+    actuatorsInterface->stir(sourceId, intensity.get()->getValue() * intensityUnits);
 }

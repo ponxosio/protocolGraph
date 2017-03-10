@@ -7,38 +7,38 @@
 
 #include "ApplyTemperature.h"
 
-ApplyTemperature::ApplyTemperature() : ContainerOperation() {
+ApplyTemperature::ApplyTemperature() : ActuatorsOperation() {
 	this->sourceId = -1;
-	this->degress = std::shared_ptr<MathematicOperable>();
+	this->temperature = std::shared_ptr<MathematicOperable>();
+    this->temperatureUnits = units::K;
 }
 
-ApplyTemperature::ApplyTemperature(const ApplyTemperature& node) : ContainerOperation(node) {
+ApplyTemperature::ApplyTemperature(const ApplyTemperature& node) : ActuatorsOperation(node) {
 	this->sourceId = node.sourceId;
-	this->degress = node.degress;
+	this->temperature = node.temperature;
+    this->temperatureUnits = node.temperatureUnits;
 }
 
 std::string ApplyTemperature::toText() {
-	return patch::to_string(containerID) + "[label=\"applyTemperature("
-			+ patch::to_string(sourceId) + ", " + degress.get()->toString()
+    return std::to_string(containerID) + "[label=\"applyTemperature("
+            + std::to_string(sourceId) + ", " + temperature.get()->toString()
 			+ ")\"];";
 }
 
-void ApplyTemperature::loadNode(const std::string& line)
-		throw (std::invalid_argument) {
-	//TODO: JSON
-}
-
-ApplyTemperature::ApplyTemperature(int containerId,
+ApplyTemperature::ApplyTemperature(
+        int containerId,
 		int sourceId,
-		std::shared_ptr<MathematicOperable> degress) :
-		ContainerOperation(containerId) {
-
+        std::shared_ptr<MathematicOperable> temperature,
+        units::Temperature temperatureUnits) :
+    ActuatorsOperation(containerId)
+{
 	this->sourceId = sourceId;
-	this->degress = degress;
+    this->temperature = temperature;
+    this->temperatureUnits = temperatureUnits;
 }
 
 ApplyTemperature::~ApplyTemperature() {}
 
-void ApplyTemperature::execute() throw(std::invalid_argument)  {
-    getMapping()->applyTemperature(sourceId, degress.get()->getValue());
+void ApplyTemperature::execute(ActuatorsExecutionInterface* actuatorsInterface) throw(std::invalid_argument)  {
+    actuatorsInterface->applyTemperature(sourceId, temperature.get()->getValue() * temperatureUnits);
 }

@@ -49,7 +49,6 @@ HEADERS += protocolGraph/protocolgraph_global.h \
     protocolGraph/operations/DivergeNode.h \
     protocolGraph/operations/LoopNode.h \
     protocolGraph/ConditionEdge.h \
-    protocolGraph/OperationNode.h \
     protocolGraph/ProtocolGraph.h \
     protocolGraph/operables/comparison/BooleanComparison.h \
     protocolGraph/operables/comparison/ComparisonOperable.h \
@@ -60,13 +59,14 @@ HEADERS += protocolGraph/protocolgraph_global.h \
     protocolGraph/operables/mathematics/MathematicOperable.h \
     protocolGraph/operables/mathematics/UnaryOperation.h \
     protocolGraph/operables/mathematics/VariableEntry.h \
-    protocolGraph/operables/ComparisonOperable.h \
-    protocolGraph/operables/VariableTable.h
+    protocolGraph/operables/VariableTable.h \
+    protocolGraph/execution_interface/actuatorsexecutioninterface.h \
+    protocolGraph/operations/cpuoperation.h \
+    protocolGraph/protocolgraphiterator.h
 
 SOURCES += \
     protocolGraph/operations/container/ApplyLight.cpp \
     protocolGraph/operations/container/ApplyTemperature.cpp \
-    protocolGraph/operations/container/containeroperation.cpp \
     protocolGraph/operations/container/GetVolume.cpp \
     protocolGraph/operations/container/LoadContainerOperation.cpp \
     protocolGraph/operations/container/MeasureOD.cpp \
@@ -87,7 +87,8 @@ SOURCES += \
     protocolGraph/operables/mathematics/ConstantNumber.cpp \
     protocolGraph/operables/mathematics/UnaryOperation.cpp \
     protocolGraph/operables/mathematics/VariableEntry.cpp \
-    protocolGraph/operables/VariableTable.cpp
+    protocolGraph/operables/VariableTable.cpp \
+    protocolGraph/protocolgraphiterator.cpp
 
 debug {
     QMAKE_POST_LINK=X:\protocolGraph\protocolGraph\setDLL.bat $$shell_path($$OUT_PWD/debug) debug
@@ -101,6 +102,6 @@ debug {
     LIBS += -L$$quote(X:\utils\dll_release\bin) -lutils
 }
 
-INCLUDEPATH += X:\libraries
+INCLUDEPATH += X:\libraries\cereal-1.2.2\include
 
 

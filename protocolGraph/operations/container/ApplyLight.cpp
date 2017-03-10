@@ -7,41 +7,48 @@
 
 #include "ApplyLight.h"
 
-ApplyLight::ApplyLight() : ContainerOperation() {
+ApplyLight::ApplyLight() : ActuatorsOperation() {
 	this->sourceId = -1;
 	this->wavelength = std::shared_ptr<MathematicOperable>();
 	this->intensity = std::shared_ptr<MathematicOperable>();
+    this->wavelengthUnits = units::Hz;
+    this->intensityUnits = units::cd;
 }
 
-ApplyLight::ApplyLight(const ApplyLight& node) : ContainerOperation(node) {
+ApplyLight::ApplyLight(const ApplyLight& node) : ActuatorsOperation(node) {
 	this->sourceId = node.sourceId;
 	this->wavelength = node.wavelength;
 	this->intensity = node.intensity;
+    this->wavelengthUnits = node.wavelengthUnits;
+    this->intensityUnits = node.intensityUnits;
 }
 
 std::string ApplyLight::toText() {
-	return patch::to_string(containerID) + "[label=\"applyLigth("
-			+ patch::to_string(sourceId) + ", " + wavelength.get()->toString()
+    return std::to_string(containerID) + "[label=\"applyLigth("
+            + std::to_string(sourceId) + ", " + wavelength.get()->toString()
 			+ ", " + intensity.get()->toString() + ")\"];";
 }
 
-void ApplyLight::loadNode(const std::string& line) throw (std::invalid_argument) {
-	//TODO: JSON
-}
-
-ApplyLight::ApplyLight(int idContainer, int sourceID,
-		std::shared_ptr<MathematicOperable> wavelength,
-		std::shared_ptr<MathematicOperable> intensity) :
-	ContainerOperation(idContainer){
+ApplyLight::ApplyLight(
+        int idContainer,
+        int sourceID,
+        std::shared_ptr<MathematicOperable> wavelength,
+        units::Frequency wavelengthUnits,
+        std::shared_ptr<MathematicOperable> intensity,
+        units::LuminousIntensity intensityUnits) :
+    ActuatorsOperation(idContainer)
+{
 	this->sourceId = sourceID;
 	this->wavelength = wavelength;
 	this->intensity = intensity;
+    this->wavelengthUnits = wavelengthUnits;
+    this->intensityUnits = intensityUnits;
 }
 
 ApplyLight::~ApplyLight() {
 
 }
 
-void ApplyLight::execute() throw(std::invalid_argument)  {
-    getMapping()->applyLight(sourceId, wavelength.get()->getValue(), intensity.get()->getValue());
+void ApplyLight::execute(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument)  {
+    actuatorInterface->applyLigth(sourceId, wavelength.get()->getValue() * wavelengthUnits, intensity.get()->getValue() * intensityUnits);
 }

@@ -7,10 +7,12 @@
 
 #include "SimpleComparison.h"
 
-SimpleComparison::SimpleComparison(bool negation,std::shared_ptr<MathematicOperable> left,
-		comparison::ComparisonOperator op,
-		std::shared_ptr<MathematicOperable> right) {
-
+SimpleComparison::SimpleComparison(
+        bool negation,
+        std::shared_ptr<MathematicOperable> left,
+        ComparisonOperator op,
+        std::shared_ptr<MathematicOperable> right)
+{
 	this->left = left;
 	this->right = right;
 	this->op = op;
@@ -21,22 +23,16 @@ SimpleComparison::~SimpleComparison() {
 	// TODO Auto-generated destructor stub
 }
 
-void SimpleComparison::updateReference(const std::string & reference) 
-{
-	left->updateReference(reference);
-	right->updateReference(reference);
-}
-
 bool SimpleComparison::conditionMet() {
 	double leftValue = left.get()->getValue();
 	double rightValue = right.get()->getValue();
-	boost::function<bool(double, double)> fun = getFunctionType(op);
+    std::function<bool(double, double)> fun = getFunctionType(op);
 
 	bool vuelta = fun(leftValue, rightValue);
 	return negation ? !vuelta : vuelta;
 }
 
-bool SimpleComparison::equal(ComparisonOperable* obj) const {
+bool SimpleComparison::equals(ComparisonOperable* obj) const {
 	bool vuelta = false;
 	if (Utils::IsType<SimpleComparison, ComparisonOperable>(obj)) {
 		const SimpleComparison* cast = dynamic_cast<const SimpleComparison*>(obj);
@@ -48,24 +44,22 @@ bool SimpleComparison::equal(ComparisonOperable* obj) const {
 	return vuelta;
 }
 
-boost::function<bool(double, double)> SimpleComparison::getFunctionType(
-		comparison::ComparisonOperator op) {
-
-	boost::function<bool(double, double)> vuelta;
+std::function<bool(double, double)> SimpleComparison::getFunctionType(ComparisonOperator op) {
+    std::function<bool(double, double)> vuelta;
 	switch (op) {
-	case comparison::less_equal:
+    case less_equal:
 		vuelta = std::less_equal<double>();
 		break;
-	case comparison::less:
+    case less:
 		vuelta = std::less<double>();
 		break;
-	case comparison::greater_equal:
+    case greater_equal:
 		vuelta = std::greater_equal<double>();
 		break;
-	case comparison::greater:
+    case greater:
 		vuelta = std::greater<double>();
 		break;
-	case comparison::equal:
+    case equal:
 		vuelta = std::equal_to<double>();
 	}
 	return vuelta;
@@ -74,19 +68,19 @@ boost::function<bool(double, double)> SimpleComparison::getFunctionType(
 std::string SimpleComparison::getStingOp() {
 	std::string vuelta;
 	switch (op) {
-	case comparison::less_equal:
+    case less_equal:
 		vuelta = LESS_EQUAL_STRING;
 		break;
-	case comparison::less:
+    case less:
 		vuelta = LESS_STRING;
 		break;
-	case comparison::greater_equal:
+    case greater_equal:
 		vuelta = GREAT_EQUAL_STRING;
 		break;
-	case comparison::greater:
+    case greater:
 		vuelta = GREAT_STRING;
 		break;
-	case comparison::equal:
+    case equal:
 		vuelta = EQUAL_STRING;
 	}
 	return vuelta;

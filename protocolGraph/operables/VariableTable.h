@@ -8,26 +8,18 @@
 #ifndef SRC_OPERABLES_VARIABLETABLE_H_
 #define SRC_OPERABLES_VARIABLETABLE_H_
 
-#pragma warning( disable : 4290 )
-
 /**** TIME VARIABLE ****/
 #define TIME_VARIABLE "actualTime"
 
 #include <string>
-#include  <stdexcept>
+#include <stdexcept>
 #include <memory>
 
 // data structures
 #include <tuple>
 #include <unordered_map>
 
-//lib
-#include <cereal/cereal.hpp>
-#include <cereal/types/unordered_map.hpp>
-#include <cereal/types/string.hpp>
-#include <cereal/types/tuple.hpp>
-
-#include "evocodercore_global.h"
+#include "protocolGraph/protocolgraph_global.h"
 
 /**
  * Class that implements an associative table where the value of the declared variables in a protocol will be stored.
@@ -39,6 +31,7 @@
 class VARIABLETABLE_EXPORT VariableTable {
 public:
 	VariableTable();
+    VariableTable(const VariableTable & varTable);
 	virtual ~VariableTable();
 
 	/**
@@ -69,27 +62,16 @@ public:
 	 * Clears all variables at the table
 	 */
 	inline void clear() {table.clear();}
-
+    /**
+     * @brief containsKey checks if a key already exist in the table
+     * @param key string with the variable name
+     * @return true if the variable already exists, false in o.c
+     */
 	inline bool containsKey(const std::string & key)
 	{
 		return (table.find(key) != table.end());
 	}
-
-	template<class Archive>
-	void serialize(Archive & ar, std::uint32_t const version);
-
 protected:
 	std::unordered_map<std::string, std::tuple<double,bool>> table;
 };
-
-template<class Archive>
-inline void VariableTable::serialize(Archive& ar, std::uint32_t const version) {
-	if (version == 1) {
-		ar(CEREAL_NVP(table));
-	}
-}
-
-// Associate some type with a version number
-CEREAL_CLASS_VERSION( VariableTable, 1 );
-
 #endif /* SRC_OPERABLES_VARIABLETABLE_H_ */

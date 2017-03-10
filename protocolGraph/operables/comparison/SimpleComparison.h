@@ -8,8 +8,6 @@
 #ifndef SRC_OPERABLES_COMPARISON_SIMPLECOMPARISON_H_
 #define SRC_OPERABLES_COMPARISON_SIMPLECOMPARISON_H_
 
-#pragma warning( disable : 4290 )
-
 //Operators string
 #define LESS_EQUAL_STRING "<="
 #define LESS_STRING "<"
@@ -19,48 +17,45 @@
 
 //boost
 #include <memory>
-#include <boost/function.hpp>
+#include <functional>
 
 //local
-#include "util/Utils.h"
-#include "operables/mathematics/MathematicOperable.h"
-#include "ComparisonOperable.h"
+#include <utils/Utils.h>
 
-//cereal
-#include <cereal/cereal.hpp>
-#include <cereal/types/polymorphic.hpp>
-#include <cereal/types/memory.hpp>
+#include "protocolGraph/operables/mathematics/MathematicOperable.h"
+#include "protocolGraph/operables/comparison/ComparisonOperable.h"
 
-#include "evocodercore_global.h"
+#include "protocolGraph/protocolgraph_global.h"
 
-namespace comparison {
-/*** Enum for the type of comparison operator ***/
-enum ComparisonOperator {
-	less_equal, // <=
-	less, // <
-	greater_equal, //>=
-	greater, // >
-	equal // ==
-};
-}
 /**
  * Class that represents a simple comparison between two variables, for example "a > 3"
  */
 class SIMPLECOMPARISON_EXPORT SimpleComparison: public ComparisonOperable {
 public:
+
+    /*** Enum for the type of comparison operator ***/
+    typedef enum ComparisonOperator_ {
+        less_equal, // <=
+        less, // <
+        greater_equal, //>=
+        greater, // >
+        equal // ==
+    } ComparisonOperator;
+
 	SimpleComparison() {
 		this->left = std::shared_ptr<MathematicOperable>();
 		this->right = std::shared_ptr<MathematicOperable>();
-		this->op = comparison::less_equal;
+        this->op = less_equal;
 		this->negation = false;
 	}
-	SimpleComparison(bool negation,
-			std::shared_ptr<MathematicOperable> left,
-			comparison::ComparisonOperator op,
-			std::shared_ptr<MathematicOperable> right);
-	virtual ~SimpleComparison();
 
-	virtual void updateReference(const std::string & reference);
+    SimpleComparison(bool negation,
+			std::shared_ptr<MathematicOperable> left,
+            ComparisonOperator op,
+			std::shared_ptr<MathematicOperable> right);
+
+    virtual ~SimpleComparison();
+
 	/**
 	 * Check if the comparison is true o false
 	 * @return true if the comparison is true, false otherwise
@@ -76,7 +71,7 @@ public:
 	 * @param obj other ComparisonOperable to be compared
 	 * @return true if they are the same, false otherwise
 	 */
-	virtual bool equal(ComparisonOperable* obj) const;
+    virtual bool equals(ComparisonOperable* obj) const;
 
 	/**
 	 * negates this comparison, not(comparison)
@@ -90,9 +85,6 @@ public:
 		return  neg + left.get()->toString() + " " + getStingOp() + " " + right.get()->toString();
 	}
 
-	//SERIALIZATIoN
-	template<class Archive>
-	void serialize(Archive & ar, std::uint32_t const version);
 protected:
 	std::string getStingOp();
 	/**
@@ -100,31 +92,12 @@ protected:
 	 * @param op the comparison operation
 	 * @return a function that implements the desired comparison
 	 */
-	boost::function<bool(double, double)> getFunctionType(
-			comparison::ComparisonOperator op);
+    std::function<bool(double, double)> getFunctionType(ComparisonOperator op);
 
 	//ATRIBUTES
 	std::shared_ptr<MathematicOperable> left;
 	std::shared_ptr<MathematicOperable> right;
-	comparison::ComparisonOperator op;
+    ComparisonOperator op;
 	bool negation;
 };
-
-template<class Archive>
-inline void SimpleComparison::serialize(Archive& ar,
-		const std::uint32_t version) {
-	if (version == 1) {
-		ar(CEREAL_NVP(left), CEREAL_NVP(right), CEREAL_NVP(op), CEREAL_NVP(negation));
-	}
-}
-
-// Associate some type with a version number
-CEREAL_CLASS_VERSION( SimpleComparison, 1 );
-
-// Include any archives you plan on using with your type before you register it
-// Note that this could be done in any other location so long as it was prior
-// to this file being included
-#include <cereal/archives/json.hpp>
-// Register DerivedClass
-CEREAL_REGISTER_TYPE_WITH_NAME(SimpleComparison, "SimpleComparison");
 #endif /* SRC_OPERABLES_COMPARISON_SIMPLECOMPARISON_H_ */

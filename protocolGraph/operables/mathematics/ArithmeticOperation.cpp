@@ -10,14 +10,14 @@
 ArithmeticOperation::ArithmeticOperation() {
 	this->leftVariable = shared_ptr<MathematicOperable>();
 	this->rightVariable = shared_ptr<MathematicOperable>();
-	this->op = arithmetic::plus;
+    this->op = plus;
 }
 
 ArithmeticOperation::ArithmeticOperation(
 		std::shared_ptr<MathematicOperable> left,
-		arithmetic::ArithmeticOperator op,
-		std::shared_ptr<MathematicOperable> right) {
-
+        ArithmeticOperator op,
+        std::shared_ptr<MathematicOperable> right)
+{
 	this->leftVariable = left;
 	this->rightVariable = right;
 	this->op = op;
@@ -27,15 +27,10 @@ ArithmeticOperation::~ArithmeticOperation() {
 
 }
 
-void ArithmeticOperation::updateReference(const std::string & reference) {
-	leftVariable->updateReference(reference);
-	rightVariable->updateReference(reference);
-}
-
 double ArithmeticOperation::getValue() throw (std::invalid_argument)  {
 	MathematicOperable* left = leftVariable.get();
 	MathematicOperable* right = rightVariable.get();
-	boost::function<double(double, double)> op = getFunctionType(this->op);
+    std::function<double(double, double)> op = getFunctionType(this->op);
 
 	return (op(left->getValue(), right->getValue()));
 }
@@ -51,21 +46,19 @@ bool ArithmeticOperation::equal(const MathematicOperable* obj) const {
 	return vuelta;
 }
 
-boost::function<double(double, double)> ArithmeticOperation::getFunctionType(
-		arithmetic::ArithmeticOperator op) {
-
-	boost::function<double(double, double)> vuelta;
+std::function<double(double, double)> ArithmeticOperation::getFunctionType(ArithmeticOperator op) {
+    std::function<double(double, double)> vuelta;
 	switch (op) {
-	case arithmetic::plus:
+    case plus:
 		vuelta = std::plus<double>();
 		break;
-	case arithmetic::minus:
+    case minus:
 		vuelta = std::minus<double>();
 		break;
-	case arithmetic::multiply:
+    case multiply:
 		vuelta = std::multiplies<double>();
 		break;
-	case arithmetic::divide:
+    case divide:
 		vuelta = std::divides<double>();
 		break;
 	}
@@ -75,16 +68,16 @@ boost::function<double(double, double)> ArithmeticOperation::getFunctionType(
 std::string ArithmeticOperation::getStringOp() {
 	std::string vuelta;
 		switch (op) {
-		case arithmetic::plus:
+        case plus:
 			vuelta = PLUS_STRING;
 			break;
-		case arithmetic::minus:
+        case minus:
 			vuelta = MINUS_STRING;
 			break;
-		case arithmetic::multiply:
+        case multiply:
 			vuelta = MULTIPLY_STRING;
 			break;
-		case arithmetic::divide:
+        case divide:
 			vuelta = DIVIDE_STRING;
 			break;
 		}

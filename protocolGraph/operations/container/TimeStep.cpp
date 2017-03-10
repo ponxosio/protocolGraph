@@ -8,17 +8,17 @@
 #include "TimeStep.h"
 
 TimeStep::TimeStep() :
-		ContainerOperation() {
+		ActuatorsOperation() {
 	this->receiver = std::shared_ptr<VariableEntry>();
 }
 
 TimeStep::TimeStep(const TimeStep& node) :
-		ContainerOperation(node) {
+		ActuatorsOperation(node) {
 	this->receiver = node.receiver;
 }
 
 TimeStep::TimeStep(int containerId, std::shared_ptr<VariableEntry> receiver) :
-		ContainerOperation(containerId) {
+		ActuatorsOperation(containerId) {
 	this->receiver = receiver;
 }
 
@@ -26,21 +26,10 @@ TimeStep::~TimeStep() {
 }
 
 std::string TimeStep::toText() {
-	return patch::to_string(containerID) + "[label=\"TimeStep()\"];";
+    return std::to_string(containerID) + "[label=\"TimeStep()\"];";
 }
 
-void TimeStep::loadNode(const std::string& line) throw (invalid_argument) {
-	//TODO: JSON
-}
-
-void TimeStep::execute() throw(std::invalid_argument)  {
-	receiver.get()->setValue(
-            receiver.get()->getValue() + getMapping()->timeStept());
-    LOG(DEBUG) << "time variable: " << receiver.get()->getValue();
-}
-
-void TimeStep::updateReference(const std::string & reference)
-{
-    ContainerOperation::updateReference(reference);
-    receiver->updateReference(reference);
+void TimeStep::execute(ActuatorsExecutionInterface* actuatorsInterface) throw(std::invalid_argument)  {
+    units::Time time = actuatorsInterface->timeStep();
+    receiver.get()->setValue(receiver.get()->getValue() + time.to(units::s));
 }

@@ -7,19 +7,19 @@
 
 #include "GetVolume.h"
 
-GetVolume::GetVolume() : ContainerOperation() {
+GetVolume::GetVolume() : ActuatorsOperation() {
 	this->sourceId = -1;
 	this->receiver = std::shared_ptr<VariableEntry>();
 }
 
-GetVolume::GetVolume(const GetVolume& node) : ContainerOperation(node){
+GetVolume::GetVolume(const GetVolume& node) : ActuatorsOperation(node){
 	this->sourceId = node.sourceId;
 	this->receiver = node.receiver;
 }
 
 GetVolume::GetVolume(int containerId, 
 		int sourceId, std::shared_ptr<VariableEntry> receiver) :
-		ContainerOperation(containerId) {
+		ActuatorsOperation(containerId) {
 	this->sourceId = sourceId;
 	this->receiver = receiver;
 }
@@ -27,15 +27,12 @@ GetVolume::GetVolume(int containerId,
 GetVolume::~GetVolume() {}
 
 std::string GetVolume::toText() {
-	return patch::to_string(containerID) + "[label=\""
+    return std::to_string(containerID) + "[label=\""
 			+ receiver.get()->toString() + " = getVolume("
-			+ patch::to_string(sourceId) + ")\"];";
+            + std::to_string(sourceId) + ")\"];";
 }
 
-void GetVolume::loadNode(const std::string& line) throw (invalid_argument) {
-	//TODO: JSON
-}
-
-void GetVolume::execute() throw(std::invalid_argument)  {
-    receiver.get()->setValue(getMapping()->getVolume(sourceId));
+void GetVolume::execute(ActuatorsExecutionInterface* actuatorsExecution) throw(std::invalid_argument)  {
+    units::Volume virtualVolume = actuatorsExecution->getVirtualVolume(sourceId);
+    receiver.get()->setValue(virtualVolume.to(units::ml));
 }

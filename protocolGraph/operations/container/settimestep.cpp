@@ -2,21 +2,24 @@
 
 // Node methods
 SetTimeStep::SetTimeStep() :
-    ContainerOperation()
+    ActuatorsOperation()
 {
-
+    this->timeSlice = std::shared_ptr<MathematicOperable>();
+    this->timeSliceUnits = units::s;
 }
 
 SetTimeStep::SetTimeStep(const SetTimeStep & node) :
-    ContainerOperation(node)
+    ActuatorsOperation(node)
 {
     this->timeSlice = node.timeSlice;
+    this->timeSliceUnits = node.timeSliceUnits;
 }
 
-SetTimeStep::SetTimeStep(int containerId, std::shared_ptr<MathematicOperable> timeSlice) :
-    ContainerOperation(containerId)
+SetTimeStep::SetTimeStep(int containerId, std::shared_ptr<MathematicOperable> timeSlice, units::Time timeSliceUnits) :
+    ActuatorsOperation(containerId)
 {
     this->timeSlice = timeSlice;
+    this->timeSliceUnits = timeSliceUnits;
 }
 
 SetTimeStep::~SetTimeStep() {
@@ -24,17 +27,9 @@ SetTimeStep::~SetTimeStep() {
 }
 
 std::string SetTimeStep::toText() {
-    return patch::to_string(containerID) + "[label=\"SetTimeStep(" + (timeSlice ? patch::to_string(timeSlice->getValue()) : "null") + ")\"]";
+    return std::to_string(containerID) + "[label=\"SetTimeStep(" + (timeSlice ? std::to_string(timeSlice->getValue()) : "null") + ")\"]";
 }
 
-void SetTimeStep::loadNode(const std::string & line) throw (invalid_argument) {
-
-}
-
-void SetTimeStep::execute() throw(std::invalid_argument) {
-    getMapping()->setTimeStep(timeSlice->getValue());
-}
-
-void SetTimeStep::updateReference(const std::string & reference) {
-    ContainerOperation::updateReference(reference);
+void SetTimeStep::execute(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument) {
+    actuatorInterface->setTimeStep(timeSlice->getValue() * timeSliceUnits);
 }

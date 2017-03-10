@@ -9,11 +9,10 @@
 
 UnaryOperation::UnaryOperation() {
 	this->variable = shared_ptr<MathematicOperable>();
-	this->op = unaryOperations::absoluteValue;
+    this->op = absoluteValue;
 }
 
-UnaryOperation::UnaryOperation(std::shared_ptr<MathematicOperable> variable,
-		unaryOperations::UnaryOperator op) {
+UnaryOperation::UnaryOperation(std::shared_ptr<MathematicOperable> variable, UnaryOperator op) {
 	this->variable = variable;
 	this->op = op;
 }
@@ -23,21 +22,16 @@ UnaryOperation::~UnaryOperation()
 
 }
 
-void UnaryOperation::updateReference(const std::string & reference) 
-{
-	variable->updateReference(reference);
-}
-
 double UnaryOperation::getValue() throw (std::invalid_argument)  {
 	MathematicOperable* value = variable.get();
 	double vuelta = 0.0;
 
 	switch(this->op) {
-	case unaryOperations::absoluteValue:
-		vuelta = fabs(value->getValue());
+    case absoluteValue:
+        vuelta = std::fabs(value->getValue());
 		break;
-	case unaryOperations::floor:
-		vuelta = floor(value->getValue());
+    case floor:
+        vuelta = std::floor(value->getValue());
 		break;
 	}
 	return vuelta;
@@ -60,10 +54,10 @@ bool UnaryOperation::equal(const MathematicOperable* obj) const {
 std::string UnaryOperation::getStringOp() {
 	std::string vuelta;
 	switch (this->op) {
-	case unaryOperations::absoluteValue:
+    case absoluteValue:
 		vuelta = ABSOLUTE_VALUE_STRING;
 		break;
-	case unaryOperations::floor:
+    case floor:
 		vuelta = FLOOR_VALUE_STRING;
 		break;
 	}

@@ -7,35 +7,28 @@
 
 #include "VariableEntry.h"
 
-#include "ExecutionServer.h"
-
 using namespace std;
 
 VariableEntry::VariableEntry() {
 	this->name = "undefined";
-	this->reference = "undefined";
+    this->variableTable = std::shared_ptr<VariableTable>();
 }
 
-VariableEntry::VariableEntry(const string & name){
-		this->name = name;
-		this->reference = "undefined";
-}
-
-void VariableEntry::updateReference(const std::string & reference) {
-	this->reference = reference;
-	
-	shared_ptr<VariableTable> table = getVariableTable();
-	if (!table->containsKey(name)) {
-		table->setValue(name, 0.0);
-	}
-}
+VariableEntry::VariableEntry(const std::string & name, std::shared_ptr<VariableTable> varTable) :
+    name(name)
+{
+    this->variableTable = varTable;
+    if (!variableTable->containsKey(name)) {
+        variableTable->setValue(name, 0.0);
+    }
+}   
 
 double VariableEntry::getValue() throw (std::invalid_argument)  {
-	return getVariableTable()->getVaue(name);
+    return variableTable->getVaue(name);
 }
 
 bool VariableEntry::isPhysical() throw (std::invalid_argument)  {
-	return getVariableTable()->getPhysical(name);
+    return variableTable->getPhysical(name);
 }
 
 bool VariableEntry::equal(const MathematicOperable* obj) const{
@@ -48,20 +41,9 @@ bool VariableEntry::equal(const MathematicOperable* obj) const{
 }
 
 void VariableEntry::setValue(double value) throw (std::invalid_argument)  {
-	getVariableTable()->setValue(name, value);
+    variableTable->setValue(name, value);
 }
 
 void VariableEntry::setPhysical(bool physical) throw (std::invalid_argument)  {
-	getVariableTable()->setPhysical(name, physical);
-}
-
-std::shared_ptr<VariableTable> VariableEntry::getVariableTable() throw (std::invalid_argument) {
-    try {
-        return ExecutionServer::GetInstance()->getEvoCoder(reference)->getVariableTable();
-    }
-    catch (std::invalid_argument & e)
-    {
-        throw(std::invalid_argument("VariableEntry::getVariableTable(), " + std::string(e.what())));
-    }
-    return shared_ptr<VariableTable>();
+    variableTable->setPhysical(name, physical);
 }

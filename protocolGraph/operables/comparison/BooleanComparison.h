@@ -15,46 +15,40 @@
 #define DISJUNCTION_STRING "||"
 
 //boost
-#include <boost/function.hpp>
+#include <functional>
 #include <memory>
 
 //local
-#include "ComparisonOperable.h"
-#include "util/Utils.h"
+#include <utils/Utils.h>
 
-//cereal
-#include <cereal/cereal.hpp>
-#include <cereal/types/polymorphic.hpp>
-#include <cereal/types/memory.hpp>
+#include "protocolGraph/operables/comparison/ComparisonOperable.h"
 
-#include "evocodercore_global.h"
-
-namespace logical{
-/*** Enum for the type of boolean operator ***/
-enum BooleanOperator {
-	conjunction, // and
-	disjunction, // or 
-};
-}
+#include "protocolGraph/protocolgraph_global.h"
 
 /**
  * Class that represent a boolean operation between simple comparisons, for example: (t > 3) && (t < 5)
  */
 class BOOLEANCOMPARISON_EXPORT BooleanComparison: public ComparisonOperable {
 public:
+
+    /*** Enum for the type of boolean operator ***/
+    typedef enum BooleanOperator_ {
+        conjunction, // and
+        disjunction, // or
+    } BooleanOperator;
+
 	BooleanComparison() {
 		this->left = std::shared_ptr<ComparisonOperable>();
 		this->right = std::shared_ptr<ComparisonOperable>();
-		this->op = logical::conjunction;
+        this->op = conjunction;
 		this->negation = false;
 	}
 	BooleanComparison(bool negation,
 			std::shared_ptr<ComparisonOperable> left,
-			logical::BooleanOperator op,
+            BooleanOperator op,
 			std::shared_ptr<ComparisonOperable> right);
 	virtual ~BooleanComparison();
 
-	virtual void updateReference(const std::string & reference);
 	/**
 	 * Check if the comparison is true o false
 	 * @return true if the comparison is true, false otherwise
@@ -72,7 +66,7 @@ public:
 	 * @param obj other ComparisonOperable to be compared
 	 * @return true if they are the same, false otherwise
 	 */
-	virtual bool equal(ComparisonOperable* obj) const;
+    virtual bool equals(ComparisonOperable* obj) const;
 	/**
 	 * negates this comparison, not(comparison)
 	 */
@@ -83,9 +77,6 @@ public:
 		return neg + left.get()->toString() + " " + getStringOp() + " " + right.get()->toString();
 	}
 
-	//SERIALIZATIoN
-	template<class Archive>
-	void serialize(Archive & ar, std::uint32_t const version);
 protected:
 	std::string getStringOp();
 	/**
@@ -93,32 +84,12 @@ protected:
 	 * @param op the boolean operation
 	 * @return a function that implements the desired operation
 	 */
-	boost::function<bool(bool, bool)> getFunctionType(
-			logical::BooleanOperator op);
+    std::function<bool(bool, bool)> getFunctionType(BooleanOperator op);
 
 	//ATTRIBUTES
 	std::shared_ptr<ComparisonOperable> left;
 	std::shared_ptr<ComparisonOperable> right;
-	logical::BooleanOperator op;
+    BooleanOperator op;
 	bool negation;
 };
-
-template<class Archive>
-inline void BooleanComparison::serialize(Archive& ar,
-		const std::uint32_t version) {
-	if (version == 1) {
-		ar(CEREAL_NVP(left), CEREAL_NVP(right), CEREAL_NVP(op), CEREAL_NVP(negation));
-	}
-}
-
-// Associate some type with a version number
-CEREAL_CLASS_VERSION( BooleanComparison, 1 );
-
-// Include any archives you plan on using with your type before you register it
-// Note that this could be done in any other location so long as it was prior
-// to this file being included
-#include <cereal/archives/json.hpp>
-// Register DerivedClass
-CEREAL_REGISTER_TYPE_WITH_NAME(BooleanComparison, "BooleanComparison");
-
 #endif /* SRC_OPERABLES_COMPARISON_BOOLEANCOMPARISON_H_ */

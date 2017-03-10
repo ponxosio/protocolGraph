@@ -13,6 +13,12 @@ VariableTable::VariableTable() {
 	table = unordered_map<string,  std::tuple<double,bool>>();
 }
 
+VariableTable::VariableTable(const VariableTable & varTable) :
+    table(varTable.table)
+{
+
+}
+
 VariableTable::~VariableTable() {
 }
 

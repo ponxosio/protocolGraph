@@ -7,38 +7,39 @@
 
 #include "LoadContainerOperation.h"
 
-LoadContainerOperation::LoadContainerOperation(): ContainerOperation() {
-	this->value = std::shared_ptr<MathematicOperable>();
+LoadContainerOperation::LoadContainerOperation(): ActuatorsOperation() {
+    this->volume = std::shared_ptr<MathematicOperable>();
 	this->idSource = -1;
+    this->volumeUnits = units::l;
 }
 
-LoadContainerOperation::LoadContainerOperation(const LoadContainerOperation& obj) : ContainerOperation(obj) {
-	this->value = obj.value;
+LoadContainerOperation::LoadContainerOperation(const LoadContainerOperation& obj) : ActuatorsOperation(obj) {
+    this->volume = obj.volume;
 	this->idSource = obj.idSource;
+    this->volumeUnits = obj.volumeUnits;
 }
 
-LoadContainerOperation::LoadContainerOperation(int idConatiner,
+LoadContainerOperation::LoadContainerOperation(
+        int idConatiner,
 		int idSource,
-		std::shared_ptr<MathematicOperable> value) : ContainerOperation(idConatiner) {
-
-	this->value = value;
+        std::shared_ptr<MathematicOperable> value,
+        units::Volume volumeUnits) :
+    ActuatorsOperation(idConatiner)
+{
+    this->volume = value;
 	this->idSource = idSource;
+    this->volumeUnits = volumeUnits;
 }
 
 LoadContainerOperation::~LoadContainerOperation() {
 }
 
 std::string LoadContainerOperation::toText() {
-	return patch::to_string(containerID) + "[label=\"loadContainer("
-			+ patch::to_string(idSource) + ", " + value.get()->toString()
+    return std::to_string(containerID) + "[label=\"loadContainer("
+            + std::to_string(idSource) + ", " + volume.get()->toString()
 			+ ")\"];";
 }
 
-void LoadContainerOperation::loadNode(const std::string& line)
-		throw (std::invalid_argument) {
-	//TODO: JSON
-}
-
-void LoadContainerOperation::execute() throw(std::invalid_argument)  {
-    getMapping()->loadContainer(this->idSource, value.get()->getValue());
+void LoadContainerOperation::execute(ActuatorsExecutionInterface* actuatorsInterface) throw(std::invalid_argument)  {
+    actuatorsInterface->loadContainer(this->idSource, volume.get()->getValue() * volumeUnits);
 }

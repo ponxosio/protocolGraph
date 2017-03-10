@@ -8,11 +8,9 @@
 #ifndef SRC_OPERABLES_COMPARISON_COMPARISONOPERABLE_H_
 #define SRC_OPERABLES_COMPARISON_COMPARISONOPERABLE_H_
 
-#pragma warning( disable : 4290 )
-
 #include <string>
 
-#include "evocodercore_global.h"
+#include "protocolGraph/protocolgraph_global.h"
 
 /**
  * Interface that represents all comparation operations
@@ -21,8 +19,6 @@ class COMPARISONOPERABLE_EXPORT ComparisonOperable {
 public:
 	ComparisonOperable(){}
 	virtual ~ComparisonOperable(){}
-
-    virtual void updateReference(const std::string &) {}
 	
 	/**
 	 * Check if the comparison is true o false
@@ -40,7 +36,7 @@ public:
 	 * @param obj other ComparisonOperable to be compared
 	 * @return true if they are the same, false otherwise
 	 */
-	virtual bool equal(ComparisonOperable* obj) const = 0;
+    virtual bool equals(ComparisonOperable* obj) const = 0;
 	/**
 	 * negates this comparison, not(comparison)
 	 */
