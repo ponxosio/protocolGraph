@@ -42,13 +42,8 @@ public:
         equal // ==
     } ComparisonOperator;
 
-	SimpleComparison() {
-		this->left = std::shared_ptr<MathematicOperable>();
-		this->right = std::shared_ptr<MathematicOperable>();
-        this->op = less_equal;
-		this->negation = false;
-	}
-
+    SimpleComparison();
+    SimpleComparison(const SimpleComparison & obj);
     SimpleComparison(bool negation,
 			std::shared_ptr<MathematicOperable> left,
             ComparisonOperator op,
@@ -84,6 +79,10 @@ public:
 		std::string neg = negation ? "!" : "";
 		return  neg + left.get()->toString() + " " + getStingOp() + " " + right.get()->toString();
 	}
+
+    inline virtual ComparisonOperable* clone() {
+        return new SimpleComparison(*this);
+    }
 
 protected:
 	std::string getStingOp();

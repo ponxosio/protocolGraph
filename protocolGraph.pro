@@ -62,7 +62,8 @@ HEADERS += protocolGraph/protocolgraph_global.h \
     protocolGraph/operables/VariableTable.h \
     protocolGraph/execution_interface/actuatorsexecutioninterface.h \
     protocolGraph/operations/cpuoperation.h \
-    protocolGraph/protocolgraphiterator.h
+    protocolGraph/operables/mathematics/protocolmathf.h \
+    protocolGraph/operables/comparison/protocolboolf.h
 
 SOURCES += \
     protocolGraph/operations/container/ApplyLight.cpp \
@@ -88,7 +89,8 @@ SOURCES += \
     protocolGraph/operables/mathematics/UnaryOperation.cpp \
     protocolGraph/operables/mathematics/VariableEntry.cpp \
     protocolGraph/operables/VariableTable.cpp \
-    protocolGraph/protocolgraphiterator.cpp
+    protocolGraph/operables/mathematics/protocolmathf.cpp \
+    protocolGraph/operables/comparison/protocolboolf.cpp
 
 debug {
     QMAKE_POST_LINK=X:\protocolGraph\protocolGraph\setDLL.bat $$shell_path($$OUT_PWD/debug) debug

@@ -29,7 +29,7 @@ public:
 	ApplyLight(int idContainer,
             int sourceID,
             std::shared_ptr<MathematicOperable> wavelength,
-            units::Frequency wavelengthUnits,
+            units::Length wavelengthUnits,
             std::shared_ptr<MathematicOperable> intensity,
             units::LuminousIntensity intensityUnits);
 
@@ -42,7 +42,7 @@ protected:
 	std::shared_ptr<MathematicOperable> wavelength;
 	std::shared_ptr<MathematicOperable> intensity;
 
-    units::Frequency wavelengthUnits;
+    units::Length wavelengthUnits;
     units::LuminousIntensity intensityUnits;
 };
 #endif /* SRC_FLUIDCONTROL_PROTOCOLGRAPH_OPERATIONS_CONTAINER_APPLYLIGHT_H_ */

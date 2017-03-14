@@ -36,7 +36,7 @@ public:
               std::shared_ptr<MathematicOperable> measurmentFrequency,
               units::Frequency measurmentFrequencyUnits,
               std::shared_ptr<MathematicOperable> wavelength,
-              units::Frequency wavelengthUnits);
+              units::Length wavelengthUnits);
 	virtual ~MeasureOD();
 
     virtual void execute(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument);
@@ -51,7 +51,7 @@ protected:
 
     units::Time durationUnits;
     units::Frequency measurmentFrequencyUnits;
-    units::Frequency wavelengthUnits;
+    units::Length wavelengthUnits;
 };
 
 #endif /* SRC_FLUIDCONTROL_PROTOCOLGRAPH_OPERATIONS_CONTAINER_MEASUREOD_H_ */

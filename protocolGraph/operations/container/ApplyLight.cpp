@@ -11,7 +11,7 @@ ApplyLight::ApplyLight() : ActuatorsOperation() {
 	this->sourceId = -1;
 	this->wavelength = std::shared_ptr<MathematicOperable>();
 	this->intensity = std::shared_ptr<MathematicOperable>();
-    this->wavelengthUnits = units::Hz;
+    this->wavelengthUnits = units::nm;
     this->intensityUnits = units::cd;
 }
 
@@ -33,7 +33,7 @@ ApplyLight::ApplyLight(
         int idContainer,
         int sourceID,
         std::shared_ptr<MathematicOperable> wavelength,
-        units::Frequency wavelengthUnits,
+        units::Length wavelengthUnits,
         std::shared_ptr<MathematicOperable> intensity,
         units::LuminousIntensity intensityUnits) :
     ActuatorsOperation(idContainer)

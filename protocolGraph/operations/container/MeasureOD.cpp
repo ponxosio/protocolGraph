@@ -20,7 +20,7 @@ MeasureOD::MeasureOD() :
     this->measurmentFrequencyUnits = units::Hz;
 
     this->wavelength = std::shared_ptr<MathematicOperable>();
-    this->wavelengthUnits = units::Hz;
+    this->wavelengthUnits = units::nm;
 }
 
 MeasureOD::MeasureOD(const MeasureOD& node) : 
@@ -48,7 +48,7 @@ MeasureOD::MeasureOD(
         std::shared_ptr<MathematicOperable> measurmentFrequency,
         units::Frequency measurmentFrequencyUnits,
         std::shared_ptr<MathematicOperable> wavelength,
-        units::Frequency wavelengthUnits) :
+        units::Length wavelengthUnits) :
 	ActuatorsOperation(containerId) 
 {
 	this->sourceId = sourceId;

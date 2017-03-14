@@ -37,12 +37,8 @@ public:
         disjunction, // or
     } BooleanOperator;
 
-	BooleanComparison() {
-		this->left = std::shared_ptr<ComparisonOperable>();
-		this->right = std::shared_ptr<ComparisonOperable>();
-        this->op = conjunction;
-		this->negation = false;
-	}
+    BooleanComparison();
+    BooleanComparison(const BooleanComparison & obj);
 	BooleanComparison(bool negation,
 			std::shared_ptr<ComparisonOperable> left,
             BooleanOperator op,
@@ -76,6 +72,10 @@ public:
 		std::string neg = negation ? "!" : "";
 		return neg + left.get()->toString() + " " + getStringOp() + " " + right.get()->toString();
 	}
+
+    inline virtual ComparisonOperable* clone() {
+        return new BooleanComparison(*this);
+    }
 
 protected:
 	std::string getStringOp();

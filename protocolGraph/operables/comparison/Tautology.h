@@ -12,13 +12,15 @@
 
 #include "protocolGraph/operables/comparison/ComparisonOperable.h"
 
-#include "protocolGraph/protocolgraph_global.h"
-
-class TAUTOLOGY_EXPORT Tautology: public ComparisonOperable {
+class Tautology: public ComparisonOperable {
 public:
-	Tautology() {
+    Tautology() : ComparisonOperable() {
 		this->negation = false;
 	}
+    Tautology(const Tautology & obj) : ComparisonOperable(obj) {
+        this->negation = obj.negation;
+    }
+
 	virtual ~Tautology() {
 	}
 
@@ -59,6 +61,10 @@ public:
 		std::string neg = negation ? "!" : "";
 		return neg + "true";
 	}
+    inline virtual ComparisonOperable* clone() {
+        return new Tautology(*this);
+    }
+
 protected:
 	bool negation;
 };

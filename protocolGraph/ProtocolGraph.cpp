@@ -72,7 +72,7 @@ int ProtocolGraph::emplaceLoop(std::shared_ptr<ComparisonOperable> conditionIN) 
 int ProtocolGraph::emplaceApplyLight(
         int sourceID,
         std::shared_ptr<MathematicOperable> wavelength,
-        units::Frequency wavelengthUnits,
+        units::Length wavelengthUnits,
         std::shared_ptr<MathematicOperable> intensity,
         units::LuminousIntensity intensityUnits)
 {
@@ -128,7 +128,7 @@ int ProtocolGraph::emplaceMeasureOD(
         std::shared_ptr<MathematicOperable> measurmentFrequency,
         units::Frequency measurmentFrequencyUnits,
         std::shared_ptr<MathematicOperable> wavelength,
-        units::Frequency wavelengthUnits)
+        units::Length wavelengthUnits)
 {
     int nextId = nodeSerie.getNextValue();
 

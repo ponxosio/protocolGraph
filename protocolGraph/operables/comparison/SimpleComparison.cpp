@@ -7,6 +7,24 @@
 
 #include "SimpleComparison.h"
 
+SimpleComparison::SimpleComparison() :
+    ComparisonOperable()
+{
+    this->left = std::shared_ptr<MathematicOperable>();
+    this->right = std::shared_ptr<MathematicOperable>();
+    this->op = less_equal;
+    this->negation = false;
+}
+
+SimpleComparison::SimpleComparison(const SimpleComparison & obj) :
+    ComparisonOperable(obj)
+{
+    this->left = obj.left;
+    this->right = obj.right;
+    this->op = obj.op;
+    this->negation = obj.negation;
+}
+
 SimpleComparison::SimpleComparison(
         bool negation,
         std::shared_ptr<MathematicOperable> left,

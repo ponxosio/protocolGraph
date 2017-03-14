@@ -7,11 +7,30 @@
 
 #include "BooleanComparison.h"
 
+BooleanComparison::BooleanComparison() :
+    ComparisonOperable()
+{
+    this->left = std::shared_ptr<ComparisonOperable>();
+    this->right = std::shared_ptr<ComparisonOperable>();
+    this->op = conjunction;
+    this->negation = false;
+}
+
+BooleanComparison::BooleanComparison(const BooleanComparison & obj) :
+    ComparisonOperable(obj)
+{
+    this->left = obj.left;
+    this->right = obj.right;
+    this->op = obj.op;
+    this->negation = obj.negation;
+}
+
 BooleanComparison::BooleanComparison(
         bool negation,
         std::shared_ptr<ComparisonOperable> left,
         BooleanOperator op,
-        std::shared_ptr<ComparisonOperable> right)
+        std::shared_ptr<ComparisonOperable> right) :
+    ComparisonOperable()
 {
 	this->left = left;
 	this->right = right;

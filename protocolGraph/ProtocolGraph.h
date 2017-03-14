@@ -75,7 +75,7 @@ public:
 
     int emplaceApplyLight(int sourceID,
                           std::shared_ptr<MathematicOperable> wavelength,
-                          units::Frequency wavelengthUnits,
+                          units::Length wavelengthUnits,
                           std::shared_ptr<MathematicOperable> intensity,
                           units::LuminousIntensity intensityUnits);
 
@@ -92,7 +92,7 @@ public:
                          std::shared_ptr<MathematicOperable> measurmentFrequency,
                          units::Frequency measurmentFrequencyUnits,
                          std::shared_ptr<MathematicOperable> wavelength,
-                         units::Frequency wavelengthUnits);
+                         units::Length wavelengthUnits);
 
     int emplaceMix(int idSource1,
                    int idSource2,
@@ -126,11 +126,11 @@ public:
 
     inline bool isCpuOperation(int idNode) {
         auto finded = cpuOperations.find(idNode);
-        return (finded == cpuOperations.end());
+        return (finded != cpuOperations.end());
     }
     inline bool isActuatorOperation(int idNode) {
         auto finded = actuatorsOperations.find(idNode);
-        return (finded == actuatorsOperations.end());
+        return (finded != actuatorsOperations.end());
     }
     inline const ProtocolEdgeVectorPtr getProjectingEdges(int idNode) const {
 		return graph->getLeavingEdges(idNode);
@@ -144,6 +144,9 @@ public:
 	inline const std::string& getName() const {
 		return name;
 	}
+    inline std::string toString() const {
+        return graph->toString();
+    }
 protected:
 	int idStart;
 	std::string name;

@@ -10,14 +10,13 @@
 
 #include <string>
 
-#include "protocolGraph/protocolgraph_global.h"
-
 /**
  * Interface that represents all comparation operations
  */
-class COMPARISONOPERABLE_EXPORT ComparisonOperable {
+class ComparisonOperable {
 public:
 	ComparisonOperable(){}
+    ComparisonOperable(const ComparisonOperable & obj){}
 	virtual ~ComparisonOperable(){}
 	
 	/**
@@ -43,6 +42,8 @@ public:
 	virtual void negate() = 0;
 
 	virtual std::string toString() = 0;
+
+    virtual ComparisonOperable* clone() = 0;
 };
 
 #endif /* SRC_OPERABLES_COMPARISON_COMPARISONOPERABLE_H_ */
