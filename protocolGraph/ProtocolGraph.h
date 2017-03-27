@@ -149,6 +149,17 @@ public:
         auto finded = actuatorsOperations.find(idNode);
         return (finded != actuatorsOperations.end());
     }
+
+    inline const std::unordered_set<int> & getCpuOperations() const {
+        return cpuOperations;
+    }
+    inline const std::unordered_set<int> & getActuatorsOperations() const {
+        return actuatorsOperations;
+    }
+    inline const std::unordered_set<int> & getControlOperations() const {
+        return controlOperations;
+    }
+
     inline const ProtocolEdgeVectorPtr getProjectingEdges(int idNode) const {
 		return graph->getLeavingEdges(idNode);
 	}
