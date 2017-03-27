@@ -12,6 +12,11 @@ UnaryOperation::UnaryOperation() {
     this->op = absoluteValue;
 }
 
+UnaryOperation::UnaryOperation(const UnaryOperation & uop) {
+    this->variable = uop.variable;
+    this->op = uop.op;
+}
+
 UnaryOperation::UnaryOperation(std::shared_ptr<MathematicOperable> variable, UnaryOperator op) {
 	this->variable = variable;
 	this->op = op;
@@ -22,7 +27,7 @@ UnaryOperation::~UnaryOperation()
 
 }
 
-double UnaryOperation::getValue() throw (std::invalid_argument)  {
+double UnaryOperation::getValue() const throw (std::invalid_argument)  {
 	MathematicOperable* value = variable.get();
 	double vuelta = 0.0;
 
@@ -37,7 +42,7 @@ double UnaryOperation::getValue() throw (std::invalid_argument)  {
 	return vuelta;
 }
 
-bool UnaryOperation::isPhysical() throw (std::invalid_argument) {
+bool UnaryOperation::isPhysical() const throw (std::invalid_argument) {
 	return (variable.get()->isPhysical());
 }
 
@@ -51,7 +56,7 @@ bool UnaryOperation::equal(const MathematicOperable* obj) const {
 	return vuelta;
 }
 
-std::string UnaryOperation::getStringOp() {
+std::string UnaryOperation::getStringOp() const{
 	std::string vuelta;
 	switch (this->op) {
     case absoluteValue:

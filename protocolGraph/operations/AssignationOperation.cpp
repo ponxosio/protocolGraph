@@ -41,5 +41,4 @@ std::string AssignationOperation::toText() {
 
 void AssignationOperation::execute() throw(std::invalid_argument)  {
 	receiver.get()->setValue(value.get()->getValue());
-	receiver.get()->setPhysical(value.get()->isPhysical());
 }

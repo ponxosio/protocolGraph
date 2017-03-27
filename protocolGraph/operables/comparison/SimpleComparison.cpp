@@ -41,7 +41,7 @@ SimpleComparison::~SimpleComparison() {
 	// TODO Auto-generated destructor stub
 }
 
-bool SimpleComparison::conditionMet() {
+bool SimpleComparison::conditionMet() const {
 	double leftValue = left.get()->getValue();
 	double rightValue = right.get()->getValue();
     std::function<bool(double, double)> fun = getFunctionType(op);
@@ -62,7 +62,7 @@ bool SimpleComparison::equals(ComparisonOperable* obj) const {
 	return vuelta;
 }
 
-std::function<bool(double, double)> SimpleComparison::getFunctionType(ComparisonOperator op) {
+std::function<bool(double, double)> SimpleComparison::getFunctionType(ComparisonOperator op) const {
     std::function<bool(double, double)> vuelta;
 	switch (op) {
     case less_equal:
@@ -83,7 +83,7 @@ std::function<bool(double, double)> SimpleComparison::getFunctionType(Comparison
 	return vuelta;
 }
 
-std::string SimpleComparison::getStingOp() {
+std::string SimpleComparison::getStingOp() const {
 	std::string vuelta;
 	switch (op) {
     case less_equal:

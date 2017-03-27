@@ -11,9 +11,11 @@
 #include <string>
 
 //data structures
-#include <vector>
+#include <algorithm>
+#include <stack>
 #include <unordered_set>
 #include <unordered_map>
+#include <vector>
 
 //local
 #include <graph/Graph.h>
@@ -21,13 +23,13 @@
 #include <utils/units.h>
 
 #include "protocolGraph/operables/VariableTable.h"
+#include "protocolGraph/operables/comparison/Tautology.h"
 #include "protocolGraph/operables/mathematics/ArithmeticOperation.h"
 #include "protocolGraph/operables/mathematics/VariableEntry.h"
 
 #include "protocolGraph/operations/AssignationOperation.h"
 #include "protocolGraph/operations/cpuoperation.h"
-#include "protocolGraph/operations/DivergeNode.h"
-#include "protocolGraph/operations/LoopNode.h"
+#include "protocolGraph/operations/controlnode.h"
 
 #include "protocolGraph/operations/container/ApplyLight.h"
 #include "protocolGraph/operations/container/ApplyTemperature.h"
@@ -42,6 +44,8 @@
 #include "protocolGraph/operations/container/TimeStep.h"
 #include "protocolGraph/operations/container/Transfer.h"
 
+#include "protocol_graph_utils/controlstackelement.h"
+
 #include "protocolGraph/ConditionEdge.h"
 
 #include "protocolGraph/protocolgraph_global.h"
@@ -50,6 +54,7 @@
  * @brief The ProtocolGraph class
  */
 class PROTOCOLGRAPH_EXPORT ProtocolGraph {
+
 public:
 	//TYPE DEFS
     typedef Graph<Node, ConditionEdge>::NodeTypePtr ProtocolNodePtr;
@@ -70,9 +75,6 @@ public:
 	virtual ~ProtocolGraph();
 
     int emplaceAssignation(const std::string & receiver, std::shared_ptr<MathematicOperable> value);
-    int emplaceDivergence(std::shared_ptr<ComparisonOperable> conditionIN);
-    int emplaceLoop(std::shared_ptr<ComparisonOperable> conditionIN);
-
     int emplaceApplyLight(int sourceID,
                           std::shared_ptr<MathematicOperable> wavelength,
                           units::Length wavelengthUnits,
@@ -112,7 +114,17 @@ public:
     int emplaceTimeStep();
     int emplaceTransfer(int idSource, int idTarget, std::shared_ptr<MathematicOperable> volume, units::Volume volumeUnits);
 
-    void connectOperation(int idSource, int idTarget, std::shared_ptr<ComparisonOperable> comparison);
+    void startIfBlock(std::shared_ptr<ComparisonOperable> condition);
+    void startElIfBlock(std::shared_ptr<ComparisonOperable> condition) throw(std::runtime_error);
+    void startElseBlock() throw(std::runtime_error);
+    void endIfBlock() throw(std::runtime_error);
+
+    void startLoopBlock(std::shared_ptr<ComparisonOperable> condition);
+    void endLoopBlock() throw(std::runtime_error);
+
+    void appendOperations(int idOpAppend);
+    void appendOperations(const std::vector<int> & idsOpsAppends);
+    void appendOperations(const std::vector<int> & sourcesAppend, const std::vector<int> & targetsAppends) throw(std::runtime_error);
 
 	ProtocolNodePtr getStart();
 	void setStartNode(int idStart);
@@ -122,11 +134,16 @@ public:
     std::shared_ptr<VariableEntry> getVariable(const std::string & name);
 
     std::shared_ptr<CPUOperation> getCpuOperation(int idNode) throw(std::invalid_argument);
+    std::shared_ptr<ControlNode> getControlNode(int idNode) throw(std::invalid_argument);
     std::shared_ptr<ActuatorsOperation> getActuatorOperation(int idNode) throw(std::invalid_argument);
 
     inline bool isCpuOperation(int idNode) {
         auto finded = cpuOperations.find(idNode);
         return (finded != cpuOperations.end());
+    }
+    inline bool isControlOperations(int idNode) {
+        auto finded = controlOperations.find(idNode);
+        return (finded != controlOperations.end());
     }
     inline bool isActuatorOperation(int idNode) {
         auto finded = actuatorsOperations.find(idNode);
@@ -156,11 +173,38 @@ protected:
     std::shared_ptr<VariableTable> varTable;
     std::unordered_set<int> cpuOperations;
     std::unordered_set<int> actuatorsOperations;
+    std::unordered_set<int> controlOperations;
     std::unordered_map<std::string, std::shared_ptr<VariableEntry>> varEntryTable;
 
+    std::stack<ControlStackElement> controlStack;
+    std::vector<ControlStackElement> closingControlElms;
+    std::vector<int> mainStack;
+
+    std::shared_ptr<Tautology> tautology;
     std::shared_ptr<VariableEntry> timeVariable;
 
-	ProtocolEdgePtr makeEdge(int idSource, int idTarget, std::shared_ptr<ComparisonOperable> comparison);
+    ProtocolEdgePtr makeEdge(int idSource, int idTarget, std::shared_ptr<ComparisonOperable> comparison);
     std::shared_ptr<VariableEntry> getVariableEntry(const std::string & varName);
+
+    std::vector<int> & getActiveAppendableNodes();
+    std::shared_ptr<ComparisonOperable> getActualCondition();
+
+    bool checkClosingElemsNeedProcessing();
+    void linkClosingStack(ControlStackElement & element);
+
+    void appendToClosingControls(const std::vector<int> & idsOpsAppends, std::vector<ControlStackElement> & closingStack);
+    void closingControls_ProcessLoop(const std::vector<int> & idsOpsAppends, int idLoop, std::shared_ptr<ControlNode> & lastNode);
+    void closingControls_ProcessElse(const std::vector<int> & idsOpsAppends,
+                                     int idIf,
+                                     const std::vector<int> & localStack,
+                                     std::shared_ptr<ControlNode> & lastNode);
+    void closingControls_ProcessElif(const std::vector<int> & idsOpsAppends,
+                                     int idIf,
+                                     const std::vector<int> & localStack,
+                                     std::shared_ptr<ControlNode> & lastNode);
+    void closingControls_ProcessIf(const std::vector<int> & idsOpsAppends,
+                                   int idIf,
+                                   const std::vector<int> & localStack,
+                                   std::shared_ptr<ControlNode> & lastNode);
 };
 #endif /* SRC_FLUIDCONTROL_PROTOCOLGRAPH_PROTOCOLGRAPH_H_ */

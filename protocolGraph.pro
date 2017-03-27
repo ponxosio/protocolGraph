@@ -46,8 +46,6 @@ HEADERS += protocolGraph/protocolgraph_global.h \
     protocolGraph/operations/container/TimeStep.h \
     protocolGraph/operations/container/Transfer.h \
     protocolGraph/operations/AssignationOperation.h \
-    protocolGraph/operations/DivergeNode.h \
-    protocolGraph/operations/LoopNode.h \
     protocolGraph/ConditionEdge.h \
     protocolGraph/ProtocolGraph.h \
     protocolGraph/operables/comparison/BooleanComparison.h \
@@ -63,7 +61,9 @@ HEADERS += protocolGraph/protocolgraph_global.h \
     protocolGraph/execution_interface/actuatorsexecutioninterface.h \
     protocolGraph/operations/cpuoperation.h \
     protocolGraph/operables/mathematics/protocolmathf.h \
-    protocolGraph/operables/comparison/protocolboolf.h
+    protocolGraph/operables/comparison/protocolboolf.h \
+    protocolGraph/operations/controlnode.h \
+    protocolGraph/protocol_graph_utils/controlstackelement.h
 
 SOURCES += \
     protocolGraph/operations/container/ApplyLight.cpp \
@@ -78,8 +78,6 @@ SOURCES += \
     protocolGraph/operations/container/TimeStep.cpp \
     protocolGraph/operations/container/Transfer.cpp \
     protocolGraph/operations/AssignationOperation.cpp \
-    protocolGraph/operations/DivergeNode.cpp \
-    protocolGraph/operations/LoopNode.cpp \
     protocolGraph/ConditionEdge.cpp \
     protocolGraph/ProtocolGraph.cpp \
     protocolGraph/operables/comparison/BooleanComparison.cpp \
@@ -90,7 +88,9 @@ SOURCES += \
     protocolGraph/operables/mathematics/VariableEntry.cpp \
     protocolGraph/operables/VariableTable.cpp \
     protocolGraph/operables/mathematics/protocolmathf.cpp \
-    protocolGraph/operables/comparison/protocolboolf.cpp
+    protocolGraph/operables/comparison/protocolboolf.cpp \
+    protocolGraph/operations/controlnode.cpp \
+    protocolGraph/protocol_graph_utils/controlstackelement.cpp
 
 debug {
     QMAKE_POST_LINK=X:\protocolGraph\protocolGraph\setDLL.bat $$shell_path($$OUT_PWD/debug) debug

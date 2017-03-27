@@ -31,6 +31,7 @@ public:
     }UnaryOperator;
 
 	UnaryOperation();
+    UnaryOperation(const UnaryOperation & uop);
     UnaryOperation(std::shared_ptr<MathematicOperable> variable, UnaryOperator op);
 
 	virtual ~UnaryOperation();
@@ -39,12 +40,12 @@ public:
 	 * Returns the numeric value of the variable
 	 * @return the numeric value of the variable
 	 */
-	virtual double getValue() throw (std::invalid_argument);
+    virtual double getValue() const throw (std::invalid_argument);
 	/**
 	 * Check if the variable stores physical values
 	 * @return true if the variable stores physical values, false otherwise
 	 */
-	virtual bool isPhysical() throw (std::invalid_argument);
+    virtual bool isPhysical() const throw (std::invalid_argument);
 	/**
 	 * Compares two Objects implementing this interface
 	 * @param obj other object to be compared to
@@ -52,13 +53,17 @@ public:
 	 */
 	virtual bool equal(const MathematicOperable* obj) const;
 
-	inline virtual std::string toString() {
+    inline virtual std::string toString() const {
 		return getStringOp() + "(" + variable.get()->toString() + ")";
 	}
+
+    inline virtual MathematicOperable* clone() const {
+        return new UnaryOperation(*this);
+    }
 protected:
 	std::shared_ptr<MathematicOperable> variable;
     UnaryOperator op;
 
-	std::string getStringOp();
+    std::string getStringOp() const;
 };
 #endif /* SRC_OPERABLES_MATHEMATICS_UNARYOPERATION_H_ */

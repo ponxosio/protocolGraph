@@ -55,12 +55,14 @@ public:
 	 * Check if the comparison is true o false
 	 * @return true if the comparison is true, false otherwise
 	 */
-	virtual bool conditionMet();
+    virtual bool conditionMet() const;
 	/**
 	 * Check if the comparison used physical values
 	 * @return true if the comparison uses physical values, false otherwise
 	 */
-	inline virtual bool isPhysical() {return (left.get()->isPhysical() || right.get()->isPhysical());}
+    inline virtual bool isPhysical() const {
+        return (left.get()->isPhysical() || right.get()->isPhysical());
+    }
 	/**
 	 * Checks if two ComparisonOperable are the same
 	 * @param obj other ComparisonOperable to be compared
@@ -75,23 +77,23 @@ public:
 		negation = !negation;
 	}
 
-	inline virtual std::string toString() {
+    inline virtual std::string toString() const {
 		std::string neg = negation ? "!" : "";
 		return  neg + left.get()->toString() + " " + getStingOp() + " " + right.get()->toString();
 	}
 
-    inline virtual ComparisonOperable* clone() {
+    inline virtual ComparisonOperable* clone() const {
         return new SimpleComparison(*this);
     }
 
 protected:
-	std::string getStingOp();
+    std::string getStingOp() const;
 	/**
 	 * Returns a function that implements the comparison op
 	 * @param op the comparison operation
 	 * @return a function that implements the desired comparison
 	 */
-    std::function<bool(double, double)> getFunctionType(ComparisonOperator op);
+    std::function<bool(double, double)> getFunctionType(ComparisonOperator op) const;
 
 	//ATRIBUTES
 	std::shared_ptr<MathematicOperable> left;

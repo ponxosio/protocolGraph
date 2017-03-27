@@ -71,7 +71,6 @@ void MeasureOD::execute(ActuatorsExecutionInterface* actuatorInterface) throw(st
                                                           duration->getValue() * durationUnits,
                                                           measurmentFrequency->getValue() * measurmentFrequencyUnits,
                                                           wavelength->getValue() * wavelengthUnits));
-	receiver.get()->setPhysical(true);
 }
 
 std::string MeasureOD::toText() {

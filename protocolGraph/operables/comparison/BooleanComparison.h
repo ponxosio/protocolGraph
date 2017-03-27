@@ -49,12 +49,12 @@ public:
 	 * Check if the comparison is true o false
 	 * @return true if the comparison is true, false otherwise
 	 */
-	virtual bool conditionMet();
+    virtual bool conditionMet() const;
 	/**
 	 * Check if the comparison used physical values
 	 * @return true if the comparison uses physical values, false otherwise
 	 */
-	inline virtual bool isPhysical() {
+    inline virtual bool isPhysical() const {
 		return (left.get()->isPhysical() || right.get()->isPhysical());
 	}
 	/**
@@ -68,23 +68,23 @@ public:
 	 */
 	inline virtual void negate() {negation = !negation;}
 
-	inline virtual std::string toString() {
+    inline virtual std::string toString() const {
 		std::string neg = negation ? "!" : "";
 		return neg + left.get()->toString() + " " + getStringOp() + " " + right.get()->toString();
 	}
 
-    inline virtual ComparisonOperable* clone() {
+    inline virtual ComparisonOperable* clone() const {
         return new BooleanComparison(*this);
     }
 
 protected:
-	std::string getStringOp();
+    std::string getStringOp() const;
 	/**
 	 * Returns a function that implements the boolean operator op
 	 * @param op the boolean operation
 	 * @return a function that implements the desired operation
 	 */
-    std::function<bool(bool, bool)> getFunctionType(BooleanOperator op);
+    std::function<bool(bool, bool)> getFunctionType(BooleanOperator op) const;
 
 	//ATTRIBUTES
 	std::shared_ptr<ComparisonOperable> left;

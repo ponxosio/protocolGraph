@@ -13,6 +13,12 @@ ArithmeticOperation::ArithmeticOperation() {
     this->op = plus;
 }
 
+ArithmeticOperation::ArithmeticOperation(const ArithmeticOperation & aop) {
+    this->leftVariable = aop.leftVariable;
+    this->rightVariable = aop.rightVariable;
+    this->op = aop.op;
+}
+
 ArithmeticOperation::ArithmeticOperation(
 		std::shared_ptr<MathematicOperable> left,
         ArithmeticOperator op,
@@ -27,7 +33,7 @@ ArithmeticOperation::~ArithmeticOperation() {
 
 }
 
-double ArithmeticOperation::getValue() throw (std::invalid_argument)  {
+double ArithmeticOperation::getValue() const throw (std::invalid_argument)  {
 	MathematicOperable* left = leftVariable.get();
 	MathematicOperable* right = rightVariable.get();
     std::function<double(double, double)> op = getFunctionType(this->op);
@@ -65,7 +71,7 @@ std::function<double(double, double)> ArithmeticOperation::getFunctionType(Arith
 	return vuelta;
 }
 
-std::string ArithmeticOperation::getStringOp() {
+std::string ArithmeticOperation::getStringOp() const {
 	std::string vuelta;
 		switch (op) {
         case plus:

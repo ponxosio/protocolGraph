@@ -22,18 +22,28 @@
 class CONSTANTNUMBER_EXPORT ConstantNumber: public MathematicOperable {
 public:
 	ConstantNumber();
+    ConstantNumber(const ConstantNumber & cn);
 	ConstantNumber(int value);
 	ConstantNumber(double value);
     virtual ~ConstantNumber(){}
 
-	virtual double getValue();
 	virtual bool equal ( const MathematicOperable* obj ) const;
 
-	inline virtual bool isPhysical() {return false;}
+    inline virtual double getValue() const {
+        return value;
+    }
 
-	inline virtual std::string toString() {
+    inline virtual bool isPhysical() const {
+        return false;
+    }
+
+    inline virtual std::string toString() const {
         return std::to_string(value);
 	}
+
+    inline virtual MathematicOperable* clone() const {
+        return new ConstantNumber(*this);
+    }
 protected:
 	double value;
 };

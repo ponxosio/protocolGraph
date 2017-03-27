@@ -43,6 +43,7 @@ public:
     } ArithmeticOperator;
 
 	ArithmeticOperation();
+    ArithmeticOperation(const ArithmeticOperation & aop);
     ArithmeticOperation(std::shared_ptr<MathematicOperable> left,
                         ArithmeticOperator op,
                         std::shared_ptr<MathematicOperable> right);
@@ -53,9 +54,7 @@ public:
 	 * Returns the numeric value of the variable, resulting from the mathematical operation
 	 * @return the numeric value of the variable
 	 */
-	virtual double getValue() throw (std::invalid_argument);
-
-	inline virtual bool isPhysical() throw (std::invalid_argument) {return (leftVariable.get()->isPhysical() || rightVariable.get()->isPhysical());}
+    virtual double getValue() const throw (std::invalid_argument);
 
 	/**
 	 * Compares two Objects implementing this interface
@@ -64,9 +63,17 @@ public:
 	 */
 	virtual bool equal(const MathematicOperable* obj) const;
 
-	inline virtual  std::string toString() {
+    inline virtual bool isPhysical() const throw (std::invalid_argument) {
+        return (leftVariable.get()->isPhysical() || rightVariable.get()->isPhysical());
+    }
+
+    inline virtual  std::string toString() const {
 		return leftVariable.get()->toString() + " " + getStringOp() + " " + rightVariable.get()->toString();
 	}
+
+    inline virtual MathematicOperable* clone() const {
+        return new ArithmeticOperation(*this);
+    }
 
 protected:
     //METHODS
@@ -91,6 +98,6 @@ protected:
 	 */
     ArithmeticOperator op;
 
-	std::string getStringOp();
+    std::string getStringOp() const;
 };
 #endif /* SRC_OPERABLES_MATHEMATICS_ARITHMETICOPERATION_H_ */

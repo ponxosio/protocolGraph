@@ -29,6 +29,7 @@ public:
      * @brief VariableEntry creates undefined variable
      */
 	VariableEntry();
+    VariableEntry(const VariableEntry & ve);
     /**
      * @brief VariableEntry creates a new variable entry
      * @param name name of the variable, if does not already exist on the variable table a new one is created
@@ -44,12 +45,12 @@ public:
 	 * Returns the value from the variable table
 	 * @return
 	 */
-	virtual double getValue() throw (std::invalid_argument);
+    virtual double getValue() const throw (std::invalid_argument);
 	/**
 	 * Check if the variable stores physical values
 	 * @return true if the variable stores physical values, false otherwise
 	 */
-	virtual bool isPhysical() throw (std::invalid_argument);
+    virtual bool isPhysical() const throw (std::invalid_argument);
     /**
      * @brief equal check if two variable entries has the same name.
      * @param obj other mathemetaic operable to check
@@ -60,19 +61,23 @@ public:
 	 * Sets the value of this variable at the variable table to the given value
 	 * @param value
 	 */
-	void setValue(double value) throw (std::invalid_argument);
+    void setValue(double value) const throw (std::invalid_argument);
 	/**
 	 * Sets the physical flag of this variable at the variable table to the given value
 	 * @param value
 	 */
-	void setPhysical(bool physical) throw (std::invalid_argument);
+    void setPhysical(bool physical) const throw (std::invalid_argument);
     /**
      * @brief toString returns the name of the variable
      * @return a constant reference to the name of the variable
      */
-    inline virtual std::string toString() {
+    inline virtual std::string toString() const {
 		return name;
 	}
+
+    inline MathematicOperable* clone() const {
+        return new VariableEntry(*this);
+    }
 protected:
 	/**
 	 * name of the variable in the table

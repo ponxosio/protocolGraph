@@ -10,16 +10,17 @@
 ConstantNumber::ConstantNumber() {
 	this->value = -1.0;
 }
+
+ConstantNumber::ConstantNumber(const ConstantNumber & cn) {
+    this->value = cn.value;
+}
+
 ConstantNumber::ConstantNumber(int value) {
 	this->value = value;
 }
 
 ConstantNumber::ConstantNumber(double value) {
 	this->value = value;
-}
-
-double ConstantNumber::getValue() {
-	return value;
 }
 
 bool ConstantNumber::equal(const MathematicOperable* obj) const {

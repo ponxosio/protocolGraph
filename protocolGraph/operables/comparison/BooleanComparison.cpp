@@ -19,8 +19,8 @@ BooleanComparison::BooleanComparison() :
 BooleanComparison::BooleanComparison(const BooleanComparison & obj) :
     ComparisonOperable(obj)
 {
-    this->left = obj.left;
-    this->right = obj.right;
+    this->left = std::shared_ptr<ComparisonOperable>(obj.left->clone());
+    this->right = std::shared_ptr<ComparisonOperable>(obj.right->clone());
     this->op = obj.op;
     this->negation = obj.negation;
 }
@@ -41,7 +41,7 @@ BooleanComparison::BooleanComparison(
 BooleanComparison::~BooleanComparison() {
 }
 
-bool BooleanComparison::conditionMet() {
+bool BooleanComparison::conditionMet() const {
 	bool leftValue = left.get()->conditionMet();
 	bool rightValue = right.get()->conditionMet();
     std::function<bool(bool, bool)> fun = getFunctionType(op);
@@ -62,7 +62,7 @@ bool BooleanComparison::equals(ComparisonOperable* obj) const {
 	return vuelta;
 }
 
-std::function<bool(bool, bool)> BooleanComparison::getFunctionType(BooleanOperator op) {
+std::function<bool(bool, bool)> BooleanComparison::getFunctionType(BooleanOperator op) const {
     std::function<bool(bool, bool)> vuelta;
 	switch (op) {
         case conjunction:
@@ -75,7 +75,7 @@ std::function<bool(bool, bool)> BooleanComparison::getFunctionType(BooleanOperat
 	return vuelta;
 }
 
-std::string BooleanComparison::getStringOp() {
+std::string BooleanComparison::getStringOp() const {
 	std::string vuelta;
 	switch (op) {
     case conjunction:

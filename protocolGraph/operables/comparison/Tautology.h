@@ -28,14 +28,14 @@ public:
 	 * Check if the comparison is true o false
 	 * @return true if the comparison is true, false otherwise
 	 */
-	inline virtual bool conditionMet() {
+    inline virtual bool conditionMet() const {
 		return !negation;
 	}
 	/**
 	 * Check if the comparison used physical values
 	 * @return true if the comparison uses physical values, false otherwise
 	 */
-	inline virtual bool isPhysical() {
+    inline virtual bool isPhysical() const {
 		return false;
 	}
 	/**
@@ -57,11 +57,11 @@ public:
 		negation = !negation;
 	}
 
-	inline virtual std::string toString() {
+    inline virtual std::string toString() const {
 		std::string neg = negation ? "!" : "";
 		return neg + "true";
 	}
-    inline virtual ComparisonOperable* clone() {
+    inline virtual ComparisonOperable* clone() const {
         return new Tautology(*this);
     }
 

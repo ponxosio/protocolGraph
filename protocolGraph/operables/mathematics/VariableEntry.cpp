@@ -14,6 +14,12 @@ VariableEntry::VariableEntry() {
     this->variableTable = std::shared_ptr<VariableTable>();
 }
 
+VariableEntry::VariableEntry(const VariableEntry & ve) :
+    name(ve.name)
+{
+   this->variableTable = ve.variableTable;
+}
+
 VariableEntry::VariableEntry(const std::string & name, std::shared_ptr<VariableTable> varTable) :
     name(name)
 {
@@ -23,11 +29,11 @@ VariableEntry::VariableEntry(const std::string & name, std::shared_ptr<VariableT
     }
 }   
 
-double VariableEntry::getValue() throw (std::invalid_argument)  {
+double VariableEntry::getValue() const throw (std::invalid_argument)  {
     return variableTable->getVaue(name);
 }
 
-bool VariableEntry::isPhysical() throw (std::invalid_argument)  {
+bool VariableEntry::isPhysical() const throw (std::invalid_argument)  {
     return variableTable->getPhysical(name);
 }
 
@@ -40,10 +46,10 @@ bool VariableEntry::equal(const MathematicOperable* obj) const{
 	return vuelta;
 }
 
-void VariableEntry::setValue(double value) throw (std::invalid_argument)  {
+void VariableEntry::setValue(double value) const throw (std::invalid_argument)  {
     variableTable->setValue(name, value);
 }
 
-void VariableEntry::setPhysical(bool physical) throw (std::invalid_argument)  {
+void VariableEntry::setPhysical(bool physical) const throw (std::invalid_argument)  {
     variableTable->setPhysical(name, physical);
 }

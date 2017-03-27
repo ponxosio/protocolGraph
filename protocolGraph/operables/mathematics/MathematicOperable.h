@@ -19,19 +19,18 @@
  */
 class MATHEMATICOPERABLE_EXPORT MathematicOperable {
 public:
-	MathematicOperable(){}
 	virtual ~MathematicOperable(){}
 
 	/**
 	 * Returns the numeric value of the variable
 	 * @return the numeric value of the variable
 	 */
-	virtual double getValue() throw (std::invalid_argument) = 0;
+    virtual double getValue() const throw (std::invalid_argument) = 0;
 	/**
 	 * Check if the variable stores physical values
 	 * @return true if the variable stores physical values, false otherwise
 	 */
-	virtual bool isPhysical() throw (std::invalid_argument) = 0;
+    virtual bool isPhysical() const throw (std::invalid_argument) = 0;
 	/**
 	 * Compares two Objects implementing this interface
 	 * @param obj other object to be compared to
@@ -39,7 +38,9 @@ public:
 	 */
     virtual bool equal(const MathematicOperable* obj) const = 0;
 
-	virtual std::string toString() = 0;
+    virtual std::string toString() const = 0;
+
+    virtual MathematicOperable* clone() const = 0;
 };
 
 #endif /* SRC_OPERABLES_MATHEMATICS_MATHEMATICOPERABLE_H_ */

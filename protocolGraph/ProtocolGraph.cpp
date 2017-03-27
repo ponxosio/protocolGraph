@@ -13,14 +13,19 @@ ProtocolGraph::ProtocolGraph() {
     this->graph = std::make_shared<Graph<Node, ConditionEdge>>();
     this->varTable = std::make_shared<VariableTable>();
     this->timeVariable = std::make_shared<VariableEntry>(TIME_VARIABLE, varTable);
+    this->tautology = std::make_shared<Tautology>();
 }
 
 ProtocolGraph::ProtocolGraph(const ProtocolGraph & prot) :
     varTable(prot.varTable),
     nodeSerie(prot.nodeSerie),
     cpuOperations(prot.cpuOperations),
+    controlOperations(prot.controlOperations),
     actuatorsOperations(prot.actuatorsOperations),
-    varEntryTable(prot.varEntryTable)
+    varEntryTable(prot.varEntryTable),
+    mainStack(prot.mainStack),
+    controlStack(prot.controlStack),
+    closingControlElms(prot.closingControlElms)
 {
 	this->name = prot.name;
 	this->idStart = prot.idStart;
@@ -34,6 +39,7 @@ ProtocolGraph::ProtocolGraph(const std::string & name) {
     this->graph = std::make_shared<Graph<Node, ConditionEdge>>();
     this->varTable = std::make_shared<VariableTable>();
     this->timeVariable = std::make_shared<VariableEntry>(TIME_VARIABLE, varTable);
+    this->tautology = std::make_shared<Tautology>();
 }
 
 ProtocolGraph::~ProtocolGraph() {}
@@ -42,27 +48,9 @@ int ProtocolGraph::emplaceAssignation(const std::string & receiver, std::shared_
     int nextId = nodeSerie.getNextValue();
 
     std::shared_ptr<VariableEntry> receiverPtr = getVariableEntry(receiver);
+    receiverPtr->setPhysical(value->isPhysical());
+
     std::shared_ptr<Node> nodePtr = std::make_shared<AssignationOperation>(nextId, receiverPtr, value);
-    graph->addNode(nodePtr);
-
-    cpuOperations.insert(nextId);
-    return nextId;
-}
-
-int ProtocolGraph::emplaceDivergence(std::shared_ptr<ComparisonOperable> conditionIN) {
-    int nextId = nodeSerie.getNextValue();
-
-    std::shared_ptr<Node> nodePtr = std::make_shared<DivergeNode>(nextId, conditionIN);
-    graph->addNode(nodePtr);
-
-    cpuOperations.insert(nextId);
-    return nextId;
-}
-
-int ProtocolGraph::emplaceLoop(std::shared_ptr<ComparisonOperable> conditionIN) {
-    int nextId = nodeSerie.getNextValue();
-
-    std::shared_ptr<Node> nodePtr = std::make_shared<LoopNode>(nextId, conditionIN);
     graph->addNode(nodePtr);
 
     cpuOperations.insert(nextId);
@@ -133,6 +121,8 @@ int ProtocolGraph::emplaceMeasureOD(
     int nextId = nodeSerie.getNextValue();
 
     std::shared_ptr<VariableEntry> receiverPtr = getVariableEntry(receiver);
+    receiverPtr->setPhysical(true);
+
     std::shared_ptr<Node> nodePtr = std::make_shared<MeasureOD>(nextId, sourceId, receiverPtr, duration, durationUnits, measurmentFrequency,
                                                                 measurmentFrequencyUnits, wavelength, wavelengthUnits);
     graph->addNode(nodePtr);
@@ -214,6 +204,196 @@ int ProtocolGraph::emplaceTransfer(int idSource, int idTarget, std::shared_ptr<M
     return nextId;
 }
 
+void ProtocolGraph::startIfBlock(std::shared_ptr<ComparisonOperable> condition) {
+    int nodeId = nodeSerie.getNextValue();
+    std::shared_ptr<Node> nodeIfPtr = std::make_shared<ControlNode>(nodeId, ControlNode::if_type, condition);
+    graph->addNode(nodeIfPtr);
+    controlOperations.insert(nodeId);
+
+    appendOperations(nodeId);
+
+    ControlStackElement element(nodeId, std::vector<int>{nodeId}, ControlNode::if_type);
+    controlStack.push(element);
+}
+
+void ProtocolGraph::startElIfBlock(std::shared_ptr<ComparisonOperable> condition) throw(std::runtime_error) {
+    if(!controlStack.empty()) {
+        const ControlStackElement & top = controlStack.top();
+        ControlNode::ControlType topType = top.getType();
+        if (topType == ControlNode::if_type || topType == ControlNode::elif_type) {
+            int nodeId = nodeSerie.getNextValue();
+            std::shared_ptr<Node> nodeIfPtr = std::make_shared<ControlNode>(nodeId, ControlNode::elif_type, condition);
+            graph->addNode(nodeIfPtr);
+            controlOperations.insert(nodeId);
+
+            int topId = top.getCrtNodeId();
+            std::shared_ptr<ControlNode> ctrPtr = getControlNode(topId);
+            std::shared_ptr<ComparisonOperable> conditionOut(ctrPtr->getConditionIn()->clone());
+            conditionOut->negate();
+            graph->addEdge(makeEdge(topId, nodeId, conditionOut));
+
+            ControlStackElement element(nodeId, std::vector<int>{nodeId}, ControlNode::elif_type);
+            if (!closingControlElms.empty()) {
+                linkClosingStack(element);
+            }
+            controlStack.push(element);
+        } else {
+            throw(std::runtime_error("ProtocolGraph::startElIfBlock().To start an elif block you must have started an if or an elif before"));
+        }
+    } else {
+        throw(std::runtime_error("ProtocolGraph::startElIfBlock().To start an elif block first you must start a control block"));
+    }
+}
+
+void ProtocolGraph::startElseBlock() throw(std::runtime_error) {
+    if(!controlStack.empty()) {
+        const ControlStackElement & top = controlStack.top();
+        ControlNode::ControlType topType = top.getType();
+        if (topType == ControlNode::if_type || topType == ControlNode::elif_type) {
+            int nodeId = nodeSerie.getNextValue();
+            std::shared_ptr<Node> nodeIfPtr = std::make_shared<ControlNode>(nodeId, ControlNode::else_type, tautology);
+            graph->addNode(nodeIfPtr);
+            controlOperations.insert(nodeId);
+
+            int topId = top.getCrtNodeId();
+            std::shared_ptr<ControlNode> ctrPtr = getControlNode(topId);
+            std::shared_ptr<ComparisonOperable> conditionOut(ctrPtr->getConditionIn()->clone());
+            conditionOut->negate();
+            graph->addEdge(makeEdge(topId, nodeId, conditionOut));
+
+            ControlStackElement element(nodeId, std::vector<int>{nodeId}, ControlNode::else_type);
+            if (!closingControlElms.empty()) {
+                linkClosingStack(element);
+            }
+            controlStack.push(element);
+        } else {
+            throw(std::runtime_error("ProtocolGraph::startElseBlock().To start an else block you must have started an if or an elif before"));
+        }
+    } else {
+        throw(std::runtime_error("ProtocolGraph::startElseBlock().To start an else block first you must start a control block"));
+    }
+}
+
+void ProtocolGraph::endIfBlock() throw(std::runtime_error) {
+    if(!controlStack.empty()) {
+        ControlNode::ControlType topType = controlStack.top().getType();
+        if (topType == ControlNode::if_type || topType == ControlNode::elif_type || topType == ControlNode::else_type) {
+            ControlNode::ControlType actualType;
+            do {
+                const ControlStackElement & top = controlStack.top();
+                ControlStackElement topCopy(top);
+                closingControlElms.push_back(topCopy);
+
+                actualType = top.getType();
+                controlStack.pop();
+            } while(actualType != ControlNode::if_type);
+        } else {
+            throw(std::runtime_error("ProtocolGraph::endIfBlock().To end an if block you must have started an if or an elif or an else before"));
+        }
+    } else {
+        throw(std::runtime_error("ProtocolGraph::endIfBlock().To end an if block first you must start a control block"));
+    }
+}
+
+void ProtocolGraph::startLoopBlock(std::shared_ptr<ComparisonOperable> condition) {
+    int nodeId = nodeSerie.getNextValue();
+    std::shared_ptr<Node> nodeIfPtr = std::make_shared<ControlNode>(nodeId, ControlNode::loop_type, condition);
+    graph->addNode(nodeIfPtr);
+    controlOperations.insert(nodeId);
+
+    appendOperations(nodeId);
+
+    ControlStackElement element(nodeId, std::vector<int>{nodeId}, ControlNode::loop_type);
+    controlStack.push(element);
+}
+
+void ProtocolGraph::endLoopBlock() throw(std::runtime_error) {
+    if(!controlStack.empty()) {
+        ControlStackElement top = controlStack.top();
+        const ControlNode::ControlType & topType = top.getType();
+        if (topType == ControlNode::loop_type) {
+            int loopId = top.getCrtNodeId();
+            appendOperations(loopId);
+
+            ControlStackElement topCopy(top);
+            closingControlElms.push_back(topCopy);
+            controlStack.pop();
+        } else {
+            throw(std::runtime_error("ProtocolGraph::endLoopBlock().To end a loop block you must have started a loop before"));
+        }
+    } else {
+        throw(std::runtime_error("ProtocolGraph::endLoopBlock().To end a loop block first you must start a control block"));
+    }
+}
+
+void ProtocolGraph::appendOperations(int idOpAppend) {
+    if(checkClosingElemsNeedProcessing()) {
+        appendToClosingControls(std::vector<int>{idOpAppend}, closingControlElms);
+    } else {
+        std::vector<int> & activeStack = getActiveAppendableNodes();
+        std::shared_ptr<ComparisonOperable> condition = getActualCondition();
+
+        for(auto it = activeStack.begin(); it != activeStack.end(); ++it) {
+            graph->addEdge(makeEdge(*it, idOpAppend, condition));
+        }
+
+        activeStack.clear();
+        activeStack.push_back(idOpAppend);
+
+    }
+}
+void ProtocolGraph::appendOperations(const std::vector<int> & idsOpsAppends)
+{
+    if(checkClosingElemsNeedProcessing()) {
+        appendToClosingControls(idsOpsAppends, closingControlElms);
+    } else {
+        std::vector<int> & activeStack = getActiveAppendableNodes();
+        std::shared_ptr<ComparisonOperable> condition = getActualCondition();
+
+        for(auto it = activeStack.begin(); it != activeStack.end(); ++it) {
+            for(int id : idsOpsAppends) {
+                graph->addEdge(makeEdge(*it, id, condition));
+            }
+        }
+
+        activeStack.clear();
+        for(int id : idsOpsAppends) {
+            activeStack.push_back(id);
+        }
+    }
+}
+
+void ProtocolGraph::appendOperations(const std::vector<int> & sourcesAppend, const std::vector<int> & targetsAppends) throw(std::runtime_error)
+{
+    if(checkClosingElemsNeedProcessing()) {
+        throw(std::runtime_error("ProtocolGraph::appendOperations(). Control block just closed, imposible to use this append"));
+    } else {
+        std::vector<int> & activeStack = getActiveAppendableNodes();
+        std::shared_ptr<ComparisonOperable> condition = getActualCondition();
+
+        std::vector<std::vector<int>::iterator> mainStackToRemove;
+        for(int sourceId : sourcesAppend) {
+            auto it = std::find(activeStack.begin(), activeStack.end(), sourceId);
+            if (it != activeStack.end()) {
+                mainStackToRemove.push_back(it);
+            } else {
+                throw(std::runtime_error("ProtocolGraph::appendOperations(). Source id: " + std::to_string(sourceId) + " is not appendable"));
+            }
+        }
+        for(int sourceId : sourcesAppend) {
+            for(int targetId : targetsAppends) {
+                graph->addEdge(makeEdge(sourceId, targetId, condition));
+            }
+        }
+        for(std::vector<int>::iterator elem2erase : mainStackToRemove) {
+            activeStack.erase(elem2erase);
+        }
+        for(int targetId : targetsAppends) {
+            activeStack.push_back(targetId);
+        }
+    }
+}
+
 void ProtocolGraph::clearVarTable() {
     varTable->clear();
     varTable->setValue(TIME_VARIABLE, 0.0);
@@ -246,6 +426,25 @@ std::shared_ptr<CPUOperation> ProtocolGraph::getCpuOperation(int idNode) throw(s
     }
 }
 
+std::shared_ptr<ControlNode> ProtocolGraph::getControlNode(int idNode) throw(std::invalid_argument) {
+    auto finded = controlOperations.find(idNode);
+    if (finded != controlOperations.end()) {
+        std::shared_ptr<Node> nodePtr = graph->getNode(*finded);
+        if (nodePtr != NULL) {
+            std::shared_ptr<ControlNode> controlCast = std::dynamic_pointer_cast<ControlNode>(nodePtr);
+            if (controlCast) {
+                return controlCast;
+            } else {
+                throw(std::invalid_argument("ProtocolGraph::getControlNode()."+std::to_string(idNode) + " is not a ControlNode."));
+            }
+        } else {
+            throw(std::invalid_argument("ProtocolGraph::getControlNode()." + std::to_string(idNode) + " is not in the graph."));
+        }
+    } else {
+        throw(std::invalid_argument("ProtocolGraph::getControlNode()." + std::to_string(idNode) + " is not a ControlNode."));
+    }
+}
+
 std::shared_ptr<ActuatorsOperation> ProtocolGraph::getActuatorOperation(int idNode) throw(std::invalid_argument) {
     auto finded = actuatorsOperations.find(idNode);
     if (finded != actuatorsOperations.end()) {
@@ -265,21 +464,18 @@ std::shared_ptr<ActuatorsOperation> ProtocolGraph::getActuatorOperation(int idNo
     }
 }
 
-void ProtocolGraph::connectOperation(int idSource, int idTarget, std::shared_ptr<ComparisonOperable> comparison) {
-    graph->addEdge(makeEdge(idSource, idTarget, comparison));
-}
-
 ProtocolGraph::ProtocolNodePtr ProtocolGraph::getStart() {
 	return graph->getNode(idStart);
 }
 
 void ProtocolGraph::setStartNode(int idStart) {
 	this->idStart = idStart;
+    mainStack.push_back(idStart);
 }
 
 ProtocolGraph::ProtocolEdgePtr ProtocolGraph::makeEdge(int idSource, int idTarget, std::shared_ptr<ComparisonOperable> comparison) {
-	//return new ConditionEdge(idSource, idTarget, comparison);
-	return std::make_shared<ConditionEdge>(idSource, idTarget, comparison);
+    //return new ConditionEdge(idSource, idTarget, comparison);
+    return std::make_shared<ConditionEdge>(idSource, idTarget, comparison);
 }
 
 std::shared_ptr<VariableEntry> ProtocolGraph::getVariableEntry(const std::string & varName) {
@@ -293,8 +489,156 @@ std::shared_ptr<VariableEntry> ProtocolGraph::getVariableEntry(const std::string
     }
 }
 
+std::vector<int> & ProtocolGraph::getActiveAppendableNodes() {
+    if(controlStack.empty()) {
+        return mainStack;
+    } else {
+        return controlStack.top().getOpStack();
+    }
+}
 
+std::shared_ptr<ComparisonOperable> ProtocolGraph::getActualCondition() {
+    std::shared_ptr<ComparisonOperable> condition = tautology;
+    if (!controlStack.empty()) {
+        const std::vector<int> & controlLocalStack = controlStack.top().getOpStack();
+        if (controlLocalStack.size() == 1 && isControlOperations(controlLocalStack.back())) {
+            int controlNodeId = controlLocalStack.back();
+            std::shared_ptr<ControlNode> nodePtr = getControlNode(controlNodeId);
+            condition = std::shared_ptr<ComparisonOperable>(nodePtr->getConditionIn()->clone());
+        }
+    }
+    return condition;
+}
 
+bool ProtocolGraph::checkClosingElemsNeedProcessing() {
+    return !closingControlElms.empty() && (controlStack.empty() || (controlStack.top().getType() == ControlNode::loop_type));
+}
 
+void ProtocolGraph::linkClosingStack(ControlStackElement & element) {
+    std::vector<ControlStackElement> & linkedElem = element.getLinkedElements();
+    linkedElem.reserve(linkedElem.size() + closingControlElms.size());
+    linkedElem.insert(linkedElem.begin(), closingControlElms.begin(), closingControlElms.end());
+    closingControlElms.clear();
+}
 
+void ProtocolGraph::appendToClosingControls(const std::vector<int> & idsOpsAppends, std::vector<ControlStackElement> & closingStack) {
+    std::shared_ptr<ControlNode> lastNode = NULL;
+    std::vector<ControlStackElement> extraElems;
 
+    while(!closingStack.empty()) {
+        const ControlStackElement & elem = closingStack.back();
+
+        if (!elem.getLinkedElements().empty()) {
+            const std::vector<ControlStackElement> & actualLinked = elem.getLinkedElements();
+            extraElems.reserve(extraElems.size() + actualLinked.size());
+            extraElems.insert(extraElems.begin(), actualLinked.begin(), actualLinked.end());
+        }
+
+        ControlNode::ControlType type = elem.getType();
+        if (type == ControlNode::loop_type) {
+            closingControls_ProcessLoop(idsOpsAppends, elem.getCrtNodeId(), lastNode);
+        } else if (type == ControlNode::else_type) {
+            closingControls_ProcessElse(idsOpsAppends, elem.getCrtNodeId(), elem.getOpStack(), lastNode);
+        } else if (type == ControlNode::if_type) {
+            closingControls_ProcessIf(idsOpsAppends, elem.getCrtNodeId(), elem.getOpStack(), lastNode);
+        } else if (type == ControlNode::elif_type) {
+            closingControls_ProcessElif(idsOpsAppends, elem.getCrtNodeId(), elem.getOpStack(), lastNode);
+        }
+        closingStack.pop_back();
+    }
+
+    if ((lastNode != NULL) &&
+        (lastNode->getType() == ControlNode::if_type || lastNode->getType() == ControlNode::elif_type))
+    {
+        std::shared_ptr<ComparisonOperable> conditionOut(lastNode->getConditionIn()->clone());
+        conditionOut->negate();
+
+        for(int idOp : idsOpsAppends) {
+            graph->addEdge(makeEdge(lastNode->getContainerId(), idOp, conditionOut));
+        }
+    }
+
+    if (!extraElems.empty()) {
+        appendToClosingControls(idsOpsAppends, extraElems);
+    }
+
+    std::vector<int> & actualStack = getActiveAppendableNodes();
+    actualStack.clear();
+    for(int idOp: idsOpsAppends) {
+        actualStack.push_back(idOp);
+    }
+}
+
+void ProtocolGraph::closingControls_ProcessLoop(const std::vector<int> & idsOpsAppends,
+                                                int idLoop,
+                                                std::shared_ptr<ControlNode> & lastNode)
+{
+    std::shared_ptr<ControlNode> ctrPtr = getControlNode(idLoop);
+    std::shared_ptr<ComparisonOperable> conditionOut(ctrPtr->getConditionIn()->clone());
+    conditionOut->negate();
+
+    for(int idOp : idsOpsAppends) {
+        graph->addEdge(makeEdge(idLoop, idOp, conditionOut));
+    }
+    ctrPtr->setEndBlockId(idsOpsAppends);
+    lastNode = NULL;
+}
+
+void ProtocolGraph::closingControls_ProcessElse(const std::vector<int> & idsOpsAppends,
+                                                int idIf,
+                                                const std::vector<int> & localStack,
+                                                std::shared_ptr<ControlNode> & lastNode)
+{
+    for(int idStack: localStack) {
+        if (!isControlOperations(idStack)) {
+            for(int idOp : idsOpsAppends) {
+                graph->addEdge(makeEdge(idStack, idOp, tautology));
+            }
+        }
+    }
+    getControlNode(idIf)->setEndBlockId(idsOpsAppends);
+    lastNode = NULL;
+}
+
+void ProtocolGraph::closingControls_ProcessElif(const std::vector<int> & idsOpsAppends,
+                                                int idIf,
+                                                const std::vector<int> & localStack,
+                                                std::shared_ptr<ControlNode> & lastNode)
+{
+    for(int idStack: localStack) {
+        if (!isControlOperations(idStack)) {
+            for(int idOp : idsOpsAppends) {
+                graph->addEdge(makeEdge(idStack, idOp, tautology));
+            }
+        }
+    }
+    getControlNode(idIf)->setEndBlockId(idsOpsAppends);
+    lastNode = getControlNode(idIf);
+}
+
+void ProtocolGraph::closingControls_ProcessIf(const std::vector<int> & idsOpsAppends,
+                                              int idIf,
+                                              const std::vector<int> & localStack,
+                                              std::shared_ptr<ControlNode> & lastNode)
+{
+    if ((lastNode != NULL) &&
+        (lastNode->getType() == ControlNode::if_type || lastNode->getType() == ControlNode::elif_type))
+    {
+        std::shared_ptr<ComparisonOperable> conditionOut(lastNode->getConditionIn()->clone());
+        conditionOut->negate();
+
+        for(int idOp : idsOpsAppends) {
+            graph->addEdge(makeEdge(lastNode->getContainerId(), idOp, conditionOut));
+        }
+    }
+
+    for(int idStack: localStack) {
+        if (!isControlOperations(idStack)) {
+            for(int idOp : idsOpsAppends) {
+                graph->addEdge(makeEdge(idStack, idOp, tautology));
+            }
+        }
+    }
+    getControlNode(idIf)->setEndBlockId(idsOpsAppends);
+    lastNode = getControlNode(idIf);
+}
