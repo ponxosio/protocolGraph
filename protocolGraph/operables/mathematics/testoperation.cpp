@@ -27,6 +27,10 @@ TestOperation::TestOperation(
     this->falseValue = falseValue;
 }
 
+TestOperation::~TestOperation() {
+
+}
+
 double TestOperation::getValue() const throw (std::invalid_argument) {
     double value;
     if(condition->conditionMet()) {
@@ -41,7 +45,7 @@ bool TestOperation::equal(const MathematicOperable* obj) const {
     bool vuelta = false;
     if (Utils::IsType<TestOperation, MathematicOperable>(obj)) {
         const TestOperation* cast = dynamic_cast<const TestOperation*>(obj);
-        vuelta = ((this->condition->equal(cast->condition.get()))
+        vuelta = ((this->condition->equals(cast->condition.get()))
                 && (this->trueValue->equal(cast->trueValue.get()))
                 && (this->falseValue->equal(cast->falseValue.get())));
     }

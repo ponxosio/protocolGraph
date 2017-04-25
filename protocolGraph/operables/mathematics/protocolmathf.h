@@ -1,12 +1,14 @@
 #ifndef PROTOCOLMATHF_H
 #define PROTOCOLMATHF_H
 
+#include "protocolGraph/operables/comparison/ComparisonOperable.h"
 #include "protocolGraph/operables/mathematics/ArithmeticOperation.h"
 #include "protocolGraph/operables/mathematics/ConstantNumber.h"
 #include "protocolGraph/operables/mathematics/MathematicOperable.h"
-#include "protocolGraph/operables/mathematics/UnaryOperation.h"
 #include "protocolGraph/operables/mathematics/randomfraction.h"
 #include "protocolGraph/operables/mathematics/randominteger.h"
+#include "protocolGraph/operables/mathematics/testoperation.h"
+#include "protocolGraph/operables/mathematics/UnaryOperation.h"
 
 #include "protocolGraph/protocolgraph_global.h"
 
@@ -39,6 +41,10 @@ public:
     static std::shared_ptr<MathematicOperable> random(double op1, double op2);
 
     static std::shared_ptr<MathematicOperable> getNum(double value);
+
+    static std::shared_ptr<MathematicOperable> test(std::shared_ptr<ComparisonOperable> condition,
+                                                    std::shared_ptr<MathematicOperable> trueValue,
+                                                    std::shared_ptr<MathematicOperable> falseValue);
 };
 
 #endif // PROTOCOLMATHF_H

@@ -91,3 +91,11 @@ std::shared_ptr<MathematicOperable> ProtocolMathF::random(double op1, double op2
 std::shared_ptr<MathematicOperable> ProtocolMathF::getNum(double value) {
     return std::make_shared<ConstantNumber>(value);
 }
+
+std::shared_ptr<MathematicOperable> ProtocolMathF::test(
+        std::shared_ptr<ComparisonOperable> condition,
+        std::shared_ptr<MathematicOperable> trueValue,
+        std::shared_ptr<MathematicOperable> falseValue)
+{
+    return std::make_shared<TestOperation>(condition, trueValue, falseValue);
+}
