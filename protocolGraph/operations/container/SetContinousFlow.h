@@ -14,7 +14,7 @@
 //local
 #include "protocolGraph/execution_interface/actuatorsexecutioninterface.h"
 #include "protocolGraph/operables/mathematics/MathematicOperable.h"
-#include "protocolGraph/operations/container/ContainerOperation.h"
+#include "protocolGraph/operations/container/actuatorsoperation.h"
 
 #include "protocolGraph/protocolgraph_global.h"
 
@@ -28,8 +28,8 @@ public:
 	//
 
     SetContinousFlow(int idContainer,
-                     int idSource,
-                     int idTarget,
+                     const std::string & idSource,
+                     const std::string & idTarget,
                      std::shared_ptr<MathematicOperable> rate,
                      units::Volumetric_Flow rateUnits);
 	virtual ~SetContinousFlow();
@@ -37,8 +37,8 @@ public:
     virtual void execute(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument);
 
 protected:
-	int idSource;
-	int idTarget;
+    std::string idSource;
+    std::string idTarget;
 	std::shared_ptr<MathematicOperable> rate;
     units::Volumetric_Flow rateUnits;
 };

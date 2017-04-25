@@ -11,7 +11,7 @@
 //local
 #include "protocolGraph/execution_interface/actuatorsexecutioninterface.h"
 #include "protocolGraph/operables/mathematics/VariableEntry.h"
-#include "protocolGraph/operations/container/ContainerOperation.h"
+#include "protocolGraph/operations/container/actuatorsoperation.h"
 
 #include "protocolGraph/protocolgraph_global.h"
 
@@ -24,13 +24,13 @@ public:
 	virtual std::string toText();
 	//
 
-    GetVolume(int containerId, int sourceId, std::shared_ptr<VariableEntry> receiver);
+    GetVolume(int containerId, const std::string & sourceId, std::shared_ptr<VariableEntry> receiver);
 	virtual ~GetVolume();
 
     virtual void execute(ActuatorsExecutionInterface* actuatorsExecution) throw(std::invalid_argument);
 
 protected:
-	int sourceId;
+    std::string sourceId;
 	std::shared_ptr<VariableEntry> receiver;
 };
 #endif /* SRC_FLUIDCONTROL_PROTOCOLGRAPH_OPERATIONS_CONTAINER_GETVOLUME_H_ */

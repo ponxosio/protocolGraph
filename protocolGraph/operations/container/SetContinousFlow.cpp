@@ -25,8 +25,8 @@ SetContinousFlow::SetContinousFlow(const SetContinousFlow& obj) :
 
 SetContinousFlow::SetContinousFlow(
         int idContainer,
-        int idSource,
-        int idTarget,
+        const std::string & idSource,
+        const std::string & idTarget,
         std::shared_ptr<MathematicOperable> rate,
         units::Volumetric_Flow rateUnits) :
     ActuatorsOperation(idContainer)
@@ -43,8 +43,7 @@ SetContinousFlow::~SetContinousFlow() {
 
 std::string SetContinousFlow::toText() {
     return std::to_string(containerID) + "[label=\"setContinousFlow("
-            + std::to_string(idSource) + ", " + std::to_string(idTarget)
-			+ ", " + rate.get()->toString() + ")\"];";
+            + idSource + ", " + idTarget + ", " + rate.get()->toString() + ")\"];";
 }
 
 void SetContinousFlow::execute(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument)  {

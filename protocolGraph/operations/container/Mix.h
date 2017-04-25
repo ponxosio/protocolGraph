@@ -12,7 +12,7 @@
 
 //local
 #include "protocolGraph/operables/mathematics/MathematicOperable.h"
-#include "protocolGraph/operations/container/ContainerOperation.h"
+#include "protocolGraph/operations/container/actuatorsoperation.h"
 
 #include "protocolGraph/protocolgraph_global.h"
 
@@ -26,9 +26,9 @@ public:
 	//
 
     Mix(int idConatiner,
-        int idSource1,
-        int idSource2,
-        int idTarget,
+        const std::string & idSource1,
+        const std::string & idSource2,
+        const std::string & idTarget,
         std::shared_ptr<MathematicOperable> volume1,
         units::Volume unitsVolume1,
         std::shared_ptr<MathematicOperable> volume2,
@@ -39,9 +39,9 @@ public:
     virtual void execute(ActuatorsExecutionInterface* actuatorsInterface) throw(std::invalid_argument);
 
 protected:
-	int idSource1;
-	int idSource2;
-	int idTarget;
+    std::string idSource1;
+    std::string idSource2;
+    std::string idTarget;
 
     std::shared_ptr<MathematicOperable> volume1;
 	std::shared_ptr<MathematicOperable> volume2;

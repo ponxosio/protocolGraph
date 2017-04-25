@@ -32,9 +32,9 @@ Mix::Mix(const Mix& node) :
 }
 
 Mix::Mix(int idConatiner,
-         int idSource1,
-         int idSource2,
-         int idTarget,
+         const std::string & idSource1,
+         const std::string & idSource2,
+         const std::string & idTarget,
          std::shared_ptr<MathematicOperable> volume1,
          units::Volume unitsVolume1,
          std::shared_ptr<MathematicOperable> volume2,
@@ -55,8 +55,7 @@ Mix::~Mix() {
 
 std::string Mix::toText() {
     return std::to_string(containerID) + "[label=\"Mix("
-            + std::to_string(idSource1) + ", " + std::to_string(idSource2)
-            + ", " + std::to_string(idTarget) + ", "
+            + idSource1 + ", " + idSource2 + ", " + idTarget + ", "
 			+ volume1.get()->toString() + ", " + volume2.get()->toString()
 			+ ")\"];";
 }

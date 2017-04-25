@@ -22,7 +22,7 @@ Stir::Stir(const Stir& node) :
 
 Stir::Stir(
         int containerId,
-        int sourceId,
+        const std::string & sourceId,
         std::shared_ptr<MathematicOperable> intensity,
         units::Frequency intensityUnits) :
     ActuatorsOperation(containerId)
@@ -36,7 +36,7 @@ Stir::~Stir() {}
 
 std::string Stir::toText() {
     return std::to_string(containerID) + "[label=\"applyTemperature("
-            + std::to_string(sourceId) + ", " + intensity.get()->toString()
+            + sourceId + ", " + intensity.get()->toString()
 			+ ")\"];";
 }
 

@@ -41,7 +41,7 @@ MeasureOD::MeasureOD(const MeasureOD& node) :
 
 MeasureOD::MeasureOD(
         int containerId,
-        int sourceId,
+        const std::string & sourceId,
         std::shared_ptr<VariableEntry> receiver,
         std::shared_ptr<MathematicOperable> duration,
         units::Time durationUnits,
@@ -76,5 +76,5 @@ void MeasureOD::execute(ActuatorsExecutionInterface* actuatorInterface) throw(st
 std::string MeasureOD::toText() {
     return std::to_string(containerID) + "[label=\""
 		+ receiver.get()->toString() + " = measureOD("
-        + std::to_string(sourceId) + ")\"];";
+        + sourceId + ")\"];";
 }

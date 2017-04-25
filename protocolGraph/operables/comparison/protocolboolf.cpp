@@ -30,6 +30,30 @@ std::shared_ptr<ComparisonOperable> ProtocolBoolF::bigEq(std::shared_ptr<Mathema
     return std::make_shared<SimpleComparison>(false, op1, SimpleComparison::greater_equal, op2);
 }
 
+std::shared_ptr<ComparisonOperable> ProtocolBoolF::isOdd(std::shared_ptr<MathematicOperable> op) {
+    return std::make_shared<CharacteristicCheck>(false, op, CharacteristicCheck::odd);
+}
+
+std::shared_ptr<ComparisonOperable> ProtocolBoolF::isEven(std::shared_ptr<MathematicOperable> op) {
+    return std::make_shared<CharacteristicCheck>(false, op, CharacteristicCheck::even);
+}
+
+std::shared_ptr<ComparisonOperable> ProtocolBoolF::isPrime(std::shared_ptr<MathematicOperable> op) {
+    return std::make_shared<CharacteristicCheck>(false, op, CharacteristicCheck::prime);
+}
+
+std::shared_ptr<ComparisonOperable> ProtocolBoolF::isWhole(std::shared_ptr<MathematicOperable> op) {
+    return std::make_shared<CharacteristicCheck>(false, op, CharacteristicCheck::whole);
+}
+
+std::shared_ptr<ComparisonOperable> ProtocolBoolF::isPositive(std::shared_ptr<MathematicOperable> op) {
+    return std::make_shared<CharacteristicCheck>(false, op, CharacteristicCheck::positive);
+}
+
+std::shared_ptr<ComparisonOperable> ProtocolBoolF::isNegative(std::shared_ptr<MathematicOperable> op) {
+    return std::make_shared<CharacteristicCheck>(false, op, CharacteristicCheck::negative);
+}
+
 std::shared_ptr<ComparisonOperable> ProtocolBoolF::makeAnd(std::shared_ptr<ComparisonOperable> op1, std::shared_ptr<ComparisonOperable> op2) {
     return std::make_shared<BooleanComparison>(false, op1, BooleanComparison::conjunction, op2);
 }

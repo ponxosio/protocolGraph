@@ -25,13 +25,13 @@ ApplyLight::ApplyLight(const ApplyLight& node) : ActuatorsOperation(node) {
 
 std::string ApplyLight::toText() {
     return std::to_string(containerID) + "[label=\"applyLigth("
-            + std::to_string(sourceId) + ", " + wavelength.get()->toString()
+            + sourceId + ", " + wavelength.get()->toString()
 			+ ", " + intensity.get()->toString() + ")\"];";
 }
 
 ApplyLight::ApplyLight(
         int idContainer,
-        int sourceID,
+        const std::string & sourceID,
         std::shared_ptr<MathematicOperable> wavelength,
         units::Length wavelengthUnits,
         std::shared_ptr<MathematicOperable> intensity,

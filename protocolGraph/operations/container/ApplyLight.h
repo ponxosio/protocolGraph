@@ -10,7 +10,7 @@
 
 //local
 #include "protocolGraph/operables/mathematics/MathematicOperable.h"
-#include "protocolGraph/operations/container/ContainerOperation.h"
+#include "protocolGraph/operations/container/actuatorsoperation.h"
 
 //units
 #include <utils/units.h>
@@ -27,7 +27,7 @@ public:
 	//
 
 	ApplyLight(int idContainer,
-            int sourceID,
+            const std::string & sourceID,
             std::shared_ptr<MathematicOperable> wavelength,
             units::Length wavelengthUnits,
             std::shared_ptr<MathematicOperable> intensity,
@@ -38,7 +38,7 @@ public:
     virtual void execute(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument);
 
 protected:
-	int sourceId;
+    std::string sourceId;
 	std::shared_ptr<MathematicOperable> wavelength;
 	std::shared_ptr<MathematicOperable> intensity;
 

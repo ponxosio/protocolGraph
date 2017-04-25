@@ -2,6 +2,7 @@
 #define PROTOCOLBOOLF_H
 
 #include "protocolGraph/operables/comparison/BooleanComparison.h"
+#include "protocolGraph/operables/comparison/characteristiccheck.h"
 #include "protocolGraph/operables/comparison/ComparisonOperable.h"
 #include "protocolGraph/operables/comparison/SimpleComparison.h"
 #include "protocolGraph/operables/comparison/Tautology.h"
@@ -21,6 +22,13 @@ public:
     static std::shared_ptr<ComparisonOperable> lessEq(std::shared_ptr<MathematicOperable> op1, std::shared_ptr<MathematicOperable> op2);
     static std::shared_ptr<ComparisonOperable> big(std::shared_ptr<MathematicOperable> op1, std::shared_ptr<MathematicOperable> op2);
     static std::shared_ptr<ComparisonOperable> bigEq(std::shared_ptr<MathematicOperable> op1, std::shared_ptr<MathematicOperable> op2);
+
+    static std::shared_ptr<ComparisonOperable> isOdd(std::shared_ptr<MathematicOperable> op);
+    static std::shared_ptr<ComparisonOperable> isEven(std::shared_ptr<MathematicOperable> op);
+    static std::shared_ptr<ComparisonOperable> isPrime(std::shared_ptr<MathematicOperable> op);
+    static std::shared_ptr<ComparisonOperable> isWhole(std::shared_ptr<MathematicOperable> op);
+    static std::shared_ptr<ComparisonOperable> isPositive(std::shared_ptr<MathematicOperable> op);
+    static std::shared_ptr<ComparisonOperable> isNegative(std::shared_ptr<MathematicOperable> op);
 
     static std::shared_ptr<ComparisonOperable> makeAnd(std::shared_ptr<ComparisonOperable> op1, std::shared_ptr<ComparisonOperable> op2);
     static std::shared_ptr<ComparisonOperable> makeOr(std::shared_ptr<ComparisonOperable> op1, std::shared_ptr<ComparisonOperable> op2);

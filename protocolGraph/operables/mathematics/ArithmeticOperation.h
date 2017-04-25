@@ -15,8 +15,10 @@
 #define MINUS_STRING "-"
 #define MULTIPLY_STRING "*"
 #define DIVIDE_STRING "/"
+#define MODULE_STRING "%"
+#define MAX_STRING "max"
+#define MIN_STRING "min"
 
-#include <functional>
 #include <memory>
 
 //local
@@ -24,7 +26,6 @@
 #include "protocolGraph/operables/mathematics/MathematicOperable.h"
 
 #include "protocolGraph/protocolgraph_global.h"
-
 
 /**
  * Class that represents an arithmetic operation between two MathematicVariable s, operator available are + - * \
@@ -40,6 +41,9 @@ public:
         minus, // -
         multiply, // *
         divide, // /
+        module, // %
+        max,
+        min
     } ArithmeticOperator;
 
 	ArithmeticOperation();
@@ -76,14 +80,6 @@ public:
     }
 
 protected:
-    //METHODS
-    /**
-     * Returns a function that implements the comparison op
-     * @param op the comparison operation
-     * @return a function that implements the desired comparison
-     */
-    static std::function<double(double, double)> getFunctionType(ArithmeticOperator op);
-
 	//Attributes
 	/**
 	 * Variable on the left of the operation

@@ -36,9 +36,32 @@ ArithmeticOperation::~ArithmeticOperation() {
 double ArithmeticOperation::getValue() const throw (std::invalid_argument)  {
 	MathematicOperable* left = leftVariable.get();
 	MathematicOperable* right = rightVariable.get();
-    std::function<double(double, double)> op = getFunctionType(this->op);
 
-	return (op(left->getValue(), right->getValue()));
+    double vuelta = 0.0;
+    switch (op) {
+    case plus:
+        vuelta = left->getValue() + right->getValue();
+        break;
+    case minus:
+        vuelta = left->getValue() - right->getValue();
+        break;
+    case multiply:
+        vuelta = left->getValue() * right->getValue();
+        break;
+    case divide:
+        vuelta = left->getValue() / right->getValue();
+        break;
+    case module:
+        vuelta = std::fmod(left->getValue(), right->getValue());
+        break;
+    case max:
+        vuelta = std::max(left->getValue(), right->getValue());
+        break;
+    case min:
+        vuelta = std::min(left->getValue(), right->getValue());
+        break;
+    }
+    return vuelta;
 }
 
 bool ArithmeticOperation::equal(const MathematicOperable* obj) const {
@@ -48,25 +71,6 @@ bool ArithmeticOperation::equal(const MathematicOperable* obj) const {
 		vuelta = ((this->leftVariable.get()->equal(cast->leftVariable.get()))
 				&& (this->rightVariable.get()->equal(cast->rightVariable.get()))
 				&& (this->op == cast->op));
-	}
-	return vuelta;
-}
-
-std::function<double(double, double)> ArithmeticOperation::getFunctionType(ArithmeticOperator op) {
-    std::function<double(double, double)> vuelta;
-	switch (op) {
-    case plus:
-		vuelta = std::plus<double>();
-		break;
-    case minus:
-		vuelta = std::minus<double>();
-		break;
-    case multiply:
-		vuelta = std::multiplies<double>();
-		break;
-    case divide:
-		vuelta = std::divides<double>();
-		break;
 	}
 	return vuelta;
 }
@@ -86,6 +90,15 @@ std::string ArithmeticOperation::getStringOp() const {
         case divide:
 			vuelta = DIVIDE_STRING;
 			break;
+        case module:
+            vuelta = MODULE_STRING;
+            break;
+        case max:
+            vuelta = MAX_STRING;
+            break;
+        case min:
+            vuelta = MIN_STRING;
+            break;
 		}
 		return vuelta;
 }

@@ -10,6 +10,20 @@
 
 #define ABSOLUTE_VALUE_STRING "fabs"
 #define FLOOR_VALUE_STRING "floor"
+#define ROUND_VALUE_STRING "round"
+#define CEILING_VALUE_STRING "ceiling"
+#define SQRT_VALUE_STRING "squareRoot"
+#define LN_VALUE_STRING "ln"
+#define LOG10_VALUE_STRING "log10"
+#define EXP_E_VALUE_STRING "e^"
+#define EXP_10_VALUE_STRING "10^"
+#define MINUS_VALUE_STRING "-"
+#define SIN_VALUE_STRING "sin"
+#define COS_VALUE_STRING "cos"
+#define TAN_VALUE_STRING "tan"
+#define ASIN_VALUE_STRING "asin"
+#define ACOS_VALUE_STRING "acos"
+#define ATAN_VALUE_STRING "atan"
 
 //boost
 #include <memory>
@@ -27,7 +41,21 @@ public:
     /*** Enum for the type of unary operator ***/
     typedef enum UnaryOperator_ {
         absoluteValue, //abs()
-        floor
+        floor,
+        round,
+        ceiling,
+        sqrt, //square root
+        ln, //natural logarithm
+        log10, //logarithm base 10
+        exp_e, //e^
+        exp_10, // 10^
+        minus, // -
+        sin_op,
+        cos_op,
+        tan_op,
+        asin_op,
+        acos_op,
+        atan_op
     }UnaryOperator;
 
 	UnaryOperation();

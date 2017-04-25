@@ -35,7 +35,6 @@ unix {
 HEADERS += protocolGraph/protocolgraph_global.h \
     protocolGraph/operations/container/ApplyLight.h \
     protocolGraph/operations/container/ApplyTemperature.h \
-    protocolGraph/operations/container/ContainerOperation.h \
     protocolGraph/operations/container/GetVolume.h \
     protocolGraph/operations/container/LoadContainerOperation.h \
     protocolGraph/operations/container/MeasureOD.h \
@@ -63,7 +62,13 @@ HEADERS += protocolGraph/protocolgraph_global.h \
     protocolGraph/operables/mathematics/protocolmathf.h \
     protocolGraph/operables/comparison/protocolboolf.h \
     protocolGraph/operations/controlnode.h \
-    protocolGraph/protocol_graph_utils/controlstackelement.h
+    protocolGraph/protocol_graph_utils/controlstackelement.h \
+    protocolGraph/operations/container/stopcontinuosflow.h \
+    protocolGraph/operations/container/actuatorsoperation.h \
+    protocolGraph/operables/comparison/characteristiccheck.h \
+    protocolGraph/operables/mathematics/randomfraction.h \
+    protocolGraph/operables/mathematics/randominteger.h \
+    protocolGraph/operables/mathematics/testoperation.h
 
 SOURCES += \
     protocolGraph/operations/container/ApplyLight.cpp \
@@ -90,7 +95,12 @@ SOURCES += \
     protocolGraph/operables/mathematics/protocolmathf.cpp \
     protocolGraph/operables/comparison/protocolboolf.cpp \
     protocolGraph/operations/controlnode.cpp \
-    protocolGraph/protocol_graph_utils/controlstackelement.cpp
+    protocolGraph/protocol_graph_utils/controlstackelement.cpp \
+    protocolGraph/operations/container/stopcontinuosflow.cpp \
+    protocolGraph/operables/comparison/characteristiccheck.cpp \
+    protocolGraph/operables/mathematics/randomfraction.cpp \
+    protocolGraph/operables/mathematics/randominteger.cpp \
+    protocolGraph/operables/mathematics/testoperation.cpp
 
 debug {
     QMAKE_POST_LINK=X:\protocolGraph\protocolGraph\setDLL.bat $$shell_path($$OUT_PWD/debug) debug

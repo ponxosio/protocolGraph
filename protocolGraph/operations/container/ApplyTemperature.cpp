@@ -21,13 +21,13 @@ ApplyTemperature::ApplyTemperature(const ApplyTemperature& node) : ActuatorsOper
 
 std::string ApplyTemperature::toText() {
     return std::to_string(containerID) + "[label=\"applyTemperature("
-            + std::to_string(sourceId) + ", " + temperature.get()->toString()
+            + sourceId + ", " + temperature.get()->toString()
 			+ ")\"];";
 }
 
 ApplyTemperature::ApplyTemperature(
         int containerId,
-		int sourceId,
+        const std::string & sourceId,
         std::shared_ptr<MathematicOperable> temperature,
         units::Temperature temperatureUnits) :
     ActuatorsOperation(containerId)

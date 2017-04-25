@@ -33,12 +33,13 @@
 
 #include "protocolGraph/operations/container/ApplyLight.h"
 #include "protocolGraph/operations/container/ApplyTemperature.h"
-#include "protocolGraph/operations/container/ContainerOperation.h"
+#include "protocolGraph/operations/container/actuatorsoperation.h"
 #include "protocolGraph/operations/container/GetVolume.h"
 #include "protocolGraph/operations/container/LoadContainerOperation.h"
 #include "protocolGraph/operations/container/MeasureOD.h"
 #include "protocolGraph/operations/container/Mix.h"
 #include "protocolGraph/operations/container/SetContinousFlow.h"
+#include "protocolGraph/operations/container/stopcontinuosflow.h"
 #include "protocolGraph/operations/container/settimestep.h"
 #include "protocolGraph/operations/container/Stir.h"
 #include "protocolGraph/operations/container/TimeStep.h"
@@ -75,19 +76,19 @@ public:
 	virtual ~ProtocolGraph();
 
     int emplaceAssignation(const std::string & receiver, std::shared_ptr<MathematicOperable> value);
-    int emplaceApplyLight(int sourceID,
+    int emplaceApplyLight(const std::string & sourceID,
                           std::shared_ptr<MathematicOperable> wavelength,
                           units::Length wavelengthUnits,
                           std::shared_ptr<MathematicOperable> intensity,
                           units::LuminousIntensity intensityUnits);
 
-    int emplaceApplyTemperature(int sourceId,
+    int emplaceApplyTemperature(const std::string & sourceId,
                                 std::shared_ptr<MathematicOperable> temperature,
                                 units::Temperature temperatureUnits);
 
-    int emplaceGetVirtualVolume(int sourceId, const std::string & receiver);
-    int emplaceLoadContainer(int idSource, std::shared_ptr<MathematicOperable> volume, units::Volume volumeUnits);
-    int emplaceMeasureOD(int sourceId,
+    int emplaceGetVirtualVolume(const std::string & sourceId, const std::string & receiver);
+    int emplaceLoadContainer(const std::string & idSource, std::shared_ptr<MathematicOperable> volume, units::Volume volumeUnits);
+    int emplaceMeasureOD(const std::string & sourceId,
                          const std::string & receiver,
                          std::shared_ptr<MathematicOperable> duration,
                          units::Time durationUnits,
@@ -96,23 +97,27 @@ public:
                          std::shared_ptr<MathematicOperable> wavelength,
                          units::Length wavelengthUnits);
 
-    int emplaceMix(int idSource1,
-                   int idSource2,
-                   int idTarget,
+    int emplaceMix(const std::string & idSource1,
+                   const std::string & idSource2,
+                   const std::string & idTarget,
                    std::shared_ptr<MathematicOperable> volume1,
                    units::Volume volume1Units,
                    std::shared_ptr<MathematicOperable> volume2,
                    units::Volume volume2Units);
 
-    int emplaceSetContinuousFlow(int idSource,
-                                 int idTarget,
+    int emplaceStopContinuousFlow(const std::string & idSource, const std::string & idTarget);
+    int emplaceSetContinuousFlow(const std::string & idSource,
+                                 const std::string & idTarget,
                                  std::shared_ptr<MathematicOperable> rate,
                                  units::Volumetric_Flow rateUnits);
 
     int emplaceSetTimeStep(std::shared_ptr<MathematicOperable> timeSlice, units::Time timeUnits);
-    int emplaceStir(int sourceId, std::shared_ptr<MathematicOperable> intensity, units::Frequency intensityUnits);
+    int emplaceStir(const std::string & sourceId, std::shared_ptr<MathematicOperable> intensity, units::Frequency intensityUnits);
     int emplaceTimeStep();
-    int emplaceTransfer(int idSource, int idTarget, std::shared_ptr<MathematicOperable> volume, units::Volume volumeUnits);
+    int emplaceTransfer(const std::string & idSource,
+                        const std::string & idTarget,
+                        std::shared_ptr<MathematicOperable> volume,
+                        units::Volume volumeUnits);
 
     void startIfBlock(std::shared_ptr<ComparisonOperable> condition);
     void startElIfBlock(std::shared_ptr<ComparisonOperable> condition) throw(std::runtime_error);
@@ -187,7 +192,7 @@ protected:
     std::unordered_set<int> controlOperations;
     std::unordered_map<std::string, std::shared_ptr<VariableEntry>> varEntryTable;
 
-    std::stack<ControlStackElement> controlStack;
+    std::vector<ControlStackElement> controlStack;
     std::vector<ControlStackElement> closingControlElms;
     std::vector<int> mainStack;
 
@@ -199,6 +204,8 @@ protected:
 
     std::vector<int> & getActiveAppendableNodes();
     std::shared_ptr<ComparisonOperable> getActualCondition();
+
+    bool checkControlStackIsPhysical();
 
     bool checkClosingElemsNeedProcessing();
     void linkClosingStack(ControlStackElement & element);

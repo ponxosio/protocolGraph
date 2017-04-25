@@ -21,7 +21,7 @@ LoadContainerOperation::LoadContainerOperation(const LoadContainerOperation& obj
 
 LoadContainerOperation::LoadContainerOperation(
         int idConatiner,
-		int idSource,
+        const std::string & idSource,
         std::shared_ptr<MathematicOperable> value,
         units::Volume volumeUnits) :
     ActuatorsOperation(idConatiner)
@@ -36,7 +36,7 @@ LoadContainerOperation::~LoadContainerOperation() {
 
 std::string LoadContainerOperation::toText() {
     return std::to_string(containerID) + "[label=\"loadContainer("
-            + std::to_string(idSource) + ", " + volume.get()->toString()
+            + idSource + ", " + volume.get()->toString()
 			+ ")\"];";
 }
 

@@ -12,7 +12,7 @@
 
 //local
 #include "protocolGraph/operables/mathematics/MathematicOperable.h"
-#include "protocolGraph/operations/container/ContainerOperation.h"
+#include "protocolGraph/operations/container/actuatorsoperation.h"
 
 //units
 #include <utils/units.h>
@@ -29,19 +29,15 @@ public:
 	//
 
     ApplyTemperature(int containerId,
-                     int sourceId,
+                     const std::string & sourceId,
                      std::shared_ptr<MathematicOperable> temperature,
                      units::Temperature temperatureUnits);
 	virtual ~ApplyTemperature();
 
     virtual void execute(ActuatorsExecutionInterface* actuatorsInterface) throw(std::invalid_argument);
 
-	//SERIALIZATIoN
-	template<class Archive>
-	void serialize(Archive & ar, std::uint32_t const version);
-
 protected:
-	int sourceId;
+    std::string sourceId;
     std::shared_ptr<MathematicOperable> temperature;
     units::Temperature temperatureUnits;
 };

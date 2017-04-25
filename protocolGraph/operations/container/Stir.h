@@ -11,7 +11,7 @@
 //local
 #include "protocolGraph/execution_interface/actuatorsexecutioninterface.h"
 #include "protocolGraph/operables/mathematics/MathematicOperable.h"
-#include "protocolGraph/operations/container/ContainerOperation.h"
+#include "protocolGraph/operations/container/actuatorsoperation.h"
 
 #include "protocolGraph/protocolgraph_global.h"
 
@@ -24,13 +24,13 @@ public:
 	virtual std::string toText();
 	//
 
-    Stir(int containerId, int sourceId, std::shared_ptr<MathematicOperable> intensity, units::Frequency intensityUnits);
+    Stir(int containerId, const std::string & sourceId, std::shared_ptr<MathematicOperable> intensity, units::Frequency intensityUnits);
 	virtual ~Stir();
 
     virtual void execute(ActuatorsExecutionInterface* actuatorsInterface) throw(std::invalid_argument);
 
 protected:
-	int sourceId;
+    std::string sourceId;
 	std::shared_ptr<MathematicOperable> intensity;
     units::Frequency intensityUnits;
 };

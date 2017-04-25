@@ -17,10 +17,13 @@ GetVolume::GetVolume(const GetVolume& node) : ActuatorsOperation(node){
 	this->receiver = node.receiver;
 }
 
-GetVolume::GetVolume(int containerId, 
-		int sourceId, std::shared_ptr<VariableEntry> receiver) :
-		ActuatorsOperation(containerId) {
-	this->sourceId = sourceId;
+GetVolume::GetVolume(
+        int containerId,
+        const std::string & sourceId,
+        std::shared_ptr<VariableEntry> receiver) :
+    ActuatorsOperation(containerId)
+{
+    this->sourceId = sourceId;
 	this->receiver = receiver;
 }
 
@@ -29,7 +32,7 @@ GetVolume::~GetVolume() {}
 std::string GetVolume::toText() {
     return std::to_string(containerID) + "[label=\""
 			+ receiver.get()->toString() + " = getVolume("
-            + std::to_string(sourceId) + ")\"];";
+            + sourceId + ")\"];";
 }
 
 void GetVolume::execute(ActuatorsExecutionInterface* actuatorsExecution) throw(std::invalid_argument)  {

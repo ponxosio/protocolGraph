@@ -32,13 +32,55 @@ double UnaryOperation::getValue() const throw (std::invalid_argument)  {
 	double vuelta = 0.0;
 
 	switch(this->op) {
-    case absoluteValue:
+    case UnaryOperator::absoluteValue:
         vuelta = std::fabs(value->getValue());
 		break;
-    case floor:
+    case UnaryOperator::floor:
         vuelta = std::floor(value->getValue());
 		break;
-	}
+    case UnaryOperator::round:
+        vuelta = std::round(value->getValue());
+        break;
+    case UnaryOperator::ceiling:
+        vuelta = std::ceil(value->getValue());
+        break;
+    case UnaryOperator::sqrt:
+        vuelta = std::sqrt(value->getValue());
+        break;
+    case UnaryOperator::ln:
+        vuelta = std::log(value->getValue());
+        break;
+    case UnaryOperator::log10:
+        vuelta = std::log10(value->getValue());
+        break;
+    case UnaryOperator::exp_e:
+        vuelta = std::exp(value->getValue());
+        break;
+    case UnaryOperator::exp_10:
+        vuelta = std::pow(value->getValue(), 10);
+        break;
+    case UnaryOperator::minus:
+        vuelta = -1.0 * value->getValue();
+        break;
+    case UnaryOperator::sin_op:
+        vuelta = std::sin(value->getValue());
+        break;
+    case UnaryOperator::cos_op:
+        vuelta = std::cos(value->getValue());
+        break;
+    case UnaryOperator::tan_op:
+        vuelta = std::tan(value->getValue());
+        break;
+    case UnaryOperator::asin_op:
+        vuelta = std::asin(value->getValue());
+        break;
+    case UnaryOperator::acos_op:
+        vuelta = std::acos(value->getValue());
+        break;
+    case UnaryOperator::atan_op:
+        vuelta = std::atan(value->getValue());
+        break;
+    }
 	return vuelta;
 }
 
@@ -59,12 +101,54 @@ bool UnaryOperation::equal(const MathematicOperable* obj) const {
 std::string UnaryOperation::getStringOp() const{
 	std::string vuelta;
 	switch (this->op) {
-    case absoluteValue:
+    case UnaryOperator::absoluteValue:
 		vuelta = ABSOLUTE_VALUE_STRING;
 		break;
-    case floor:
+    case UnaryOperator::floor:
 		vuelta = FLOOR_VALUE_STRING;
 		break;
+    case UnaryOperator::round:
+        vuelta = ROUND_VALUE_STRING;
+        break;
+    case UnaryOperator::ceiling:
+        vuelta = CEILING_VALUE_STRING;
+        break;
+    case UnaryOperator::sqrt:
+        vuelta = SQRT_VALUE_STRING;
+        break;
+    case UnaryOperator::ln:
+        vuelta = LN_VALUE_STRING;
+        break;
+    case UnaryOperator::log10:
+        vuelta = LOG10_VALUE_STRING;
+        break;
+    case UnaryOperator::exp_e:
+        vuelta = EXP_E_VALUE_STRING;
+        break;
+    case UnaryOperator::exp_10:
+        vuelta = EXP_10_VALUE_STRING;
+        break;
+    case UnaryOperator::minus:
+        vuelta = MINUS_VALUE_STRING;
+        break;
+    case UnaryOperator::sin_op:
+        vuelta = SIN_VALUE_STRING;
+        break;
+    case UnaryOperator::cos_op:
+        vuelta = COS_VALUE_STRING;
+        break;
+    case UnaryOperator::tan_op:
+        vuelta = TAN_VALUE_STRING;
+        break;
+    case UnaryOperator::asin_op:
+        vuelta = ASIN_VALUE_STRING;
+        break;
+    case UnaryOperator::acos_op:
+        vuelta = ACOS_VALUE_STRING;
+        break;
+    case UnaryOperator::atan_op:
+        vuelta = ATAN_VALUE_STRING;
+        break;
 	}
 	return vuelta;
 }

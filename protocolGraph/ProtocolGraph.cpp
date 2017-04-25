@@ -48,7 +48,7 @@ int ProtocolGraph::emplaceAssignation(const std::string & receiver, std::shared_
     int nextId = nodeSerie.getNextValue();
 
     std::shared_ptr<VariableEntry> receiverPtr = getVariableEntry(receiver);
-    receiverPtr->setPhysical(value->isPhysical());
+    receiverPtr->setPhysical(value->isPhysical() || checkControlStackIsPhysical());
 
     std::shared_ptr<Node> nodePtr = std::make_shared<AssignationOperation>(nextId, receiverPtr, value);
     graph->addNode(nodePtr);
@@ -58,7 +58,7 @@ int ProtocolGraph::emplaceAssignation(const std::string & receiver, std::shared_
 }
 
 int ProtocolGraph::emplaceApplyLight(
-        int sourceID,
+        const std::string & sourceID,
         std::shared_ptr<MathematicOperable> wavelength,
         units::Length wavelengthUnits,
         std::shared_ptr<MathematicOperable> intensity,
@@ -74,7 +74,7 @@ int ProtocolGraph::emplaceApplyLight(
 }
 
 int ProtocolGraph::emplaceApplyTemperature(
-        int sourceId,
+        const std::string & sourceId,
         std::shared_ptr<MathematicOperable> temperature,
         units::Temperature temperatureUnits)
 {
@@ -87,7 +87,7 @@ int ProtocolGraph::emplaceApplyTemperature(
     return nextId;
 }
 
-int ProtocolGraph::emplaceGetVirtualVolume(int sourceId, const std::string & receiver) {
+int ProtocolGraph::emplaceGetVirtualVolume(const std::string & sourceId, const std::string & receiver) {
     int nextId = nodeSerie.getNextValue();
 
     std::shared_ptr<VariableEntry> receiverPtr = getVariableEntry(receiver);
@@ -98,7 +98,7 @@ int ProtocolGraph::emplaceGetVirtualVolume(int sourceId, const std::string & rec
     return nextId;
 }
 
-int ProtocolGraph::emplaceLoadContainer(int idSource, std::shared_ptr<MathematicOperable> volume, units::Volume volumeUnits) {
+int ProtocolGraph::emplaceLoadContainer(const std::string & idSource, std::shared_ptr<MathematicOperable> volume, units::Volume volumeUnits) {
     int nextId = nodeSerie.getNextValue();
 
     std::shared_ptr<Node> nodePtr = std::make_shared<LoadContainerOperation>(nextId, idSource, volume, volumeUnits);
@@ -109,7 +109,7 @@ int ProtocolGraph::emplaceLoadContainer(int idSource, std::shared_ptr<Mathematic
 }
 
 int ProtocolGraph::emplaceMeasureOD(
-        int sourceId,
+        const std::string & sourceId,
         const std::string & receiver,
         std::shared_ptr<MathematicOperable> duration,
         units::Time durationUnits,
@@ -132,9 +132,9 @@ int ProtocolGraph::emplaceMeasureOD(
 }
 
 int ProtocolGraph::emplaceMix(
-        int idSource1,
-        int idSource2,
-        int idTarget,
+        const std::string & idSource1,
+        const std::string & idSource2,
+        const std::string & idTarget,
         std::shared_ptr<MathematicOperable> volume1,
         units::Volume volume1Units,
         std::shared_ptr<MathematicOperable> volume2,
@@ -149,9 +149,19 @@ int ProtocolGraph::emplaceMix(
     return nextId;
 }
 
+int ProtocolGraph::emplaceStopContinuousFlow(const std::string & idSource, const std::string & idTarget) {
+    int nextId = nodeSerie.getNextValue();
+
+    std::shared_ptr<Node> nodePtr = std::make_shared<StopContinuosFlow>(nextId, idSource, idTarget);
+    graph->addNode(nodePtr);
+
+    actuatorsOperations.insert(nextId);
+    return nextId;
+}
+
 int ProtocolGraph::emplaceSetContinuousFlow(
-        int idSource,
-        int idTarget,
+        const std::string & idSource,
+        const std::string & idTarget,
         std::shared_ptr<MathematicOperable> rate,
         units::Volumetric_Flow rateUnits)
 {
@@ -174,7 +184,7 @@ int ProtocolGraph::emplaceSetTimeStep(std::shared_ptr<MathematicOperable> timeSl
     return nextId;
 }
 
-int ProtocolGraph::emplaceStir(int sourceId, std::shared_ptr<MathematicOperable> intensity, units::Frequency intensityUnits) {
+int ProtocolGraph::emplaceStir(const std::string & sourceId, std::shared_ptr<MathematicOperable> intensity, units::Frequency intensityUnits) {
     int nextId = nodeSerie.getNextValue();
 
     std::shared_ptr<Node> nodePtr = std::make_shared<Stir>(nextId, sourceId, intensity, intensityUnits);
@@ -194,7 +204,12 @@ int ProtocolGraph::emplaceTimeStep() {
     return nextId;
 }
 
-int ProtocolGraph::emplaceTransfer(int idSource, int idTarget, std::shared_ptr<MathematicOperable> volume, units::Volume volumeUnits) {
+int ProtocolGraph::emplaceTransfer(
+        const std::string & idSource,
+        const std::string & idTarget,
+        std::shared_ptr<MathematicOperable> volume,
+        units::Volume volumeUnits)
+{
     int nextId = nodeSerie.getNextValue();
 
     std::shared_ptr<Node> nodePtr = std::make_shared<Transfer>(nextId, idSource, idTarget, volume, volumeUnits);
@@ -213,12 +228,12 @@ void ProtocolGraph::startIfBlock(std::shared_ptr<ComparisonOperable> condition) 
     appendOperations(nodeId);
 
     ControlStackElement element(nodeId, std::vector<int>{nodeId}, ControlNode::if_type);
-    controlStack.push(element);
+    controlStack.push_back(element);
 }
 
 void ProtocolGraph::startElIfBlock(std::shared_ptr<ComparisonOperable> condition) throw(std::runtime_error) {
     if(!controlStack.empty()) {
-        const ControlStackElement & top = controlStack.top();
+        const ControlStackElement & top = controlStack.back();
         ControlNode::ControlType topType = top.getType();
         if (topType == ControlNode::if_type || topType == ControlNode::elif_type) {
             int nodeId = nodeSerie.getNextValue();
@@ -236,7 +251,7 @@ void ProtocolGraph::startElIfBlock(std::shared_ptr<ComparisonOperable> condition
             if (!closingControlElms.empty()) {
                 linkClosingStack(element);
             }
-            controlStack.push(element);
+            controlStack.push_back(element);
         } else {
             throw(std::runtime_error("ProtocolGraph::startElIfBlock().To start an elif block you must have started an if or an elif before"));
         }
@@ -247,7 +262,7 @@ void ProtocolGraph::startElIfBlock(std::shared_ptr<ComparisonOperable> condition
 
 void ProtocolGraph::startElseBlock() throw(std::runtime_error) {
     if(!controlStack.empty()) {
-        const ControlStackElement & top = controlStack.top();
+        const ControlStackElement & top = controlStack.back();
         ControlNode::ControlType topType = top.getType();
         if (topType == ControlNode::if_type || topType == ControlNode::elif_type) {
             int nodeId = nodeSerie.getNextValue();
@@ -265,7 +280,7 @@ void ProtocolGraph::startElseBlock() throw(std::runtime_error) {
             if (!closingControlElms.empty()) {
                 linkClosingStack(element);
             }
-            controlStack.push(element);
+            controlStack.push_back(element);
         } else {
             throw(std::runtime_error("ProtocolGraph::startElseBlock().To start an else block you must have started an if or an elif before"));
         }
@@ -276,16 +291,16 @@ void ProtocolGraph::startElseBlock() throw(std::runtime_error) {
 
 void ProtocolGraph::endIfBlock() throw(std::runtime_error) {
     if(!controlStack.empty()) {
-        ControlNode::ControlType topType = controlStack.top().getType();
+        ControlNode::ControlType topType = controlStack.back().getType();
         if (topType == ControlNode::if_type || topType == ControlNode::elif_type || topType == ControlNode::else_type) {
             ControlNode::ControlType actualType;
             do {
-                const ControlStackElement & top = controlStack.top();
+                const ControlStackElement & top = controlStack.back();
                 ControlStackElement topCopy(top);
                 closingControlElms.push_back(topCopy);
 
                 actualType = top.getType();
-                controlStack.pop();
+                controlStack.pop_back();
             } while(actualType != ControlNode::if_type);
         } else {
             throw(std::runtime_error("ProtocolGraph::endIfBlock().To end an if block you must have started an if or an elif or an else before"));
@@ -304,12 +319,12 @@ void ProtocolGraph::startLoopBlock(std::shared_ptr<ComparisonOperable> condition
     appendOperations(nodeId);
 
     ControlStackElement element(nodeId, std::vector<int>{nodeId}, ControlNode::loop_type);
-    controlStack.push(element);
+    controlStack.push_back(element);
 }
 
 void ProtocolGraph::endLoopBlock() throw(std::runtime_error) {
     if(!controlStack.empty()) {
-        ControlStackElement top = controlStack.top();
+        ControlStackElement top = controlStack.back();
         const ControlNode::ControlType & topType = top.getType();
         if (topType == ControlNode::loop_type) {
             int loopId = top.getCrtNodeId();
@@ -317,7 +332,7 @@ void ProtocolGraph::endLoopBlock() throw(std::runtime_error) {
 
             ControlStackElement topCopy(top);
             closingControlElms.push_back(topCopy);
-            controlStack.pop();
+            controlStack.pop_back();
         } else {
             throw(std::runtime_error("ProtocolGraph::endLoopBlock().To end a loop block you must have started a loop before"));
         }
@@ -493,14 +508,14 @@ std::vector<int> & ProtocolGraph::getActiveAppendableNodes() {
     if(controlStack.empty()) {
         return mainStack;
     } else {
-        return controlStack.top().getOpStack();
+        return controlStack.back().getOpStack();
     }
 }
 
 std::shared_ptr<ComparisonOperable> ProtocolGraph::getActualCondition() {
     std::shared_ptr<ComparisonOperable> condition = tautology;
     if (!controlStack.empty()) {
-        const std::vector<int> & controlLocalStack = controlStack.top().getOpStack();
+        const std::vector<int> & controlLocalStack = controlStack.back().getOpStack();
         if (controlLocalStack.size() == 1 && isControlOperations(controlLocalStack.back())) {
             int controlNodeId = controlLocalStack.back();
             std::shared_ptr<ControlNode> nodePtr = getControlNode(controlNodeId);
@@ -510,8 +525,18 @@ std::shared_ptr<ComparisonOperable> ProtocolGraph::getActualCondition() {
     return condition;
 }
 
+bool ProtocolGraph::checkControlStackIsPhysical() {
+    bool isPhysical = false;
+    for(const ControlStackElement & e : controlStack) {
+        int ctrId = e.getCrtNodeId();
+        const std::shared_ptr<ControlNode> & ctrPtr = getControlNode(ctrId);
+        isPhysical = isPhysical || ctrPtr->getConditionIn()->isPhysical();
+    }
+    return isPhysical;
+}
+
 bool ProtocolGraph::checkClosingElemsNeedProcessing() {
-    return !closingControlElms.empty() && (controlStack.empty() || (controlStack.top().getType() == ControlNode::loop_type));
+    return !closingControlElms.empty() && (controlStack.empty() || (controlStack.back().getType() == ControlNode::loop_type));
 }
 
 void ProtocolGraph::linkClosingStack(ControlStackElement & element) {

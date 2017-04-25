@@ -15,7 +15,7 @@
 #include "protocolGraph/execution_interface/actuatorsexecutioninterface.h"
 #include "protocolGraph/operables/mathematics/MathematicOperable.h"
 #include "protocolGraph/operables/mathematics/VariableEntry.h"
-#include "protocolGraph/operations/container/ContainerOperation.h"
+#include "protocolGraph/operations/container/actuatorsoperation.h"
 
 #include "protocolGraph/protocolgraph_global.h"
 
@@ -29,7 +29,7 @@ public:
 	//
 
     MeasureOD(int containerId,
-              int sourceId,
+              const std::string & sourceId,
               std::shared_ptr<VariableEntry> receiver,
               std::shared_ptr<MathematicOperable> duration,
               units::Time durationUnits,
@@ -42,7 +42,7 @@ public:
     virtual void execute(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument);
 
 protected:
-	int sourceId;
+    std::string sourceId;
 	std::shared_ptr<VariableEntry> receiver;
 
     std::shared_ptr<MathematicOperable> duration;

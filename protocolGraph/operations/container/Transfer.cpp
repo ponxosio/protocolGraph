@@ -24,19 +24,23 @@ Transfer::Transfer(const Transfer& obj)  :
     this->volumeUnits = obj.volumeUnits;
 }
 
-Transfer::Transfer(int idContainer, int idSource, int idTarget, std::shared_ptr<MathematicOperable> volume, units::Volume volumeUnits) :
-		ActuatorsOperation(idContainer) {
-
-	this->idSource = idSource;
-	this->idTarget = idTarget;
-	this->volume = volume;
+Transfer::Transfer(
+        int idContainer,
+        const std::string & idSource,
+        const std::string & idTarget,
+        std::shared_ptr<MathematicOperable> volume,
+        units::Volume volumeUnits) :
+    ActuatorsOperation(idContainer)
+{
+    this->idSource = idSource;
+    this->idTarget = idTarget;
+    this->volume = volume;
     this->volumeUnits = volumeUnits;
 }
 
 std::string Transfer::toText() {
     return std::to_string(containerID) + "[label=\"Transfer("
-            + std::to_string(idSource) + ", " + std::to_string(idTarget)
-			+ ", " + volume.get()->toString() + ")\"];";
+            + idSource + ", " + idTarget + ", " + volume.get()->toString() + ")\"];";
 }
 
 Transfer::~Transfer() {

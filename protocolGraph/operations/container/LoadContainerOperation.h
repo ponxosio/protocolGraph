@@ -13,7 +13,7 @@
 //local
 #include "protocolGraph/execution_interface/actuatorsexecutioninterface.h"
 #include "protocolGraph/operables/mathematics/MathematicOperable.h"
-#include "protocolGraph/operations/container/ContainerOperation.h"
+#include "protocolGraph/operations/container/actuatorsoperation.h"
 
 #include "protocolGraph/protocolgraph_global.h"
 
@@ -26,14 +26,14 @@ public:
 	virtual std::string toText();
 	//
 
-    LoadContainerOperation(int idConatiner, int idSource, std::shared_ptr<MathematicOperable> volume, units::Volume volumeUnits);
+    LoadContainerOperation(int idConatiner, const std::string & idSource, std::shared_ptr<MathematicOperable> volume, units::Volume volumeUnits);
 
 	virtual ~LoadContainerOperation();
 
     virtual void execute(ActuatorsExecutionInterface* actuatorsInterface) throw(std::invalid_argument);
 
 protected:
-	int idSource;
+    std::string idSource;
     std::shared_ptr<MathematicOperable> volume;
     units::Volume volumeUnits;
 };
