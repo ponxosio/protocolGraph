@@ -7,7 +7,7 @@
 
 #include "ApplyLight.h"
 
-ApplyLight::ApplyLight() : ActuatorsOperation() {
+ApplyLight::ApplyLight() : FinishableOperation() {
 	this->sourceId = -1;
 	this->wavelength = std::shared_ptr<MathematicOperable>();
 	this->intensity = std::shared_ptr<MathematicOperable>();
@@ -15,18 +15,12 @@ ApplyLight::ApplyLight() : ActuatorsOperation() {
     this->intensityUnits = units::cd;
 }
 
-ApplyLight::ApplyLight(const ApplyLight& node) : ActuatorsOperation(node) {
+ApplyLight::ApplyLight(const ApplyLight& node) : FinishableOperation(node) {
 	this->sourceId = node.sourceId;
 	this->wavelength = node.wavelength;
 	this->intensity = node.intensity;
     this->wavelengthUnits = node.wavelengthUnits;
     this->intensityUnits = node.intensityUnits;
-}
-
-std::string ApplyLight::toText() {
-    return std::to_string(containerID) + "[label=\"applyLigth("
-            + sourceId + ", " + wavelength.get()->toString()
-			+ ", " + intensity.get()->toString() + ")\"];";
 }
 
 ApplyLight::ApplyLight(
@@ -36,7 +30,7 @@ ApplyLight::ApplyLight(
         units::Length wavelengthUnits,
         std::shared_ptr<MathematicOperable> intensity,
         units::LuminousIntensity intensityUnits) :
-    ActuatorsOperation(idContainer)
+    FinishableOperation(idContainer)
 {
 	this->sourceId = sourceID;
 	this->wavelength = wavelength;
@@ -49,6 +43,16 @@ ApplyLight::~ApplyLight() {
 
 }
 
+std::string ApplyLight::toText() {
+    return std::to_string(containerID) + "[label=\"applyLigth("
+            + sourceId + ", " + wavelength.get()->toString()
+            + ", " + intensity.get()->toString() + ")\"];";
+}
+
 void ApplyLight::execute(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument)  {
     actuatorInterface->applyLigth(sourceId, wavelength.get()->getValue() * wavelengthUnits, intensity.get()->getValue() * intensityUnits);
+}
+
+void ApplyLight::finish(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument) {
+    actuatorInterface->stopApplyLigth(sourceId);
 }

@@ -68,7 +68,10 @@ HEADERS += protocolGraph/protocolgraph_global.h \
     protocolGraph/operables/comparison/characteristiccheck.h \
     protocolGraph/operables/mathematics/randomfraction.h \
     protocolGraph/operables/mathematics/randominteger.h \
-    protocolGraph/operables/mathematics/testoperation.h
+    protocolGraph/operables/mathematics/testoperation.h \
+    protocolGraph/container/virtualcontainer.h \
+    protocolGraph/operations/container/finishoperation.h \
+    protocolGraph/operations/container/finishableoperation.h
 
 SOURCES += \
     protocolGraph/operations/container/ApplyLight.cpp \
@@ -100,7 +103,8 @@ SOURCES += \
     protocolGraph/operables/comparison/characteristiccheck.cpp \
     protocolGraph/operables/mathematics/randomfraction.cpp \
     protocolGraph/operables/mathematics/randominteger.cpp \
-    protocolGraph/operables/mathematics/testoperation.cpp
+    protocolGraph/operables/mathematics/testoperation.cpp \
+    protocolGraph/operations/container/finishoperation.cpp
 
 debug {
     QMAKE_POST_LINK=X:\protocolGraph\protocolGraph\setDLL.bat $$shell_path($$OUT_PWD/debug) debug

@@ -20,6 +20,9 @@ public:
     static std::shared_ptr<MathematicOperable> multiply(std::shared_ptr<MathematicOperable> op1, std::shared_ptr<MathematicOperable> op2);
     static std::shared_ptr<MathematicOperable> divide(std::shared_ptr<MathematicOperable> op1, std::shared_ptr<MathematicOperable> op2);
     static std::shared_ptr<MathematicOperable> module(std::shared_ptr<MathematicOperable> op1, std::shared_ptr<MathematicOperable> op2);
+    static std::shared_ptr<MathematicOperable> min(std::shared_ptr<MathematicOperable> op1, std::shared_ptr<MathematicOperable> op2);
+    static std::shared_ptr<MathematicOperable> max(std::shared_ptr<MathematicOperable> op1, std::shared_ptr<MathematicOperable> op2);
+    static std::shared_ptr<MathematicOperable> pow(std::shared_ptr<MathematicOperable> op1, std::shared_ptr<MathematicOperable> op2);
 
     static std::shared_ptr<MathematicOperable> abs(std::shared_ptr<MathematicOperable> op);
     static std::shared_ptr<MathematicOperable> floor(std::shared_ptr<MathematicOperable> op);
@@ -39,6 +42,7 @@ public:
 
     static std::shared_ptr<MathematicOperable> random();
     static std::shared_ptr<MathematicOperable> random(double op1, double op2);
+    static std::shared_ptr<MathematicOperable> random(std::shared_ptr<MathematicOperable> op1, std::shared_ptr<MathematicOperable> op2);
 
     static std::shared_ptr<MathematicOperable> getNum(double value);
 

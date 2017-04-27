@@ -79,6 +79,10 @@ std::function<bool(double, double)> SimpleComparison::getFunctionType(Comparison
 		break;
     case equal:
 		vuelta = std::equal_to<double>();
+        break;
+    case not_equal:
+        vuelta = std::not_equal_to<double>();
+        break;
 	}
 	return vuelta;
 }
@@ -100,6 +104,10 @@ std::string SimpleComparison::getStingOp() const {
 		break;
     case equal:
 		vuelta = EQUAL_STRING;
+        break;
+    case not_equal:
+        vuelta = NOT_EQUAL_STRING;
+        break;
 	}
 	return vuelta;
 }

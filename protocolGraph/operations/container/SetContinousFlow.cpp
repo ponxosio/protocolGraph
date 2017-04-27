@@ -8,7 +8,7 @@
 #include "SetContinousFlow.h"
 
 SetContinousFlow::SetContinousFlow() :
-		ActuatorsOperation() {
+        FinishableOperation() {
 	this->idSource = -1;
 	this->idTarget = -1;
 	this->rate = std::shared_ptr<MathematicOperable>();
@@ -16,7 +16,7 @@ SetContinousFlow::SetContinousFlow() :
 }
 
 SetContinousFlow::SetContinousFlow(const SetContinousFlow& obj) :
-		ActuatorsOperation(obj) {
+        FinishableOperation(obj) {
 	this->idSource = obj.idSource;
 	this->idTarget = obj.idTarget;
 	this->rate = obj.rate;
@@ -29,7 +29,7 @@ SetContinousFlow::SetContinousFlow(
         const std::string & idTarget,
         std::shared_ptr<MathematicOperable> rate,
         units::Volumetric_Flow rateUnits) :
-    ActuatorsOperation(idContainer)
+    FinishableOperation(idContainer)
 {
 
 	this->idSource = idSource;
@@ -48,4 +48,8 @@ std::string SetContinousFlow::toText() {
 
 void SetContinousFlow::execute(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument)  {
     actuatorInterface->setContinuosFlow(idSource, idTarget, rate.get()->getValue() * rateUnits);
+}
+
+void SetContinousFlow::finish(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument) {
+    actuatorInterface->stopContinuosFlow(idSource, idTarget);
 }

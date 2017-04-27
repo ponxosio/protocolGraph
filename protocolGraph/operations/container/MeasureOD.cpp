@@ -8,7 +8,7 @@
 #include "MeasureOD.h"
 
 MeasureOD::MeasureOD() : 
-	ActuatorsOperation() 
+    FinishableOperation()
 {
 	this->sourceId = -1;
 	this->receiver = std::shared_ptr<VariableEntry>();
@@ -24,7 +24,7 @@ MeasureOD::MeasureOD() :
 }
 
 MeasureOD::MeasureOD(const MeasureOD& node) : 
-	ActuatorsOperation(node) 
+    FinishableOperation(node)
 {
 	this->sourceId = node.sourceId;
 	this->receiver = node.receiver;
@@ -49,7 +49,7 @@ MeasureOD::MeasureOD(
         units::Frequency measurmentFrequencyUnits,
         std::shared_ptr<MathematicOperable> wavelength,
         units::Length wavelengthUnits) :
-	ActuatorsOperation(containerId) 
+    FinishableOperation(containerId)
 {
 	this->sourceId = sourceId;
 	this->receiver = receiver;
@@ -67,10 +67,14 @@ MeasureOD::MeasureOD(
 MeasureOD::~MeasureOD() {}
 
 void MeasureOD::execute(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument) {
-    receiver.get()->setValue(actuatorInterface->measureOD(sourceId,
-                                                          duration->getValue() * durationUnits,
-                                                          measurmentFrequency->getValue() * measurmentFrequencyUnits,
-                                                          wavelength->getValue() * wavelengthUnits));
+    actuatorInterface->startMeasureOD(sourceId,
+                                      duration->getValue() * durationUnits,
+                                      measurmentFrequency->getValue() * measurmentFrequencyUnits,
+                                      wavelength->getValue() * wavelengthUnits);
+}
+
+void MeasureOD::finish(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument) {
+    receiver.get()->setValue(actuatorInterface->getMeasureOD(sourceId));
 }
 
 std::string MeasureOD::toText() {

@@ -60,6 +60,9 @@ double ArithmeticOperation::getValue() const throw (std::invalid_argument)  {
     case min:
         vuelta = std::min(left->getValue(), right->getValue());
         break;
+    case power:
+        vuelta = std::pow(left->getValue(), right->getValue());
+        break;
     }
     return vuelta;
 }
@@ -98,6 +101,9 @@ std::string ArithmeticOperation::getStringOp() const {
             break;
         case min:
             vuelta = MIN_STRING;
+            break;
+        case power:
+            vuelta = POWER_STRING;
             break;
 		}
 		return vuelta;

@@ -12,14 +12,14 @@
 
 //local
 #include "protocolGraph/operables/mathematics/MathematicOperable.h"
-#include "protocolGraph/operations/container/actuatorsoperation.h"
+#include "protocolGraph/operations/container/finishableoperation.h"
 
 //units
 #include <utils/units.h>
 
 #include "protocolGraph/protocolgraph_global.h"
 
-class APPLYTEMPERATURE_EXPORT ApplyTemperature: public ActuatorsOperation {
+class APPLYTEMPERATURE_EXPORT ApplyTemperature: public FinishableOperation {
 public:
 	// Node methods
 	ApplyTemperature();
@@ -35,6 +35,7 @@ public:
 	virtual ~ApplyTemperature();
 
     virtual void execute(ActuatorsExecutionInterface* actuatorsInterface) throw(std::invalid_argument);
+    virtual void finish(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument);
 
 protected:
     std::string sourceId;

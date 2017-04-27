@@ -15,11 +15,11 @@
 #include "protocolGraph/execution_interface/actuatorsexecutioninterface.h"
 #include "protocolGraph/operables/mathematics/MathematicOperable.h"
 #include "protocolGraph/operables/mathematics/VariableEntry.h"
-#include "protocolGraph/operations/container/actuatorsoperation.h"
+#include "protocolGraph/operations/container/finishableoperation.h"
 
 #include "protocolGraph/protocolgraph_global.h"
 
-class MEASUREOD_EXPORT MeasureOD: public ActuatorsOperation {
+class MEASUREOD_EXPORT MeasureOD: public FinishableOperation {
 public:
 	// Node methods
 	MeasureOD();
@@ -40,6 +40,7 @@ public:
 	virtual ~MeasureOD();
 
     virtual void execute(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument);
+    virtual void finish(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument);
 
 protected:
     std::string sourceId;

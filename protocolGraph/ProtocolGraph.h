@@ -22,6 +22,8 @@
 #include <utils/AutoEnumerate.h>
 #include <utils/units.h>
 
+#include "protocolGraph/container/virtualcontainer.h"
+
 #include "protocolGraph/operables/VariableTable.h"
 #include "protocolGraph/operables/comparison/Tautology.h"
 #include "protocolGraph/operables/mathematics/ArithmeticOperation.h"
@@ -34,6 +36,8 @@
 #include "protocolGraph/operations/container/ApplyLight.h"
 #include "protocolGraph/operations/container/ApplyTemperature.h"
 #include "protocolGraph/operations/container/actuatorsoperation.h"
+#include "protocolGraph/operations/container/finishableoperation.h"
+#include "protocolGraph/operations/container/finishoperation.h"
 #include "protocolGraph/operations/container/GetVolume.h"
 #include "protocolGraph/operations/container/LoadContainerOperation.h"
 #include "protocolGraph/operations/container/MeasureOD.h"
@@ -119,6 +123,8 @@ public:
                         std::shared_ptr<MathematicOperable> volume,
                         units::Volume volumeUnits);
 
+    int emplaceFinishOperation(int finsihOperationId) throw(std::invalid_argument);
+
     void startIfBlock(std::shared_ptr<ComparisonOperable> condition);
     void startElIfBlock(std::shared_ptr<ComparisonOperable> condition) throw(std::runtime_error);
     void startElseBlock() throw(std::runtime_error);
@@ -141,6 +147,17 @@ public:
     std::shared_ptr<CPUOperation> getCpuOperation(int idNode) throw(std::invalid_argument);
     std::shared_ptr<ControlNode> getControlNode(int idNode) throw(std::invalid_argument);
     std::shared_ptr<ActuatorsOperation> getActuatorOperation(int idNode) throw(std::invalid_argument);
+
+    std::shared_ptr<VirtualContainer> getVContainer(const std::string & vcName) const;
+    bool addVContainer(const std::string & name,
+                       VirtualContainer::ContainerType vcType,
+                       units::Volume capacity,
+                       units::Volume initialVolume,
+                       units::Temperature storeTemperature);
+
+    inline bool hasVContainer(const std::string & name) const {
+        return (vcontainerMap.find(name) != vcontainerMap.end());
+    }
 
     inline bool isCpuOperation(int idNode) {
         auto finded = cpuOperations.find(idNode);
@@ -191,6 +208,7 @@ protected:
     std::unordered_set<int> actuatorsOperations;
     std::unordered_set<int> controlOperations;
     std::unordered_map<std::string, std::shared_ptr<VariableEntry>> varEntryTable;
+    std::unordered_map<std::string, std::shared_ptr<VirtualContainer>> vcontainerMap;
 
     std::vector<ControlStackElement> controlStack;
     std::vector<ControlStackElement> closingControlElms;

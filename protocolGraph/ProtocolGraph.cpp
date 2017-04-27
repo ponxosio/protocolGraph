@@ -23,6 +23,7 @@ ProtocolGraph::ProtocolGraph(const ProtocolGraph & prot) :
     controlOperations(prot.controlOperations),
     actuatorsOperations(prot.actuatorsOperations),
     varEntryTable(prot.varEntryTable),
+    vcontainerMap(prot.vcontainerMap),
     mainStack(prot.mainStack),
     controlStack(prot.controlStack),
     closingControlElms(prot.closingControlElms)
@@ -217,6 +218,27 @@ int ProtocolGraph::emplaceTransfer(
 
     actuatorsOperations.insert(nextId);
     return nextId;
+}
+
+int ProtocolGraph::emplaceFinishOperation(int finsihOperationId) throw(std::invalid_argument) {
+    std::shared_ptr<Node> opPtr = graph->getNode(finsihOperationId);
+    if (opPtr != NULL) {
+        std::shared_ptr<FinishableOperation> finishOpPtr = std::dynamic_pointer_cast<FinishableOperation>(opPtr);
+        if (finishOpPtr != NULL) {
+            int nextId = nodeSerie.getNextValue();
+
+            std::shared_ptr<Node> nodePtr = std::make_shared<FinishOperation>(nextId, finishOpPtr);
+            graph->addNode(nodePtr);
+
+            actuatorsOperations.insert(nextId);
+            return nextId;
+        } else {
+            throw(std::invalid_argument("ProtocolGraph::emplaceFinishOperation. finishOp id " + std::to_string(finsihOperationId) +
+                                        " is not a Finishable Operation"));
+        }
+    } else {
+        throw(std::invalid_argument("ProtocolGraph::emplaceFinishOperation. Unknow finishOp id " + std::to_string(finsihOperationId)));
+    }
 }
 
 void ProtocolGraph::startIfBlock(std::shared_ptr<ComparisonOperable> condition) {
@@ -477,6 +499,31 @@ std::shared_ptr<ActuatorsOperation> ProtocolGraph::getActuatorOperation(int idNo
     } else {
         throw(std::invalid_argument(std::to_string(idNode) + " is not an Actuator operation."));
     }
+}
+
+std::shared_ptr<VirtualContainer> ProtocolGraph::getVContainer(const std::string & vcName) const {
+    std::shared_ptr<VirtualContainer> vcPtr = NULL;
+    auto finded = vcontainerMap.find(vcName);
+    if (finded != vcontainerMap.end()) {
+        vcPtr = finded->second;
+    }
+    return vcPtr;
+}
+
+bool ProtocolGraph::addVContainer(
+        const std::string & name,
+        VirtualContainer::ContainerType vcType,
+        units::Volume capacity,
+        units::Volume initialVolume,
+        units::Temperature storeTemperature)
+{
+    bool added = false;
+    if (vcontainerMap.find(name) == vcontainerMap.end()) {
+        std::shared_ptr<VirtualContainer> vptr = std::make_shared<VirtualContainer>(name, vcType, capacity, initialVolume, storeTemperature);
+        vcontainerMap.insert(std::make_pair(name, vptr));
+        added = true;
+    }
+    return added;
 }
 
 ProtocolGraph::ProtocolNodePtr ProtocolGraph::getStart() {

@@ -14,6 +14,7 @@
 #define GREAT_EQUAL_STRING ">="
 #define GREAT_STRING ">"
 #define EQUAL_STRING "="
+#define NOT_EQUAL_STRING "!="
 
 //boost
 #include <memory>
@@ -39,7 +40,8 @@ public:
         less, // <
         greater_equal, //>=
         greater, // >
-        equal // ==
+        equal, // ==
+        not_equal // !=
     } ComparisonOperator;
 
     SimpleComparison();

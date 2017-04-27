@@ -10,14 +10,14 @@
 
 //local
 #include "protocolGraph/operables/mathematics/MathematicOperable.h"
-#include "protocolGraph/operations/container/actuatorsoperation.h"
+#include "protocolGraph/operations/container/finishableoperation.h"
 
 //units
 #include <utils/units.h>
 
 #include "protocolGraph/protocolgraph_global.h"
 
-class APPLYLIGHT_EXPORT ApplyLight: public ActuatorsOperation {
+class APPLYLIGHT_EXPORT ApplyLight: public FinishableOperation {
 public:
 	// Node methods
 	ApplyLight();
@@ -36,6 +36,7 @@ public:
 	virtual ~ApplyLight();
 
     virtual void execute(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument);
+    virtual void finish(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument);
 
 protected:
     std::string sourceId;

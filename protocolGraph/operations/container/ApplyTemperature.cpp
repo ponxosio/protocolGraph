@@ -7,22 +7,16 @@
 
 #include "ApplyTemperature.h"
 
-ApplyTemperature::ApplyTemperature() : ActuatorsOperation() {
+ApplyTemperature::ApplyTemperature() : FinishableOperation() {
 	this->sourceId = -1;
 	this->temperature = std::shared_ptr<MathematicOperable>();
     this->temperatureUnits = units::K;
 }
 
-ApplyTemperature::ApplyTemperature(const ApplyTemperature& node) : ActuatorsOperation(node) {
+ApplyTemperature::ApplyTemperature(const ApplyTemperature& node) : FinishableOperation(node) {
 	this->sourceId = node.sourceId;
 	this->temperature = node.temperature;
     this->temperatureUnits = node.temperatureUnits;
-}
-
-std::string ApplyTemperature::toText() {
-    return std::to_string(containerID) + "[label=\"applyTemperature("
-            + sourceId + ", " + temperature.get()->toString()
-			+ ")\"];";
 }
 
 ApplyTemperature::ApplyTemperature(
@@ -30,7 +24,7 @@ ApplyTemperature::ApplyTemperature(
         const std::string & sourceId,
         std::shared_ptr<MathematicOperable> temperature,
         units::Temperature temperatureUnits) :
-    ActuatorsOperation(containerId)
+    FinishableOperation(containerId)
 {
 	this->sourceId = sourceId;
     this->temperature = temperature;
@@ -39,6 +33,16 @@ ApplyTemperature::ApplyTemperature(
 
 ApplyTemperature::~ApplyTemperature() {}
 
+std::string ApplyTemperature::toText() {
+    return std::to_string(containerID) + "[label=\"applyTemperature("
+            + sourceId + ", " + temperature.get()->toString()
+            + ")\"];";
+}
+
 void ApplyTemperature::execute(ActuatorsExecutionInterface* actuatorsInterface) throw(std::invalid_argument)  {
     actuatorsInterface->applyTemperature(sourceId, temperature.get()->getValue() * temperatureUnits);
+}
+
+void ApplyTemperature::finish(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument) {
+    actuatorInterface->stopApplyTemperature(sourceId);
 }

@@ -18,6 +18,7 @@
 #define MODULE_STRING "%"
 #define MAX_STRING "max"
 #define MIN_STRING "min"
+#define POWER_STRING "power"
 
 #include <memory>
 
@@ -42,6 +43,7 @@ public:
         multiply, // *
         divide, // /
         module, // %
+        power, // ^
         max,
         min
     } ArithmeticOperator;

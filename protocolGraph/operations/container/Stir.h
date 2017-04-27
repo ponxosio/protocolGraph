@@ -11,11 +11,11 @@
 //local
 #include "protocolGraph/execution_interface/actuatorsexecutioninterface.h"
 #include "protocolGraph/operables/mathematics/MathematicOperable.h"
-#include "protocolGraph/operations/container/actuatorsoperation.h"
+#include "protocolGraph/operations/container/finishableoperation.h"
 
 #include "protocolGraph/protocolgraph_global.h"
 
-class STIR_EXPORT Stir: public ActuatorsOperation {
+class STIR_EXPORT Stir: public FinishableOperation {
 public:
 	// Node methods
 	Stir();
@@ -28,6 +28,7 @@ public:
 	virtual ~Stir();
 
     virtual void execute(ActuatorsExecutionInterface* actuatorsInterface) throw(std::invalid_argument);
+    virtual void finish(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument);
 
 protected:
     std::string sourceId;

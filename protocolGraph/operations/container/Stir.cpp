@@ -7,14 +7,14 @@
 
 #include "Stir.h"
 
-Stir::Stir() : ActuatorsOperation() {
+Stir::Stir() : FinishableOperation() {
 	this->sourceId = -1;
 	this->intensity = std::shared_ptr<MathematicOperable>();
     this->intensityUnits = units::Hz;
 }
 
 Stir::Stir(const Stir& node) :
-		ActuatorsOperation(node) {
+        FinishableOperation(node) {
 	this->sourceId = node.sourceId;
 	this->intensity = node.intensity;
     this->intensityUnits = node.intensityUnits;
@@ -25,7 +25,7 @@ Stir::Stir(
         const std::string & sourceId,
         std::shared_ptr<MathematicOperable> intensity,
         units::Frequency intensityUnits) :
-    ActuatorsOperation(containerId)
+    FinishableOperation(containerId)
 {
 	this->sourceId = sourceId;
 	this->intensity = intensity;
@@ -42,4 +42,8 @@ std::string Stir::toText() {
 
 void Stir::execute(ActuatorsExecutionInterface* actuatorsInterface) throw(std::invalid_argument) {
     actuatorsInterface->stir(sourceId, intensity.get()->getValue() * intensityUnits);
+}
+
+void Stir::finish(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument) {
+    actuatorInterface->stopStir(sourceId);
 }

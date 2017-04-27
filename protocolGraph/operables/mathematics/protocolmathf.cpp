@@ -20,6 +20,18 @@ std::shared_ptr<MathematicOperable> ProtocolMathF::module(std::shared_ptr<Mathem
     return std::make_shared<ArithmeticOperation>(op1, ArithmeticOperation::module, op2);
 }
 
+std::shared_ptr<MathematicOperable> ProtocolMathF::min(std::shared_ptr<MathematicOperable> op1, std::shared_ptr<MathematicOperable> op2) {
+    return std::make_shared<ArithmeticOperation>(op1, ArithmeticOperation::min, op2);
+}
+
+std::shared_ptr<MathematicOperable> ProtocolMathF::max(std::shared_ptr<MathematicOperable> op1, std::shared_ptr<MathematicOperable> op2) {
+    return std::make_shared<ArithmeticOperation>(op1, ArithmeticOperation::max, op2);
+}
+
+std::shared_ptr<MathematicOperable> ProtocolMathF::pow(std::shared_ptr<MathematicOperable> op1, std::shared_ptr<MathematicOperable> op2) {
+    return std::make_shared<ArithmeticOperation>(op1, ArithmeticOperation::power, op2);
+}
+
 std::shared_ptr<MathematicOperable> ProtocolMathF::abs(std::shared_ptr<MathematicOperable> op) {
     return std::make_shared<UnaryOperation>(op, UnaryOperation::absoluteValue);
 }
@@ -86,6 +98,10 @@ std::shared_ptr<MathematicOperable> ProtocolMathF::random() {
 
 std::shared_ptr<MathematicOperable> ProtocolMathF::random(double op1, double op2) {
     return std::make_shared<RandomInteger>(getNum(op1), getNum(op2));
+}
+
+std::shared_ptr<MathematicOperable> ProtocolMathF::random(std::shared_ptr<MathematicOperable> op1, std::shared_ptr<MathematicOperable> op2) {
+    return std::make_shared<RandomInteger>(op1,op2);
 }
 
 std::shared_ptr<MathematicOperable> ProtocolMathF::getNum(double value) {
