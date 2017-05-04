@@ -1,12 +1,5 @@
-/*
- * MeasureOD.h
- *
- *  Created on: 28 de mar. de 2016
- *      Author: angel
- */
-
-#ifndef SRC_FLUIDCONTROL_PROTOCOLGRAPH_OPERATIONS_CONTAINER_MEASUREOD_H_
-#define SRC_FLUIDCONTROL_PROTOCOLGRAPH_OPERATIONS_CONTAINER_MEASUREOD_H_
+#ifndef MEASURELUMINISCENCE_H
+#define MEASURELUMINISCENCE_H
 
 //units
 #include <utils/units.h>
@@ -19,36 +12,32 @@
 
 #include "protocolGraph/protocolgraph_global.h"
 
-class MEASUREOD_EXPORT MeasureOD: public FinishableOperation {
+class MeasureLuminiscence : public FinishableOperation
+{
 public:
-	// Node methods
-	MeasureOD();
-	MeasureOD(const MeasureOD & node);
+    // Node methods
+    MeasureLuminiscence();
+    MeasureLuminiscence(const MeasureLuminiscence & node);
 
-	virtual std::string toText();
-	//
+    virtual std::string toText();
+    //
 
-    MeasureOD(int containerId,
+    MeasureLuminiscence(int containerId,
               const std::string & sourceId,
               std::shared_ptr<VariableEntry> receiver,
               std::shared_ptr<MathematicOperable> measurmentFrequency,
-              units::Frequency measurmentFrequencyUnits,
-              std::shared_ptr<MathematicOperable> wavelength,
-              units::Length wavelengthUnits);
-	virtual ~MeasureOD();
+              units::Frequency measurmentFrequencyUnits);
+    virtual ~MeasureLuminiscence();
 
     virtual void execute(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument);
     virtual void finish(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument);
 
 protected:
     std::string sourceId;
-	std::shared_ptr<VariableEntry> receiver;
+    std::shared_ptr<VariableEntry> receiver;
 
-    std::shared_ptr<MathematicOperable> wavelength;
     std::shared_ptr<MathematicOperable> measurmentFrequency;
-
     units::Frequency measurmentFrequencyUnits;
-    units::Length wavelengthUnits;
 };
 
-#endif /* SRC_FLUIDCONTROL_PROTOCOLGRAPH_OPERATIONS_CONTAINER_MEASUREOD_H_ */
+#endif // MEASURELUMINISCENCE_H

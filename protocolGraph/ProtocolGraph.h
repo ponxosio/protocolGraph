@@ -36,15 +36,22 @@
 #include "protocolGraph/operations/container/ApplyLight.h"
 #include "protocolGraph/operations/container/ApplyTemperature.h"
 #include "protocolGraph/operations/container/actuatorsoperation.h"
+#include "protocolGraph/operations/container/centrifugateoperation.h"
+#include "protocolGraph/operations/container/electrophoresisoperation.h"
 #include "protocolGraph/operations/container/finishableoperation.h"
 #include "protocolGraph/operations/container/finishoperation.h"
 #include "protocolGraph/operations/container/GetVolume.h"
 #include "protocolGraph/operations/container/LoadContainerOperation.h"
+#include "protocolGraph/operations/container/measurefluorescence.h"
+#include "protocolGraph/operations/container/measureluminiscence.h"
 #include "protocolGraph/operations/container/MeasureOD.h"
+#include "protocolGraph/operations/container/measuretemperature.h"
+#include "protocolGraph/operations/container/measurevolume.h"
 #include "protocolGraph/operations/container/Mix.h"
 #include "protocolGraph/operations/container/SetContinousFlow.h"
 #include "protocolGraph/operations/container/stopcontinuosflow.h"
 #include "protocolGraph/operations/container/settimestep.h"
+#include "protocolGraph/operations/container/shakeoperation.h"
 #include "protocolGraph/operations/container/Stir.h"
 #include "protocolGraph/operations/container/TimeStep.h"
 #include "protocolGraph/operations/container/Transfer.h"
@@ -92,14 +99,33 @@ public:
 
     int emplaceGetVirtualVolume(const std::string & sourceId, const std::string & receiver);
     int emplaceLoadContainer(const std::string & idSource, std::shared_ptr<MathematicOperable> volume, units::Volume volumeUnits);
+
     int emplaceMeasureOD(const std::string & sourceId,
                          const std::string & receiver,
-                         std::shared_ptr<MathematicOperable> duration,
-                         units::Time durationUnits,
                          std::shared_ptr<MathematicOperable> measurmentFrequency,
                          units::Frequency measurmentFrequencyUnits,
                          std::shared_ptr<MathematicOperable> wavelength,
                          units::Length wavelengthUnits);
+    int emplaceMeasureFluorescence(const std::string & sourceId,
+                                   const std::string & receiver,
+                                   std::shared_ptr<MathematicOperable> measurmentFrequency,
+                                   units::Frequency measurmentFrequencyUnits,
+                                   std::shared_ptr<MathematicOperable> excitation,
+                                   units::Length excitationUnits,
+                                   std::shared_ptr<MathematicOperable> emission,
+                                   units::Length emissionUnits);
+    int emplaceMeasureLuminiscence(const std::string & sourceId,
+                                   const std::string & receiver,
+                                   std::shared_ptr<MathematicOperable> measurmentFrequency,
+                                   units::Frequency measurmentFrequencyUnits);
+    int emplaceMeasureVolume(const std::string & sourceId,
+                             const std::string & receiver,
+                             std::shared_ptr<MathematicOperable> measurmentFrequency,
+                             units::Frequency measurmentFrequencyUnits);
+    int emplaceMeasureTemperature(const std::string & sourceId,
+                                  const std::string & receiver,
+                                  std::shared_ptr<MathematicOperable> measurmentFrequency,
+                                  units::Frequency measurmentFrequencyUnits);
 
     int emplaceMix(const std::string & idSource1,
                    const std::string & idSource2,
@@ -124,6 +150,19 @@ public:
                         units::Volume volumeUnits);
 
     int emplaceFinishOperation(int finsihOperationId) throw(std::invalid_argument);
+
+    int emplaceElectrophoresis(const std::string & sourceId,
+                               std::shared_ptr<MathematicOperable> fieldStrenght,
+                               units::ElectricField fieldUnits,
+                               std::shared_ptr<VariableEntry> dataReference);
+
+    int emplaceCentrifugate(const std::string & sourceId,
+                            std::shared_ptr<MathematicOperable> speed,
+                            units::Frequency speedUnits);
+
+    int emplaceShake(const std::string & sourceId,
+                     std::shared_ptr<MathematicOperable> speed,
+                     units::Frequency speedUnits);
 
     void startIfBlock(std::shared_ptr<ComparisonOperable> condition);
     void startElIfBlock(std::shared_ptr<ComparisonOperable> condition) throw(std::runtime_error);

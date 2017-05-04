@@ -71,7 +71,15 @@ HEADERS += protocolGraph/protocolgraph_global.h \
     protocolGraph/operables/mathematics/testoperation.h \
     protocolGraph/container/virtualcontainer.h \
     protocolGraph/operations/container/finishoperation.h \
-    protocolGraph/operations/container/finishableoperation.h
+    protocolGraph/operations/container/finishableoperation.h \
+    protocolGraph/operations/container/electrophoresisoperation.h \
+    protocolGraph/execution_interface/electrophoresisresult.h \
+    protocolGraph/operations/container/centrifugateoperation.h \
+    protocolGraph/operations/container/shakeoperation.h \
+    protocolGraph/operations/container/measurefluorescence.h \
+    protocolGraph/operations/container/measureluminiscence.h \
+    protocolGraph/operations/container/measurevolume.h \
+    protocolGraph/operations/container/measuretemperature.h
 
 SOURCES += \
     protocolGraph/operations/container/ApplyLight.cpp \
@@ -104,7 +112,14 @@ SOURCES += \
     protocolGraph/operables/mathematics/randomfraction.cpp \
     protocolGraph/operables/mathematics/randominteger.cpp \
     protocolGraph/operables/mathematics/testoperation.cpp \
-    protocolGraph/operations/container/finishoperation.cpp
+    protocolGraph/operations/container/finishoperation.cpp \
+    protocolGraph/operations/container/electrophoresisoperation.cpp \
+    protocolGraph/operations/container/centrifugateoperation.cpp \
+    protocolGraph/operations/container/shakeoperation.cpp \
+    protocolGraph/operations/container/measurefluorescence.cpp \
+    protocolGraph/operations/container/measureluminiscence.cpp \
+    protocolGraph/operations/container/measurevolume.cpp \
+    protocolGraph/operations/container/measuretemperature.cpp
 
 debug {
     QMAKE_POST_LINK=X:\protocolGraph\protocolGraph\setDLL.bat $$shell_path($$OUT_PWD/debug) debug

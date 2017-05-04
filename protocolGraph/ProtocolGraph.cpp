@@ -112,8 +112,6 @@ int ProtocolGraph::emplaceLoadContainer(const std::string & idSource, std::share
 int ProtocolGraph::emplaceMeasureOD(
         const std::string & sourceId,
         const std::string & receiver,
-        std::shared_ptr<MathematicOperable> duration,
-        units::Time durationUnits,
         std::shared_ptr<MathematicOperable> measurmentFrequency,
         units::Frequency measurmentFrequencyUnits,
         std::shared_ptr<MathematicOperable> wavelength,
@@ -124,8 +122,85 @@ int ProtocolGraph::emplaceMeasureOD(
     std::shared_ptr<VariableEntry> receiverPtr = getVariableEntry(receiver);
     receiverPtr->setPhysical(true);
 
-    std::shared_ptr<Node> nodePtr = std::make_shared<MeasureOD>(nextId, sourceId, receiverPtr, duration, durationUnits, measurmentFrequency,
+    std::shared_ptr<Node> nodePtr = std::make_shared<MeasureOD>(nextId, sourceId, receiverPtr, measurmentFrequency,
                                                                 measurmentFrequencyUnits, wavelength, wavelengthUnits);
+    graph->addNode(nodePtr);
+
+    actuatorsOperations.insert(nextId);
+    return nextId;
+}
+
+int ProtocolGraph::emplaceMeasureFluorescence(
+        const std::string & sourceId,
+        const std::string & receiver,
+        std::shared_ptr<MathematicOperable> measurmentFrequency,
+        units::Frequency measurmentFrequencyUnits,
+        std::shared_ptr<MathematicOperable> excitation,
+        units::Length excitationUnits,
+        std::shared_ptr<MathematicOperable> emission,
+        units::Length emissionUnits)
+{
+    int nextId = nodeSerie.getNextValue();
+
+    std::shared_ptr<VariableEntry> receiverPtr = getVariableEntry(receiver);
+    receiverPtr->setPhysical(true);
+
+    std::shared_ptr<Node> nodePtr = std::make_shared<MeasureFluorescence>(nextId, sourceId, receiverPtr, measurmentFrequency,
+                                                                measurmentFrequencyUnits, excitation, excitationUnits, emission, emissionUnits);
+    graph->addNode(nodePtr);
+
+    actuatorsOperations.insert(nextId);
+    return nextId;
+}
+
+int ProtocolGraph::emplaceMeasureLuminiscence(
+        const std::string & sourceId,
+        const std::string & receiver,
+        std::shared_ptr<MathematicOperable> measurmentFrequency,
+        units::Frequency measurmentFrequencyUnits)
+{
+    int nextId = nodeSerie.getNextValue();
+
+    std::shared_ptr<VariableEntry> receiverPtr = getVariableEntry(receiver);
+    receiverPtr->setPhysical(true);
+
+    std::shared_ptr<Node> nodePtr = std::make_shared<MeasureLuminiscence>(nextId, sourceId, receiverPtr, measurmentFrequency, measurmentFrequencyUnits);
+    graph->addNode(nodePtr);
+
+    actuatorsOperations.insert(nextId);
+    return nextId;
+}
+
+int ProtocolGraph::emplaceMeasureVolume(
+        const std::string & sourceId,
+        const std::string & receiver,
+        std::shared_ptr<MathematicOperable> measurmentFrequency,
+        units::Frequency measurmentFrequencyUnits)
+{
+    int nextId = nodeSerie.getNextValue();
+
+    std::shared_ptr<VariableEntry> receiverPtr = getVariableEntry(receiver);
+    receiverPtr->setPhysical(true);
+
+    std::shared_ptr<Node> nodePtr = std::make_shared<MeasureVolume>(nextId, sourceId, receiverPtr, measurmentFrequency, measurmentFrequencyUnits);
+    graph->addNode(nodePtr);
+
+    actuatorsOperations.insert(nextId);
+    return nextId;
+}
+
+int ProtocolGraph::emplaceMeasureTemperature(
+        const std::string & sourceId,
+        const std::string & receiver,
+        std::shared_ptr<MathematicOperable> measurmentFrequency,
+        units::Frequency measurmentFrequencyUnits)
+{
+    int nextId = nodeSerie.getNextValue();
+
+    std::shared_ptr<VariableEntry> receiverPtr = getVariableEntry(receiver);
+    receiverPtr->setPhysical(true);
+
+    std::shared_ptr<Node> nodePtr = std::make_shared<MeasureTemperature>(nextId, sourceId, receiverPtr, measurmentFrequency, measurmentFrequencyUnits);
     graph->addNode(nodePtr);
 
     actuatorsOperations.insert(nextId);
@@ -239,6 +314,48 @@ int ProtocolGraph::emplaceFinishOperation(int finsihOperationId) throw(std::inva
     } else {
         throw(std::invalid_argument("ProtocolGraph::emplaceFinishOperation. Unknow finishOp id " + std::to_string(finsihOperationId)));
     }
+}
+
+int ProtocolGraph::emplaceElectrophoresis(
+        const std::string & sourceId,
+        std::shared_ptr<MathematicOperable> fieldStrenght,
+        units::ElectricField fieldUnits,
+        std::shared_ptr<VariableEntry> dataReference)
+{
+    int nextId = nodeSerie.getNextValue();
+
+    std::shared_ptr<Node> nodePtr = std::make_shared<ElectrophoresisOperation>(nextId, sourceId, fieldStrenght, fieldUnits, dataReference);
+    graph->addNode(nodePtr);
+
+    actuatorsOperations.insert(nextId);
+    return nextId;
+}
+
+int ProtocolGraph::emplaceCentrifugate(
+        const std::string & sourceId,
+        std::shared_ptr<MathematicOperable> speed,
+        units::Frequency speedUnits)
+{
+    int nextId = nodeSerie.getNextValue();
+
+    std::shared_ptr<Node> nodePtr = std::make_shared<CentrifugateOperation>(nextId, sourceId, speed, speedUnits);
+    graph->addNode(nodePtr);
+
+    actuatorsOperations.insert(nextId);
+    return nextId;
+}
+
+int ProtocolGraph::emplaceShake(const std::string & sourceId,
+                                std::shared_ptr<MathematicOperable> speed,
+                                units::Frequency speedUnits)
+{
+    int nextId = nodeSerie.getNextValue();
+
+    std::shared_ptr<Node> nodePtr = std::make_shared<ShakeOperation>(nextId, sourceId, speed, speedUnits);
+    graph->addNode(nodePtr);
+
+    actuatorsOperations.insert(nextId);
+    return nextId;
 }
 
 void ProtocolGraph::startIfBlock(std::shared_ptr<ComparisonOperable> condition) {

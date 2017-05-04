@@ -13,9 +13,6 @@ MeasureOD::MeasureOD() :
 	this->sourceId = -1;
 	this->receiver = std::shared_ptr<VariableEntry>();
 
-    this->duration = std::shared_ptr<MathematicOperable>();
-    this->durationUnits = units::s;
-
     this->measurmentFrequency = std::shared_ptr<MathematicOperable>();
     this->measurmentFrequencyUnits = units::Hz;
 
@@ -29,9 +26,6 @@ MeasureOD::MeasureOD(const MeasureOD& node) :
 	this->sourceId = node.sourceId;
 	this->receiver = node.receiver;
 
-    this->duration = node.duration;
-    this->durationUnits = node.durationUnits;
-
     this->measurmentFrequency = node.measurmentFrequency;
     this->measurmentFrequencyUnits = node.measurmentFrequencyUnits;
 
@@ -43,8 +37,6 @@ MeasureOD::MeasureOD(
         int containerId,
         const std::string & sourceId,
         std::shared_ptr<VariableEntry> receiver,
-        std::shared_ptr<MathematicOperable> duration,
-        units::Time durationUnits,
         std::shared_ptr<MathematicOperable> measurmentFrequency,
         units::Frequency measurmentFrequencyUnits,
         std::shared_ptr<MathematicOperable> wavelength,
@@ -53,9 +45,6 @@ MeasureOD::MeasureOD(
 {
 	this->sourceId = sourceId;
 	this->receiver = receiver;
-
-    this->duration = duration;
-    this->durationUnits = durationUnits;
 
     this->measurmentFrequency = measurmentFrequency;
     this->measurmentFrequencyUnits = measurmentFrequencyUnits;
@@ -68,7 +57,6 @@ MeasureOD::~MeasureOD() {}
 
 void MeasureOD::execute(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument) {
     actuatorInterface->startMeasureOD(sourceId,
-                                      duration->getValue() * durationUnits,
                                       measurmentFrequency->getValue() * measurmentFrequencyUnits,
                                       wavelength->getValue() * wavelengthUnits);
 }
