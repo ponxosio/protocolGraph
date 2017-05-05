@@ -147,7 +147,8 @@ public:
     int emplaceTransfer(const std::string & idSource,
                         const std::string & idTarget,
                         std::shared_ptr<MathematicOperable> volume,
-                        units::Volume volumeUnits);
+                        units::Volume volumeUnits,
+                        const std::string & opDuration);
 
     int emplaceFinishOperation(int finsihOperationId) throw(std::invalid_argument);
 
@@ -235,6 +236,9 @@ public:
 	}
     inline std::string toString() const {
         return graph->toString();
+    }
+    inline int getNextAvailableNodeId() const {
+        return nodeSerie.getValue();
     }
 protected:
 	int idStart;

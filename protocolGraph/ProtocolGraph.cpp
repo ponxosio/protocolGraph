@@ -284,11 +284,12 @@ int ProtocolGraph::emplaceTransfer(
         const std::string & idSource,
         const std::string & idTarget,
         std::shared_ptr<MathematicOperable> volume,
-        units::Volume volumeUnits)
+        units::Volume volumeUnits,
+        const std::string & opDuration)
 {
     int nextId = nodeSerie.getNextValue();
 
-    std::shared_ptr<Node> nodePtr = std::make_shared<Transfer>(nextId, idSource, idTarget, volume, volumeUnits);
+    std::shared_ptr<Node> nodePtr = std::make_shared<Transfer>(nextId, idSource, idTarget, volume, volumeUnits, getVariable(opDuration));
     graph->addNode(nodePtr);
 
     actuatorsOperations.insert(nextId);

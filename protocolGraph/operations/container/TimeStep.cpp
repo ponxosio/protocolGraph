@@ -31,5 +31,5 @@ std::string TimeStep::toText() {
 
 void TimeStep::execute(ActuatorsExecutionInterface* actuatorsInterface) throw(std::invalid_argument)  {
     units::Time time = actuatorsInterface->timeStep();
-    receiver.get()->setValue(receiver.get()->getValue() + time.to(units::s));
+    receiver->setValue(receiver->getValue() + Utils::toDefaultUnits(time));
 }

@@ -42,7 +42,8 @@ void MeasureVolume::execute(ActuatorsExecutionInterface* actuatorInterface) thro
 }
 
 void MeasureVolume::finish(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument) {
-    receiver->setValue(actuatorInterface->getMeasureVolume(sourceId).to(units::l));
+    units::Volume value = actuatorInterface->getMeasureVolume(sourceId);
+    receiver->setValue(Utils::toDefaultUnits(value));
 }
 
 std::string MeasureVolume::toText() {

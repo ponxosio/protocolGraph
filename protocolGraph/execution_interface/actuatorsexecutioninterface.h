@@ -54,12 +54,13 @@ public:
 
     virtual void setContinuosFlow(const std::string & idSource, const std::string & idTarget, units::Volumetric_Flow rate) = 0;
     virtual void stopContinuosFlow(const std::string & idSource, const std::string & idTarget) = 0;
-    virtual void transfer(const std::string & idSource, const std::string & idTarget, units::Volume volume) = 0;
-    virtual void mix(const std::string & idSource1,
-                     const std::string & idSource2,
-                     const std::string & idTarget,
-                     units::Volume volume1,
-                     units::Volume volume2) = 0;
+
+    virtual units::Time transfer(const std::string & idSource, const std::string & idTarget, units::Volume volume) = 0;
+    virtual units::Time mix(const std::string & idSource1,
+                            const std::string & idSource2,
+                            const std::string & idTarget,
+                            units::Volume volume1,
+                            units::Volume volume2) = 0;
 
     virtual void setTimeStep(units::Time time) = 0;
     virtual units::Time timeStep() = 0;

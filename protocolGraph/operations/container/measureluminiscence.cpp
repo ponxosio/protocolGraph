@@ -42,7 +42,8 @@ void MeasureLuminiscence::execute(ActuatorsExecutionInterface* actuatorInterface
 }
 
 void MeasureLuminiscence::finish(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument) {
-    receiver->setValue(actuatorInterface->getMeasureFluorescence(sourceId).to(units::cd));
+    units::LuminousIntensity value = actuatorInterface->getMeasureLuminiscense(sourceId);
+    receiver->setValue(Utils::toDefaultUnits(value));
 }
 
 std::string MeasureLuminiscence::toText() {

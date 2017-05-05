@@ -37,5 +37,5 @@ std::string GetVolume::toText() {
 
 void GetVolume::execute(ActuatorsExecutionInterface* actuatorsExecution) throw(std::invalid_argument)  {
     units::Volume virtualVolume = actuatorsExecution->getVirtualVolume(sourceId);
-    receiver.get()->setValue(virtualVolume.to(units::ml));
+    receiver.get()->setValue(Utils::toDefaultUnits(virtualVolume));
 }

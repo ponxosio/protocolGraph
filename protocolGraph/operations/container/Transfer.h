@@ -12,7 +12,10 @@
 
 //local
 #include "protocolGraph/execution_interface/actuatorsexecutioninterface.h"
+
 #include "protocolGraph/operables/mathematics/MathematicOperable.h"
+#include "protocolGraph/operables/mathematics/VariableEntry.h"
+
 #include "protocolGraph/operations/container/actuatorsoperation.h"
 
 #include "protocolGraph/protocolgraph_global.h"
@@ -31,14 +34,18 @@ public:
              const std::string & idSource,
              const std::string & idTarget,
              std::shared_ptr<MathematicOperable> volume,
-             units::Volume volumeUnits);
+             units::Volume volumeUnits,
+             std::shared_ptr<VariableEntry> opDuration);
 
     virtual void execute(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument);
 
 protected:
     std::string idSource;
     std::string idTarget;
+
     std::shared_ptr<MathematicOperable> volume;
     units::Volume volumeUnits;
+
+    std::shared_ptr<VariableEntry> opDuration;
 };
 #endif /* SRC_FLUIDCONTROL_PROTOCOLGRAPH_OPERATIONS_CONTAINER_TRANSFER_H_ */

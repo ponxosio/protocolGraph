@@ -11,8 +11,9 @@ Transfer::Transfer() :
 		ActuatorsOperation() {
 	this->idSource = -1;
 	this->idTarget = -1;
-	this->volume = std::shared_ptr<MathematicOperable>();
+    this->volume = NULL;
     this->volumeUnits = units::l;
+    this->opDuration = NULL;
 }
 
 Transfer::Transfer(const Transfer& obj)  :
@@ -22,6 +23,7 @@ Transfer::Transfer(const Transfer& obj)  :
 	this->idTarget = obj.idTarget;
 	this->volume = obj.volume;
     this->volumeUnits = obj.volumeUnits;
+    this->opDuration = obj.opDuration;
 }
 
 Transfer::Transfer(
@@ -29,13 +31,15 @@ Transfer::Transfer(
         const std::string & idSource,
         const std::string & idTarget,
         std::shared_ptr<MathematicOperable> volume,
-        units::Volume volumeUnits) :
+        units::Volume volumeUnits,
+        std::shared_ptr<VariableEntry> opDuration) :
     ActuatorsOperation(idContainer)
 {
     this->idSource = idSource;
     this->idTarget = idTarget;
     this->volume = volume;
     this->volumeUnits = volumeUnits;
+    this->opDuration = opDuration;
 }
 
 std::string Transfer::toText() {
@@ -48,5 +52,6 @@ Transfer::~Transfer() {
 }
 
 void Transfer::execute(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument)  {
-    actuatorInterface->transfer(idSource, idTarget, volume.get()->getValue() * volumeUnits);
+    units::Time duration = actuatorInterface->transfer(idSource, idTarget, volume.get()->getValue() * volumeUnits);
+    opDuration->setValue(Utils::toDefaultUnits(duration));
 }

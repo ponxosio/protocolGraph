@@ -42,7 +42,8 @@ void MeasureTemperature::execute(ActuatorsExecutionInterface* actuatorInterface)
 }
 
 void MeasureTemperature::finish(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument) {
-    receiver->setValue(actuatorInterface->getMeasureTemperature(sourceId).to(units::K));
+    units::Temperature value = actuatorInterface->getMeasureTemperature(sourceId);
+    receiver->setValue(Utils::toDefaultUnits(value));
 }
 
 std::string MeasureTemperature::toText() {

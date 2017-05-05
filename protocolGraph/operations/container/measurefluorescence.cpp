@@ -70,5 +70,6 @@ void MeasureFluorescence::execute(ActuatorsExecutionInterface* actuatorInterface
 }
 
 void MeasureFluorescence::finish(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument) {
-    receiver->setValue(actuatorInterface->getMeasureFluorescence(sourceId).to(units::cd));
+    units::LuminousIntensity value = actuatorInterface->getMeasureFluorescence(sourceId);
+    receiver->setValue(Utils::toDefaultUnits(value));
 }
