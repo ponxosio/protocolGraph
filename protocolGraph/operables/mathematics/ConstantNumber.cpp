@@ -7,6 +7,12 @@
 
 #include "../mathematics/ConstantNumber.h"
 
+const double ConstantNumber::INFINITE  = std::numeric_limits<double>::max();
+
+std::shared_ptr<ConstantNumber> ConstantNumber::getInfinite() {
+    return std::make_shared<ConstantNumber>(INFINITE);
+}
+
 ConstantNumber::ConstantNumber() {
 	this->value = -1.0;
 }

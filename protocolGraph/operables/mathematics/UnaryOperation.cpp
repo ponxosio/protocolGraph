@@ -29,57 +29,61 @@ UnaryOperation::~UnaryOperation()
 
 double UnaryOperation::getValue() const throw (std::invalid_argument)  {
 	MathematicOperable* value = variable.get();
-	double vuelta = 0.0;
 
-	switch(this->op) {
-    case UnaryOperator::absoluteValue:
-        vuelta = std::fabs(value->getValue());
-		break;
-    case UnaryOperator::floor:
-        vuelta = std::floor(value->getValue());
-		break;
-    case UnaryOperator::round:
-        vuelta = std::round(value->getValue());
-        break;
-    case UnaryOperator::ceiling:
-        vuelta = std::ceil(value->getValue());
-        break;
-    case UnaryOperator::sqrt:
-        vuelta = std::sqrt(value->getValue());
-        break;
-    case UnaryOperator::ln:
-        vuelta = std::log(value->getValue());
-        break;
-    case UnaryOperator::log10:
-        vuelta = std::log10(value->getValue());
-        break;
-    case UnaryOperator::exp_e:
-        vuelta = std::exp(value->getValue());
-        break;
-    case UnaryOperator::exp_10:
-        vuelta = std::pow(value->getValue(), 10);
-        break;
-    case UnaryOperator::minus:
-        vuelta = -1.0 * value->getValue();
-        break;
-    case UnaryOperator::sin_op:
-        vuelta = std::sin(value->getValue());
-        break;
-    case UnaryOperator::cos_op:
-        vuelta = std::cos(value->getValue());
-        break;
-    case UnaryOperator::tan_op:
-        vuelta = std::tan(value->getValue());
-        break;
-    case UnaryOperator::asin_op:
-        vuelta = std::asin(value->getValue());
-        break;
-    case UnaryOperator::acos_op:
-        vuelta = std::acos(value->getValue());
-        break;
-    case UnaryOperator::atan_op:
-        vuelta = std::atan(value->getValue());
-        break;
+    double vuelta = 0.0;
+    if (value->getValue() == ConstantNumber::INFINITE) {
+        vuelta = ConstantNumber::INFINITE;
+    } else {
+        switch(this->op) {
+        case UnaryOperator::absoluteValue:
+            vuelta = std::fabs(value->getValue());
+            break;
+        case UnaryOperator::floor:
+            vuelta = std::floor(value->getValue());
+            break;
+        case UnaryOperator::round:
+            vuelta = std::round(value->getValue());
+            break;
+        case UnaryOperator::ceiling:
+            vuelta = std::ceil(value->getValue());
+            break;
+        case UnaryOperator::sqrt:
+            vuelta = std::sqrt(value->getValue());
+            break;
+        case UnaryOperator::ln:
+            vuelta = std::log(value->getValue());
+            break;
+        case UnaryOperator::log10:
+            vuelta = std::log10(value->getValue());
+            break;
+        case UnaryOperator::exp_e:
+            vuelta = std::exp(value->getValue());
+            break;
+        case UnaryOperator::exp_10:
+            vuelta = std::pow(value->getValue(), 10);
+            break;
+        case UnaryOperator::minus:
+            vuelta = -1.0 * value->getValue();
+            break;
+        case UnaryOperator::sin_op:
+            vuelta = std::sin(value->getValue());
+            break;
+        case UnaryOperator::cos_op:
+            vuelta = std::cos(value->getValue());
+            break;
+        case UnaryOperator::tan_op:
+            vuelta = std::tan(value->getValue());
+            break;
+        case UnaryOperator::asin_op:
+            vuelta = std::asin(value->getValue());
+            break;
+        case UnaryOperator::acos_op:
+            vuelta = std::acos(value->getValue());
+            break;
+        case UnaryOperator::atan_op:
+            vuelta = std::atan(value->getValue());
+            break;
+        }
     }
 	return vuelta;
 }

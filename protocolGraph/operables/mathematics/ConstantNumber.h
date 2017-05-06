@@ -8,6 +8,7 @@
 #ifndef SRC_OPERABLES_MATHEMATICS_CONSTANTNUMBER_H_
 #define SRC_OPERABLES_MATHEMATICS_CONSTANTNUMBER_H_
 
+#include <limits>
 #include <memory>
 #include <string>
 
@@ -21,6 +22,9 @@
  */
 class CONSTANTNUMBER_EXPORT ConstantNumber: public MathematicOperable {
 public:
+    static const double INFINITE;
+    static std::shared_ptr<ConstantNumber> getInfinite();
+
 	ConstantNumber();
     ConstantNumber(const ConstantNumber & cn);
 	ConstantNumber(int value);

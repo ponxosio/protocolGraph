@@ -25,6 +25,7 @@
 //local
 #include <utils/Utils.h>
 #include "protocolGraph/operables/mathematics/MathematicOperable.h"
+#include "protocolGraph/operables/mathematics/ConstantNumber.h"
 
 #include "protocolGraph/protocolgraph_global.h"
 

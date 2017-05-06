@@ -25,7 +25,13 @@ std::shared_ptr<MathematicOperable> ProtocolMathF::min(std::shared_ptr<Mathemati
 }
 
 std::shared_ptr<MathematicOperable> ProtocolMathF::max(std::shared_ptr<MathematicOperable> op1, std::shared_ptr<MathematicOperable> op2) {
-    return std::make_shared<ArithmeticOperation>(op1, ArithmeticOperation::max, op2);
+    if (op1 == NULL) {
+        return op2;
+    } else if (op2 == NULL) {
+        return op1;
+    } else {
+        return std::make_shared<ArithmeticOperation>(op1, ArithmeticOperation::max, op2);
+    }
 }
 
 std::shared_ptr<MathematicOperable> ProtocolMathF::pow(std::shared_ptr<MathematicOperable> op1, std::shared_ptr<MathematicOperable> op2) {

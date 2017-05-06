@@ -38,31 +38,37 @@ double ArithmeticOperation::getValue() const throw (std::invalid_argument)  {
 	MathematicOperable* right = rightVariable.get();
 
     double vuelta = 0.0;
-    switch (op) {
-    case plus:
-        vuelta = left->getValue() + right->getValue();
-        break;
-    case minus:
-        vuelta = left->getValue() - right->getValue();
-        break;
-    case multiply:
-        vuelta = left->getValue() * right->getValue();
-        break;
-    case divide:
-        vuelta = left->getValue() / right->getValue();
-        break;
-    case module:
-        vuelta = std::fmod(left->getValue(), right->getValue());
-        break;
-    case max:
-        vuelta = std::max(left->getValue(), right->getValue());
-        break;
-    case min:
-        vuelta = std::min(left->getValue(), right->getValue());
-        break;
-    case power:
-        vuelta = std::pow(left->getValue(), right->getValue());
-        break;
+    if (left->getValue() == ConstantNumber::INFINITE ||
+            right->getValue() == ConstantNumber::INFINITE)
+    {
+        vuelta = ConstantNumber::INFINITE;
+    } else {
+        switch (op) {
+        case plus:
+            vuelta = left->getValue() + right->getValue();
+            break;
+        case minus:
+            vuelta = left->getValue() - right->getValue();
+            break;
+        case multiply:
+            vuelta = left->getValue() * right->getValue();
+            break;
+        case divide:
+            vuelta = left->getValue() / right->getValue();
+            break;
+        case module:
+            vuelta = std::fmod(left->getValue(), right->getValue());
+            break;
+        case max:
+            vuelta = std::max(left->getValue(), right->getValue());
+            break;
+        case min:
+            vuelta = std::min(left->getValue(), right->getValue());
+            break;
+        case power:
+            vuelta = std::pow(left->getValue(), right->getValue());
+            break;
+        }
     }
     return vuelta;
 }
