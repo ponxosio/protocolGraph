@@ -12,6 +12,7 @@ std::shared_ptr<ComparisonOperable> ProtocolBoolF::contradiction() {
 
 std::shared_ptr<ComparisonOperable> ProtocolBoolF::equal(std::shared_ptr<MathematicOperable> op1, std::shared_ptr<MathematicOperable> op2) {
     return std::make_shared<SimpleComparison>(false, op1, SimpleComparison::equal, op2);
+
 }
 
 std::shared_ptr<ComparisonOperable> ProtocolBoolF::less(std::shared_ptr<MathematicOperable> op1, std::shared_ptr<MathematicOperable> op2) {
@@ -55,11 +56,23 @@ std::shared_ptr<ComparisonOperable> ProtocolBoolF::isNegative(std::shared_ptr<Ma
 }
 
 std::shared_ptr<ComparisonOperable> ProtocolBoolF::makeAnd(std::shared_ptr<ComparisonOperable> op1, std::shared_ptr<ComparisonOperable> op2) {
-    return std::make_shared<BooleanComparison>(false, op1, BooleanComparison::conjunction, op2);
+    if (op1 == NULL) {
+        return op2;
+    }  else if (op2 == NULL) {
+        return op1;
+    } else {
+        return std::make_shared<BooleanComparison>(false, op1, BooleanComparison::conjunction, op2);
+    }
 }
 
 std::shared_ptr<ComparisonOperable> ProtocolBoolF::makeOr(std::shared_ptr<ComparisonOperable> op1, std::shared_ptr<ComparisonOperable> op2) {
-    return std::make_shared<BooleanComparison>(false, op1, BooleanComparison::disjunction, op2);
+    if (op1 == NULL) {
+        return op2;
+    }  else if (op2 == NULL) {
+        return op1;
+    } else {
+        return std::make_shared<BooleanComparison>(false, op1, BooleanComparison::disjunction, op2);
+    }
 }
 
 std::shared_ptr<ComparisonOperable> ProtocolBoolF::makeNot(std::shared_ptr<ComparisonOperable> op) {

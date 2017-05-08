@@ -8,7 +8,7 @@
 #include "Transfer.h"
 
 Transfer::Transfer() :
-		ActuatorsOperation() {
+        FinishableOperation() {
 	this->idSource = -1;
 	this->idTarget = -1;
     this->volume = NULL;
@@ -17,7 +17,7 @@ Transfer::Transfer() :
 }
 
 Transfer::Transfer(const Transfer& obj)  :
-		ActuatorsOperation(obj) {
+        FinishableOperation(obj) {
 
 	this->idSource = obj.idSource;
 	this->idTarget = obj.idTarget;
@@ -33,7 +33,7 @@ Transfer::Transfer(
         std::shared_ptr<MathematicOperable> volume,
         units::Volume volumeUnits,
         std::shared_ptr<VariableEntry> opDuration) :
-    ActuatorsOperation(idContainer)
+    FinishableOperation(idContainer)
 {
     this->idSource = idSource;
     this->idTarget = idTarget;
@@ -54,4 +54,8 @@ Transfer::~Transfer() {
 void Transfer::execute(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument)  {
     units::Time duration = actuatorInterface->transfer(idSource, idTarget, volume.get()->getValue() * volumeUnits);
     opDuration->setValue(Utils::toDefaultUnits(duration));
+}
+
+void Transfer::finish(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument) {
+    actuatorInterface->stopTransfer(idSource, idTarget);
 }

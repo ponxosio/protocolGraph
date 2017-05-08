@@ -8,19 +8,20 @@
 #include "Mix.h"
 
 Mix::Mix() :
-    ActuatorsOperation()
+    FinishableOperation()
 {
-	this->idSource1 = -1;
-	this->idSource2 = -1;
-	this->idTarget = -1;
-	this->volume1 = std::shared_ptr<MathematicOperable>();
-	this->volume2 = std::shared_ptr<MathematicOperable>();
+    this->idSource1 = "";
+    this->idSource2 = "";
+    this->idTarget = "";
+    this->volume1 = NULL;
+    this->volume2 = NULL;
     this->unitsVolume1 = units::l;
     this->unitsVolume2 = units::l;
+    this->opDuration = NULL;
 }
 
 Mix::Mix(const Mix& node) :
-    ActuatorsOperation(node)
+    FinishableOperation(node)
 {
 	this->idSource1 = node.idSource1;
 	this->idSource2 = node.idSource2;
@@ -29,6 +30,7 @@ Mix::Mix(const Mix& node) :
 	this->volume2 = node.volume2;
     this->unitsVolume1 = node.unitsVolume1;
     this->unitsVolume2 = node.unitsVolume2;
+    this->opDuration = node.opDuration;
 }
 
 Mix::Mix(int idConatiner,
@@ -38,8 +40,9 @@ Mix::Mix(int idConatiner,
          std::shared_ptr<MathematicOperable> volume1,
          units::Volume unitsVolume1,
          std::shared_ptr<MathematicOperable> volume2,
-         units::Volume unitsVolume2) :
-    ActuatorsOperation(idConatiner)
+         units::Volume unitsVolume2,
+         std::shared_ptr<VariableEntry> opDuration) :
+    FinishableOperation(idConatiner)
 {
 	this->idSource1 = idSource1;
 	this->idSource2 = idSource2;
@@ -48,6 +51,7 @@ Mix::Mix(int idConatiner,
 	this->volume2 = volume2;
     this->unitsVolume1 = unitsVolume1;
     this->unitsVolume2 = unitsVolume2;
+    this->opDuration = opDuration;
 }
 
 Mix::~Mix() {
@@ -61,9 +65,15 @@ std::string Mix::toText() {
 }
 
 void Mix::execute(ActuatorsExecutionInterface* actuatorsInterface) throw(std::invalid_argument)  {
-    actuatorsInterface->mix(idSource1,
+    units::Time duration = actuatorsInterface->mix(
+                            idSource1,
                             idSource2,
                             idTarget,
                             volume1.get()->getValue() * unitsVolume1,
                             volume2.get()->getValue() * unitsVolume2);
+    opDuration->setValue(Utils::toDefaultUnits(duration));
+}
+
+void Mix::finish(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument) {
+    actuatorInterface->stopMix(idSource1, idSource2, idTarget);
 }

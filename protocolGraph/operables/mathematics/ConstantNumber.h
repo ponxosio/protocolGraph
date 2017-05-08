@@ -42,7 +42,7 @@ public:
     }
 
     inline virtual std::string toString() const {
-        return std::to_string(value);
+        return value == INFINITE ? "Infinite" : std::to_string(value);
 	}
 
     inline virtual MathematicOperable* clone() const {

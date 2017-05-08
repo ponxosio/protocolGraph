@@ -214,11 +214,23 @@ int ProtocolGraph::emplaceMix(
         std::shared_ptr<MathematicOperable> volume1,
         units::Volume volume1Units,
         std::shared_ptr<MathematicOperable> volume2,
-        units::Volume volume2Units)
+        units::Volume volume2Units,
+        const std::string & opDuration)
 {
     int nextId = nodeSerie.getNextValue();
 
-    std::shared_ptr<Node> nodePtr = std::make_shared<Mix>(nextId, idSource1, idSource2, idTarget, volume1, volume1Units, volume2, volume2Units);
+    std::shared_ptr<Node> nodePtr =
+            std::make_shared<Mix>(
+                nextId,
+                idSource1,
+                idSource2,
+                idTarget,
+                volume1,
+                volume1Units,
+                volume2,
+                volume2Units,
+                getVariable(opDuration));
+
     graph->addNode(nodePtr);
 
     actuatorsOperations.insert(nextId);

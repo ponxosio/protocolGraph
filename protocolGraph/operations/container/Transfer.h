@@ -16,11 +16,11 @@
 #include "protocolGraph/operables/mathematics/MathematicOperable.h"
 #include "protocolGraph/operables/mathematics/VariableEntry.h"
 
-#include "protocolGraph/operations/container/actuatorsoperation.h"
+#include "protocolGraph/operations/container/finishableoperation.h"
 
 #include "protocolGraph/protocolgraph_global.h"
 
-class TRANSFER_EXPORT Transfer: public ActuatorsOperation {
+class TRANSFER_EXPORT Transfer: public FinishableOperation {
 public:
 	//Node methods
 	Transfer();
@@ -38,6 +38,7 @@ public:
              std::shared_ptr<VariableEntry> opDuration);
 
     virtual void execute(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument);
+    virtual void finish(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument);
 
 protected:
     std::string idSource;

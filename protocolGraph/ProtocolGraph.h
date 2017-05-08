@@ -133,7 +133,8 @@ public:
                    std::shared_ptr<MathematicOperable> volume1,
                    units::Volume volume1Units,
                    std::shared_ptr<MathematicOperable> volume2,
-                   units::Volume volume2Units);
+                   units::Volume volume2Units,
+                   const std::string & opDuration);
 
     int emplaceStopContinuousFlow(const std::string & idSource, const std::string & idTarget);
     int emplaceSetContinuousFlow(const std::string & idSource,
