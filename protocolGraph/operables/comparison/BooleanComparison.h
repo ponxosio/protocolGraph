@@ -55,7 +55,7 @@ public:
 	 * @return true if the comparison uses physical values, false otherwise
 	 */
     inline virtual bool isPhysical() const {
-		return (left.get()->isPhysical() || right.get()->isPhysical());
+        return (left->isPhysical() || right->isPhysical());
 	}
 	/**
 	 * Checks if two ComparisonOperable are the same
@@ -70,7 +70,7 @@ public:
 
     inline virtual std::string toString() const {
 		std::string neg = negation ? "!" : "";
-		return neg + left.get()->toString() + " " + getStringOp() + " " + right.get()->toString();
+        return neg + (left ? left->toString() : "?") + " " + getStringOp() + " " + (right ? right->toString() : "?");
 	}
 
     inline virtual ComparisonOperable* clone() const {

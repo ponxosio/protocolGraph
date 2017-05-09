@@ -32,7 +32,8 @@ ShakeOperation::~ShakeOperation() {
 
 std::string ShakeOperation::toText() {
     return std::to_string(containerID) + "[label=\"shake("
-            + sourceID + ", " + shakeValue->toString()
+            + sourceID + ", "
+            + (shakeValue ? shakeValue->toString() : "?")
             + ")\"];";
 }
 

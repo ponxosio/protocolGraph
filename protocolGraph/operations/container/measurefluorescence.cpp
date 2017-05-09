@@ -58,8 +58,8 @@ MeasureFluorescence::~MeasureFluorescence() {
 
 std::string MeasureFluorescence::toText() {
     return std::to_string(containerID) + "[label=\""
-        + receiver.get()->toString() + " = measureFluorescence("
-        + sourceId + ")\"];";
+        + (receiver ? receiver->toString() : "?")
+        + " = measureFluorescence(" + sourceId + ")\"];";
 }
 
 void MeasureFluorescence::execute(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument) {

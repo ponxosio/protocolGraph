@@ -36,8 +36,9 @@ LoadContainerOperation::~LoadContainerOperation() {
 
 std::string LoadContainerOperation::toText() {
     return std::to_string(containerID) + "[label=\"loadContainer("
-            + idSource + ", " + volume.get()->toString()
-			+ ")\"];";
+            + idSource + ", "
+            + (volume ? volume->toString() : "?")
+            + ")\"];";
 }
 
 void LoadContainerOperation::execute(ActuatorsExecutionInterface* actuatorsInterface) throw(std::invalid_argument)  {

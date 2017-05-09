@@ -31,8 +31,8 @@ GetVolume::~GetVolume() {}
 
 std::string GetVolume::toText() {
     return std::to_string(containerID) + "[label=\""
-			+ receiver.get()->toString() + " = getVolume("
-            + sourceId + ")\"];";
+            + (receiver ? receiver->toString() : "?")
+            + " = getVolume(" + sourceId + ")\"];";
 }
 
 void GetVolume::execute(ActuatorsExecutionInterface* actuatorsExecution) throw(std::invalid_argument)  {

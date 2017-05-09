@@ -35,7 +35,8 @@ ApplyTemperature::~ApplyTemperature() {}
 
 std::string ApplyTemperature::toText() {
     return std::to_string(containerID) + "[label=\"applyTemperature("
-            + sourceId + ", " + temperature.get()->toString()
+            + sourceId + ", "
+            + (temperature ? temperature->toString() : "?")
             + ")\"];";
 }
 

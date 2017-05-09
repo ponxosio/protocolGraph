@@ -28,7 +28,7 @@ public:
     }
 
     inline virtual std::string toString() const {
-        return "rand(" + initNumber->toString() + "," + endNumber->toString()  + ")";
+        return "rand(" + (initNumber ? initNumber->toString() : "?") + "," + (endNumber ? endNumber->toString() : "?") + ")";
     }
 
     inline virtual MathematicOperable* clone() const {

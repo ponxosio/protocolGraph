@@ -35,7 +35,9 @@ AssignationOperation::~AssignationOperation() {
 
 std::string AssignationOperation::toText() {
     return std::to_string(containerID) + "[label=\""
-			+ receiver.get()->toString() + " = " + value.get()->toString()
+            + (receiver ? receiver->toString() : "?")
+            + " = "
+            + (value ? value->toString() : "?")
 			+ "\"];";
 }
 

@@ -43,7 +43,9 @@ SetContinousFlow::~SetContinousFlow() {
 
 std::string SetContinousFlow::toText() {
     return std::to_string(containerID) + "[label=\"setContinousFlow("
-            + idSource + ", " + idTarget + ", " + rate.get()->toString() + ")\"];";
+            + idSource + ", " + idTarget + ", "
+            + (rate ? rate->toString() : "?")
+            + ")\"];";
 }
 
 void SetContinousFlow::execute(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument)  {

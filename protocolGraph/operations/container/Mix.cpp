@@ -60,8 +60,10 @@ Mix::~Mix() {
 std::string Mix::toText() {
     return std::to_string(containerID) + "[label=\"Mix("
             + idSource1 + ", " + idSource2 + ", " + idTarget + ", "
-			+ volume1.get()->toString() + ", " + volume2.get()->toString()
-			+ ")\"];";
+            + (volume1 ? volume1->toString() : "?")
+            + ", "
+            + (volume2 ? volume2->toString() : "?")
+            + ")\"];";
 }
 
 void Mix::execute(ActuatorsExecutionInterface* actuatorsInterface) throw(std::invalid_argument)  {

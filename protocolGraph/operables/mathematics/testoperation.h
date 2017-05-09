@@ -41,7 +41,10 @@ public:
     }
 
     inline virtual  std::string toString() const {
-        return condition->toString() + " ? " + trueValue->toString() + " : " + falseValue->toString();
+        return (condition ? condition->toString() : "null") + " ? "
+                           + (trueValue ? trueValue->toString() : "null")
+                           + " : "
+                           + (falseValue ? falseValue->toString() :  "null");
     }
 
     inline virtual MathematicOperable* clone() const {

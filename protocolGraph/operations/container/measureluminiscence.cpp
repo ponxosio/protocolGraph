@@ -48,6 +48,6 @@ void MeasureLuminiscence::finish(ActuatorsExecutionInterface* actuatorInterface)
 
 std::string MeasureLuminiscence::toText() {
     return std::to_string(containerID) + "[label=\""
-        + receiver.get()->toString() + " = measureLuminiscence("
-        + sourceId + ")\"];";
+        + (receiver ? receiver->toString() : "?")
+        + " = measureLuminiscence(" + sourceId + ")\"];";
 }

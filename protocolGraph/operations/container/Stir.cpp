@@ -35,9 +35,10 @@ Stir::Stir(
 Stir::~Stir() {}
 
 std::string Stir::toText() {
-    return std::to_string(containerID) + "[label=\"applyTemperature("
-            + sourceId + ", " + intensity.get()->toString()
-			+ ")\"];";
+    return std::to_string(containerID) + "[label=\"stir("
+            + sourceId + ", "
+            + (intensity ? intensity->toString() : "?")
+            + ")\"];";
 }
 
 void Stir::execute(ActuatorsExecutionInterface* actuatorsInterface) throw(std::invalid_argument) {

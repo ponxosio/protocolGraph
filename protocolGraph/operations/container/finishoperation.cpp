@@ -23,7 +23,10 @@ FinishOperation::~FinishOperation() {
 }
 
 std::string FinishOperation::toText() {
-    return std::to_string(containerID) + "[label=\"finish(" + std::to_string(operation->getContainerId()) + ")\"];";
+    return std::to_string(containerID)
+            + "[label=\"finish("
+            + (operation ? std::to_string(operation->getContainerId()) : "?")
+            + ")\"];";
 }
 
 void FinishOperation::execute(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument) {

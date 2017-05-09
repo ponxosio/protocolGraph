@@ -83,7 +83,7 @@ public:
 	virtual bool equal(const MathematicOperable* obj) const;
 
     inline virtual std::string toString() const {
-		return getStringOp() + "(" + variable.get()->toString() + ")";
+        return getStringOp() + "(" + (variable ? variable->toString() : "?") + ")";
 	}
 
     inline virtual MathematicOperable* clone() const {

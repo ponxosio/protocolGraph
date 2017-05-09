@@ -81,7 +81,7 @@ public:
 
     inline virtual std::string toString() const {
 		std::string neg = negation ? "!" : "";
-		return  neg + left.get()->toString() + " " + getStingOp() + " " + right.get()->toString();
+        return  neg + (left ? left->toString() : "?") + " " + getStingOp() + " " + (right ? right->toString() : "?");
 	}
 
     inline virtual ComparisonOperable* clone() const {

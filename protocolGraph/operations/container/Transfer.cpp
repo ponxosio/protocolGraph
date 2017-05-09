@@ -44,7 +44,9 @@ Transfer::Transfer(
 
 std::string Transfer::toText() {
     return std::to_string(containerID) + "[label=\"Transfer("
-            + idSource + ", " + idTarget + ", " + volume.get()->toString() + ")\"];";
+            + idSource + ", " + idTarget + ", "
+            + (volume ? volume->toString() : "?")
+            + ")\"];";
 }
 
 Transfer::~Transfer() {

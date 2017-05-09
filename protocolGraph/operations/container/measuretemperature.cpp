@@ -48,6 +48,6 @@ void MeasureTemperature::finish(ActuatorsExecutionInterface* actuatorInterface) 
 
 std::string MeasureTemperature::toText() {
     return std::to_string(containerID) + "[label=\""
-        + receiver.get()->toString() + " = measureTemperature("
-        + sourceId + ")\"];";
+        + (receiver ? receiver->toString() : "?")
+        + " = measureTemperature(" + sourceId + ")\"];";
 }

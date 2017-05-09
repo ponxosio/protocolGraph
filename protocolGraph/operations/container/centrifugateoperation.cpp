@@ -32,7 +32,8 @@ CentrifugateOperation::~CentrifugateOperation() {
 
 std::string CentrifugateOperation::toText() {
     return std::to_string(containerID) + "[label=\"centrifugate("
-            + sourceID + ", " + speed.get()->toString()
+            + sourceID + ", "
+            + (speed ? speed.get()->toString() : "?")
             + ")\"];";
 }
 

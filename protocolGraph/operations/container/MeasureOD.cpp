@@ -67,6 +67,6 @@ void MeasureOD::finish(ActuatorsExecutionInterface* actuatorInterface) throw(std
 
 std::string MeasureOD::toText() {
     return std::to_string(containerID) + "[label=\""
-		+ receiver.get()->toString() + " = measureOD("
-        + sourceId + ")\"];";
+        + (receiver ? receiver->toString() : "?")
+        + " = measureOD(" + sourceId + ")\"];";
 }

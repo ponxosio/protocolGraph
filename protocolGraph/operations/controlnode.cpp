@@ -21,7 +21,9 @@ ControlNode::~ControlNode() {
 }
 
 std::string ControlNode::toText() {
-    return std::to_string(containerID) + "[label=\"" + typeToStr(type) + "(" + conditionIn->toString() + ")\"];";
+    return std::to_string(containerID) + "[label=\"" + typeToStr(type) + "("
+            + (conditionIn ? conditionIn->toString() : "?")
+            + ")\"];";
 }
 
 std::string ControlNode::typeToStr(ControlType type) {

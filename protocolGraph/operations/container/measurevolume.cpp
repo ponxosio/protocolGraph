@@ -48,6 +48,7 @@ void MeasureVolume::finish(ActuatorsExecutionInterface* actuatorInterface) throw
 
 std::string MeasureVolume::toText() {
     return std::to_string(containerID) + "[label=\""
-        + receiver.get()->toString() + " = measureVolume("
+        + (receiver ? receiver->toString() : "?")
+        + " = measureVolume("
         + sourceId + ")\"];";
 }

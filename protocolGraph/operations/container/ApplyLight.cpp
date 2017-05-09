@@ -45,8 +45,11 @@ ApplyLight::~ApplyLight() {
 
 std::string ApplyLight::toText() {
     return std::to_string(containerID) + "[label=\"applyLigth("
-            + sourceId + ", " + wavelength.get()->toString()
-            + ", " + intensity.get()->toString() + ")\"];";
+            + sourceId + ", "
+            + (wavelength ? wavelength->toString() : "?")
+            + ", "
+            + (intensity ? intensity->toString() : "?")
+            + ")\"];";
 }
 
 void ApplyLight::execute(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument)  {

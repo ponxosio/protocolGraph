@@ -75,7 +75,9 @@ public:
     }
 
     inline virtual  std::string toString() const {
-		return leftVariable.get()->toString() + " " + getStringOp() + " " + rightVariable.get()->toString();
+        return (leftVariable ? leftVariable->toString() : "?")
+                + " " + getStringOp() + " "
+                + (rightVariable ? rightVariable.get()->toString() : "?");
 	}
 
     inline virtual MathematicOperable* clone() const {

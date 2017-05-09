@@ -35,7 +35,9 @@ ElectrophoresisOperation::~ElectrophoresisOperation() {
 
 std::string ElectrophoresisOperation::toText() {
     return std::to_string(containerID) + "[label=\"" + dataReference->toString() +" = electrophoresis("
-            + sourceId + ", " + fieldStrength.get()->toString() + ")\"];";
+            + sourceId + ", "
+            + (fieldStrength ? fieldStrength->toString() : "?")
+            + ")\"];";
 }
 
 void ElectrophoresisOperation::execute(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument) {
