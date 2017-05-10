@@ -241,6 +241,11 @@ public:
     inline int getNextAvailableNodeId() const {
         return nodeSerie.getValue();
     }
+
+    inline const std::unordered_map<std::string, std::shared_ptr<VirtualContainer>> & getVContainerMap() {
+        return vcontainerMap;
+    }
+
 protected:
 	int idStart;
 	std::string name;
