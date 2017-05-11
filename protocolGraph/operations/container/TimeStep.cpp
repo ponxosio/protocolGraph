@@ -30,6 +30,7 @@ std::string TimeStep::toText() {
 }
 
 void TimeStep::execute(ActuatorsExecutionInterface* actuatorsInterface) throw(std::invalid_argument)  {
-    units::Time time = actuatorsInterface->timeStep();
-    receiver->setValue(receiver->getValue() + Utils::toDefaultUnits(time));
+    units::Time time = Utils::toDefaultUnits(actuatorsInterface->timeStep());
+    double newTimeValue = Utils::pround(receiver->getValue() + time(), 5); //set precision to 5 decimals, avoid floating point representation erros in the time variable.
+    receiver->setValue(newTimeValue);
 }
