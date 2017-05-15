@@ -48,6 +48,6 @@ void ElectrophoresisOperation::finish(ActuatorsExecutionInterface* actuatorInter
     saveElectrophoresisResult(actuatorInterface->stopElectrophoresis(sourceId), dataReference);
 }
 
-void ElectrophoresisOperation::saveElectrophoresisResult(const ElectrophoresisResult & result, std::shared_ptr<VariableEntry> dataReference) {
+void ElectrophoresisOperation::saveElectrophoresisResult(std::shared_ptr<ElectrophoresisResult> result, std::shared_ptr<VariableEntry> dataReference) {
     //TODO:
 }

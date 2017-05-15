@@ -5,12 +5,12 @@
 #include <string>
 
 //local
-#include "protocolGraph/execution_interface/electrophoresisresult.h"
 #include "protocolGraph/operables/mathematics/MathematicOperable.h"
 #include "protocolGraph/operables/mathematics/VariableEntry.h"
 #include "protocolGraph/operations/container/finishableoperation.h"
 
 //units
+#include <utils/electrophoresisresult.h>
 #include <utils/units.h>
 
 #include "protocolGraph/protocolgraph_global.h"
@@ -41,7 +41,7 @@ protected:
     units::ElectricField fieldUnits;
     std::shared_ptr<VariableEntry> dataReference;
 
-    void saveElectrophoresisResult(const ElectrophoresisResult & result, std::shared_ptr<VariableEntry> dataReference);
+    void saveElectrophoresisResult(std::shared_ptr<ElectrophoresisResult> result, std::shared_ptr<VariableEntry> dataReference);
 };
 
 #endif // ELECTROPHORESISOPERATION_H

@@ -73,7 +73,6 @@ HEADERS += protocolGraph/protocolgraph_global.h \
     protocolGraph/operations/container/finishoperation.h \
     protocolGraph/operations/container/finishableoperation.h \
     protocolGraph/operations/container/electrophoresisoperation.h \
-    protocolGraph/execution_interface/electrophoresisresult.h \
     protocolGraph/operations/container/centrifugateoperation.h \
     protocolGraph/operations/container/shakeoperation.h \
     protocolGraph/operations/container/measurefluorescence.h \
