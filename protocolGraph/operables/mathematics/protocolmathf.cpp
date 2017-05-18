@@ -84,7 +84,7 @@ std::shared_ptr<MathematicOperable> ProtocolMathF::abs(std::shared_ptr<Mathemati
     if (op == NULL) {
         return NULL;
     } else {
-        return std::make_shared<UnaryOperation>(op, UnaryOperation::absoluteValue);
+        return std::make_shared<ProtocolUnaryOperation>(op, ProtocolUnaryOperation::absoluteValue);
     }
 }
 
@@ -92,7 +92,7 @@ std::shared_ptr<MathematicOperable> ProtocolMathF::floor(std::shared_ptr<Mathema
     if (op == NULL) {
         return NULL;
     } else {
-        return std::make_shared<UnaryOperation>(op, UnaryOperation::floor);
+        return std::make_shared<ProtocolUnaryOperation>(op, ProtocolUnaryOperation::floor);
     }
 }
 
@@ -100,7 +100,7 @@ std::shared_ptr<MathematicOperable> ProtocolMathF::round(std::shared_ptr<Mathema
     if (op == NULL) {
         return NULL;
     } else {
-        return std::make_shared<UnaryOperation>(op, UnaryOperation::round);
+        return std::make_shared<ProtocolUnaryOperation>(op, ProtocolUnaryOperation::round);
     }
 }
 
@@ -108,7 +108,7 @@ std::shared_ptr<MathematicOperable> ProtocolMathF::ceiling(std::shared_ptr<Mathe
     if (op == NULL) {
         return NULL;
     } else {
-        return std::make_shared<UnaryOperation>(op, UnaryOperation::ceiling);
+        return std::make_shared<ProtocolUnaryOperation>(op, ProtocolUnaryOperation::ceiling);
     }
 }
 
@@ -116,7 +116,7 @@ std::shared_ptr<MathematicOperable> ProtocolMathF::log10(std::shared_ptr<Mathema
     if (op == NULL) {
         return NULL;
     } else {
-        return std::make_shared<UnaryOperation>(op, UnaryOperation::log10);
+        return std::make_shared<ProtocolUnaryOperation>(op, ProtocolUnaryOperation::log10);
     }
 }
 
@@ -124,7 +124,7 @@ std::shared_ptr<MathematicOperable> ProtocolMathF::ln(std::shared_ptr<Mathematic
     if (op == NULL) {
         return NULL;
     } else {
-        return std::make_shared<UnaryOperation>(op, UnaryOperation::ln);
+        return std::make_shared<ProtocolUnaryOperation>(op, ProtocolUnaryOperation::ln);
     }
 }
 
@@ -132,7 +132,7 @@ std::shared_ptr<MathematicOperable> ProtocolMathF::exp_e(std::shared_ptr<Mathema
     if (op == NULL) {
         return NULL;
     } else {
-        return std::make_shared<UnaryOperation>(op, UnaryOperation::exp_e);
+        return std::make_shared<ProtocolUnaryOperation>(op, ProtocolUnaryOperation::exp_e);
     }
 }
 
@@ -140,7 +140,7 @@ std::shared_ptr<MathematicOperable> ProtocolMathF::exp_10(std::shared_ptr<Mathem
     if (op == NULL) {
         return NULL;
     } else {
-        return std::make_shared<UnaryOperation>(op, UnaryOperation::exp_10);
+        return std::make_shared<ProtocolUnaryOperation>(op, ProtocolUnaryOperation::exp_10);
     }
 }
 
@@ -148,7 +148,7 @@ std::shared_ptr<MathematicOperable> ProtocolMathF::minus(std::shared_ptr<Mathema
     if (op == NULL) {
         return NULL;
     } else {
-        return std::make_shared<UnaryOperation>(op, UnaryOperation::minus);
+        return std::make_shared<ProtocolUnaryOperation>(op, ProtocolUnaryOperation::minus);
     }
 }
 
@@ -156,7 +156,7 @@ std::shared_ptr<MathematicOperable> ProtocolMathF::sin_op(std::shared_ptr<Mathem
     if (op == NULL) {
         return NULL;
     } else {
-        return std::make_shared<UnaryOperation>(op, UnaryOperation::sin_op);
+        return std::make_shared<ProtocolUnaryOperation>(op, ProtocolUnaryOperation::sin_op);
     }
 }
 
@@ -164,7 +164,7 @@ std::shared_ptr<MathematicOperable> ProtocolMathF::cos_op(std::shared_ptr<Mathem
     if (op == NULL) {
         return NULL;
     } else {
-        return std::make_shared<UnaryOperation>(op, UnaryOperation::cos_op);
+        return std::make_shared<ProtocolUnaryOperation>(op, ProtocolUnaryOperation::cos_op);
     }
 }
 
@@ -172,7 +172,7 @@ std::shared_ptr<MathematicOperable> ProtocolMathF::tan_op(std::shared_ptr<Mathem
     if (op == NULL) {
         return NULL;
     } else {
-        return std::make_shared<UnaryOperation>(op, UnaryOperation::tan_op);
+        return std::make_shared<ProtocolUnaryOperation>(op, ProtocolUnaryOperation::tan_op);
     }
 }
 
@@ -180,7 +180,7 @@ std::shared_ptr<MathematicOperable> ProtocolMathF::asin_op(std::shared_ptr<Mathe
     if (op == NULL) {
         return NULL;
     } else {
-        return std::make_shared<UnaryOperation>(op, UnaryOperation::asin_op);
+        return std::make_shared<ProtocolUnaryOperation>(op, ProtocolUnaryOperation::asin_op);
     }
 }
 
@@ -188,7 +188,7 @@ std::shared_ptr<MathematicOperable> ProtocolMathF::acos_op(std::shared_ptr<Mathe
     if (op == NULL) {
         return NULL;
     } else {
-        return std::make_shared<UnaryOperation>(op, UnaryOperation::acos_op);
+        return std::make_shared<ProtocolUnaryOperation>(op, ProtocolUnaryOperation::acos_op);
     }
 }
 
@@ -196,7 +196,7 @@ std::shared_ptr<MathematicOperable> ProtocolMathF::atan_op(std::shared_ptr<Mathe
     if (op == NULL) {
         return NULL;
     } else {
-        return std::make_shared<UnaryOperation>(op, UnaryOperation::atan_op);
+        return std::make_shared<ProtocolUnaryOperation>(op, ProtocolUnaryOperation::atan_op);
     }
 }
 

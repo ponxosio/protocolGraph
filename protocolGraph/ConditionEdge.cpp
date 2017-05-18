@@ -38,7 +38,7 @@ bool ConditionEdge::hasCondition(ComparisonOperable* comparison) {
     return this->comparison.get()->equals(comparison);
 }
 
-bool ConditionEdge::equals(const Edge& e) {
+bool ConditionEdge::equals(const Edge& e) const {
 	bool vuelta = false;
 	if (Utils::IsType<ConditionEdge, Edge> (&e)) {
 		const ConditionEdge* cast = dynamic_cast<const ConditionEdge*>(&e);

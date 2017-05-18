@@ -21,7 +21,6 @@
  */
 class CONDITIONEDGE_EXPORT ConditionEdge: public Edge {
 public:
-
 	//Obligatory constructors if is derived from NODE
 	ConditionEdge();
 	ConditionEdge(const ConditionEdge & edge);
@@ -57,9 +56,14 @@ public:
 	 * @param e other edge to compare
 	 * @return true if the edges are equal, false otherwise
 	 */
-	virtual bool equals(const Edge& e);
+    virtual bool equals(const Edge& e) const;
 
 	virtual std::string toText();
+
+    inline bool operator== ( const ConditionEdge & n) const
+    {
+            return this->equals(n);
+    }
 protected:
 	std::shared_ptr<ComparisonOperable> comparison;
 

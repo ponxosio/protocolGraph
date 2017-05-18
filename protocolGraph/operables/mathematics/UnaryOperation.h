@@ -37,7 +37,7 @@
 
 #include "protocolGraph/protocolgraph_global.h"
 
-class UNARYOPERATION_EXPORT UnaryOperation: public MathematicOperable {
+class UNARYOPERATION_EXPORT ProtocolUnaryOperation: public MathematicOperable {
 public:
     /*** Enum for the type of unary operator ***/
     typedef enum UnaryOperator_ {
@@ -59,11 +59,11 @@ public:
         atan_op
     }UnaryOperator;
 
-	UnaryOperation();
-    UnaryOperation(const UnaryOperation & uop);
-    UnaryOperation(std::shared_ptr<MathematicOperable> variable, UnaryOperator op);
+    ProtocolUnaryOperation();
+    ProtocolUnaryOperation(const ProtocolUnaryOperation & uop);
+    ProtocolUnaryOperation(std::shared_ptr<MathematicOperable> variable, UnaryOperator op);
 
-	virtual ~UnaryOperation();
+    virtual ~ProtocolUnaryOperation();
 
 	/**
 	 * Returns the numeric value of the variable
@@ -87,7 +87,7 @@ public:
 	}
 
     inline virtual MathematicOperable* clone() const {
-        return new UnaryOperation(*this);
+        return new ProtocolUnaryOperation(*this);
     }
 protected:
 	std::shared_ptr<MathematicOperable> variable;

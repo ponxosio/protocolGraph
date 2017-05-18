@@ -7,27 +7,27 @@
 
 #include "UnaryOperation.h"
 
-UnaryOperation::UnaryOperation() {
+ProtocolUnaryOperation::ProtocolUnaryOperation() {
 	this->variable = shared_ptr<MathematicOperable>();
     this->op = absoluteValue;
 }
 
-UnaryOperation::UnaryOperation(const UnaryOperation & uop) {
+ProtocolUnaryOperation::ProtocolUnaryOperation(const ProtocolUnaryOperation & uop) {
     this->variable = uop.variable;
     this->op = uop.op;
 }
 
-UnaryOperation::UnaryOperation(std::shared_ptr<MathematicOperable> variable, UnaryOperator op) {
+ProtocolUnaryOperation::ProtocolUnaryOperation(std::shared_ptr<MathematicOperable> variable, UnaryOperator op) {
 	this->variable = variable;
 	this->op = op;
 }
 
-UnaryOperation::~UnaryOperation() 
+ProtocolUnaryOperation::~ProtocolUnaryOperation() 
 {
 
 }
 
-double UnaryOperation::getValue() const throw (std::invalid_argument)  {
+double ProtocolUnaryOperation::getValue() const throw (std::invalid_argument)  {
 	MathematicOperable* value = variable.get();
 
     double vuelta = 0.0;
@@ -88,21 +88,21 @@ double UnaryOperation::getValue() const throw (std::invalid_argument)  {
 	return vuelta;
 }
 
-bool UnaryOperation::isPhysical() const throw (std::invalid_argument) {
+bool ProtocolUnaryOperation::isPhysical() const throw (std::invalid_argument) {
 	return (variable.get()->isPhysical());
 }
 
-bool UnaryOperation::equal(const MathematicOperable* obj) const {
+bool ProtocolUnaryOperation::equal(const MathematicOperable* obj) const {
 	bool vuelta = false;
-	if (Utils::IsType<UnaryOperation, MathematicOperable>(obj)) {
-		const UnaryOperation* cast = dynamic_cast<const UnaryOperation*>(obj);
+	if (Utils::IsType<ProtocolUnaryOperation, MathematicOperable>(obj)) {
+		const ProtocolUnaryOperation* cast = dynamic_cast<const ProtocolUnaryOperation*>(obj);
 		vuelta = ((this->variable.get()->equal(cast->variable.get()))
 				&& (this->op == cast->op));
 	}
 	return vuelta;
 }
 
-std::string UnaryOperation::getStringOp() const{
+std::string ProtocolUnaryOperation::getStringOp() const{
 	std::string vuelta;
 	switch (this->op) {
     case UnaryOperator::absoluteValue:
