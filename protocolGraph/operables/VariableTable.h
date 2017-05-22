@@ -19,6 +19,9 @@
 #include <tuple>
 #include <unordered_map>
 
+#include <utils/memento.h>
+
+#include "protocolGraph/operables/variablestate.h"
 #include "protocolGraph/protocolgraph_global.h"
 
 /**
@@ -46,6 +49,12 @@ public:
 	 * @return true if te variable stores physical data, false otherwise
 	 */
 	bool getPhysical(const std::string & name) throw (std::invalid_argument);
+    /**
+     * @brief hasBeenWritten
+     * @param name
+     * @return
+     */
+    bool hasBeenWritten(const std::string & name);
 	/**
 	 * Change the value of a given entry of the table, creating it if the name does not exists
 	 * @param name key of the entry to be changed
@@ -58,6 +67,29 @@ public:
 	 * @param physical flag that indicates that a variable stores a physical property of the machine
 	 */
 	void setPhysical(const std::string & name, bool physical);
+    /**
+     * @brief setHasBeenWritten
+     * @param name
+     * @param hasBeenWritten
+     */
+    void setHasBeenWritten(const std::string & name, bool hasBeenWritten);
+    /**
+     * @brief setIsWritable
+     * @param name
+     * @param isWritable
+     */
+    void setIsWritable(const std::string & name, bool isWritable);
+
+    /**
+     * @brief createMemento follows the memento pattern, creates a new copy state of the class
+     * @return the copy state of the class
+     */
+    std::shared_ptr<Memento<VariableTable>> createMemento() const;
+    /**
+     * @brief restoreMememnto flows the memento pattern, restore a past state of the class
+     * @param memento memento obj with the pass state
+     */
+    void restoreMememnto(const Memento<VariableTable> & memento);
 	/**
 	 * Clears all variables at the table
 	 */
@@ -72,6 +104,8 @@ public:
 		return (table.find(key) != table.end());
 	}
 protected:
-	std::unordered_map<std::string, std::tuple<double,bool>> table;
+    std::unordered_map<std::string, VariableState> table;
+
+    void restoreVariableTable(const VariableTable & pastTable);
 };
 #endif /* SRC_OPERABLES_VARIABLETABLE_H_ */

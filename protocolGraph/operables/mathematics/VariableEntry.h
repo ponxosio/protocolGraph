@@ -62,11 +62,39 @@ public:
 	 * @param value
 	 */
     void setValue(double value) const throw (std::invalid_argument);
+
 	/**
 	 * Sets the physical flag of this variable at the variable table to the given value
 	 * @param value
 	 */
     void setPhysical(bool physical) const throw (std::invalid_argument);
+    /**
+     * @brief clearHasBeenWritten
+     */
+    inline void clearHasBeenWritten() {
+        variableTable->setHasBeenWritten(name, false);
+    }
+    /**
+     * @brief hasBeenWritten
+     * @param name
+     * @return
+     */
+    inline bool hasBeenWritten() const {
+        return variableTable->hasBeenWritten(name);
+    }
+    /**
+     * @brief blockVariable
+     */
+    inline void blockVariable() {
+        this->variableTable->setIsWritable(name, false);
+    }
+    /**
+     * @brief unblockVariable
+     */
+    inline void unblockVariable() {
+        this->variableTable->setIsWritable(name, true);
+    }
+
     /**
      * @brief toString returns the name of the variable
      * @return a constant reference to the name of the variable

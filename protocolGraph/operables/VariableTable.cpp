@@ -10,7 +10,7 @@
 using namespace std;
 
 VariableTable::VariableTable() {
-	table = unordered_map<string,  std::tuple<double,bool>>();
+
 }
 
 VariableTable::VariableTable(const VariableTable & varTable) :
@@ -28,7 +28,7 @@ double VariableTable::getVaue(const std::string& name)
 	double vuelta = 0.0;
 	auto entry = table.find(name);
 	if (entry != table.end()) {
-		vuelta = std::get<0>(entry->second);
+        vuelta =entry->second.getValue();
 	} else {
 		throw(invalid_argument("the key:\"" + name + "\" does not exits"));
 	}
@@ -41,27 +41,92 @@ bool VariableTable::getPhysical(const std::string& name)
 	bool vuelta = false;
 	auto entry = table.find(name);
 	if (entry != table.end()) {
-		vuelta = std::get<1>(entry->second);
+        vuelta = entry->second.getIsPhysical();
 	} else {
 		throw(invalid_argument("the key:\"" + name + "\" does not exits"));
 	}
 	return vuelta;
 }
 
+bool VariableTable::hasBeenWritten(const std::string & name) {
+    auto entry = table.find(name);
+    if (entry != table.end()) {
+        return entry->second.getHasBeenWritten();
+    } else {
+        throw(invalid_argument("the key:\"" + name + "\" does not exits"));
+    }
+}
+
 void VariableTable::setValue(const string& name, double value) {
-	auto entry = table.find(name);
+    auto entry = table.find(name);
 	if (entry != table.end()) {
-		get<0>(entry->second) = value;
+        VariableState & state = entry->second;
+        if (state.getIsWritable()) {
+            state.setValue(value);
+        }
+        state.setHasBeenWritten(true);
 	} else {
-		table.insert(make_pair(name, make_tuple(value,false)));
+        VariableState newState;
+        newState.setValue(value);
+        newState.setHasBeenWritten(true);
+
+        table.insert(make_pair(name, newState));
 	}
 }
 
 void VariableTable::setPhysical(const string& name, bool physical) {
 	auto entry = table.find(name);
 	if (entry != table.end()) {
-		get<1>(entry->second) = physical;
+        entry->second.setPhysical(physical);
 	} else {
-		table.insert(make_pair(name, make_tuple(0.0, physical)));
+        VariableState newState;
+        newState.setPhysical(physical);
+
+        table.insert(make_pair(name, newState));
 	}
 }
+
+void VariableTable::setHasBeenWritten(const std::string & name, bool hasBeenWritten) {
+    auto entry = table.find(name);
+    if (entry != table.end()) {
+        entry->second.setHasBeenWritten(hasBeenWritten);
+    } else {
+        VariableState newState;
+        newState.setHasBeenWritten(hasBeenWritten);
+
+        table.insert(make_pair(name, newState));
+    }
+}
+
+void VariableTable::setIsWritable(const std::string & name, bool isWritable) {
+    auto entry = table.find(name);
+    if (entry != table.end()) {
+        entry->second.setWritable(isWritable);
+    } else {
+        VariableState newState;
+        newState.setWritable(isWritable);
+
+        table.insert(make_pair(name, newState));
+    }
+}
+
+std::shared_ptr<Memento<VariableTable>> VariableTable::createMemento() const {
+    return std::make_shared<Memento<VariableTable>>(*this);
+}
+
+void VariableTable::restoreMememnto(const Memento<VariableTable> & memento) {
+    restoreVariableTable(memento.getState());
+}
+
+void VariableTable::restoreVariableTable(const VariableTable & table) {
+    this->table.clear();
+
+    for (auto actualPair : table.table) {
+        this->table.insert(actualPair);
+    }
+}
+
+
+
+
+

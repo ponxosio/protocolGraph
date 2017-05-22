@@ -27,7 +27,7 @@ SetTimeStep::~SetTimeStep() {
 }
 
 std::string SetTimeStep::toText() {
-    return std::to_string(containerID) + "[label=\"SetTimeStep(" + (timeSlice ? std::to_string(timeSlice->getValue()) : "null") + ")\"]";
+    return std::to_string(containerID) + "[label=\"SetTimeStep(" + (timeSlice ? std::to_string(timeSlice->getValue()) : "null") + ")\"];";
 }
 
 void SetTimeStep::execute(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument) {

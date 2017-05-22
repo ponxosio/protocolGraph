@@ -78,7 +78,8 @@ HEADERS += protocolGraph/protocolgraph_global.h \
     protocolGraph/operations/container/measurefluorescence.h \
     protocolGraph/operations/container/measureluminiscence.h \
     protocolGraph/operations/container/measurevolume.h \
-    protocolGraph/operations/container/measuretemperature.h
+    protocolGraph/operations/container/measuretemperature.h \
+    protocolGraph/operables/variablestate.h
 
 SOURCES += \
     protocolGraph/operations/container/ApplyLight.cpp \

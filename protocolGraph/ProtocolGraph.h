@@ -246,6 +246,14 @@ public:
         return vcontainerMap;
     }
 
+    inline std::shared_ptr<Memento<VariableTable>> makeVariableTableStateCopy() const {
+        return varTable->createMemento();
+    }
+
+    inline void restoreVariableTableState(const Memento<VariableTable> & pastState) {
+        varTable->restoreMememnto(pastState);
+    }
+
 protected:
 	int idStart;
 	std::string name;
