@@ -61,8 +61,18 @@ void MeasureOD::execute(ActuatorsExecutionInterface* actuatorInterface) throw(st
                                       wavelength->getValue() * wavelengthUnits);
 }
 
+void MeasureOD::simulate(ActuatorsSimulationInterface* simulateInterface) throw(std::invalid_argument) {
+    simulateInterface->startMeasureOD(sourceId,
+                                      measurmentFrequency, measurmentFrequencyUnits,
+                                      wavelength, wavelengthUnits);
+}
+
 void MeasureOD::finish(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument) {
     receiver.get()->setValue(actuatorInterface->getMeasureOD(sourceId));
+}
+
+void MeasureOD::finish(ActuatorsSimulationInterface* simulateInterface) throw(std::invalid_argument) {
+    receiver.get()->setValue(simulateInterface->getMeasureOD(sourceId));
 }
 
 std::string MeasureOD::toText() {

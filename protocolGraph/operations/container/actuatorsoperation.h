@@ -15,6 +15,7 @@
 
 //local
 #include "protocolGraph/execution_interface/actuatorsexecutioninterface.h"
+#include "protocolGraph/execution_interface/actuatorssimulationinterface.h"
 #include "protocolGraph/operables/mathematics/MathematicOperable.h"
 
 /**
@@ -30,5 +31,6 @@ public:
 
     //pure virtual
     virtual void execute(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument) = 0;
+    virtual void simulate(ActuatorsSimulationInterface* simulationInterface) throw(std::invalid_argument) = 0;
 };
 #endif /* SRC_FLUIDCONTROL_PROTOCOLGRAPH_OPERATIONS_CONTAINER_CONTAINEROPERATION_H_ */

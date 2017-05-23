@@ -12,7 +12,8 @@
 #include"protocolGraph/operables/mathematics/MathematicOperable.h"
 
 class ActuatorsSimulationInterface {
-    virtual ~ActuatorsSimulationInterface();
+public:
+    virtual ~ActuatorsSimulationInterface(){}
 
     virtual void applyLigth(const std::string & sourceId,
                             std::shared_ptr<MathematicOperable> wavelength,

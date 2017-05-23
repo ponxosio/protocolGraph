@@ -41,6 +41,14 @@ void CentrifugateOperation::execute(ActuatorsExecutionInterface* actuatorInterfa
     actuatorInterface->centrifugate(sourceID, speed->getValue() * speedUnits);
 }
 
+void CentrifugateOperation::simulate(ActuatorsSimulationInterface* simulationInterface) throw(std::invalid_argument) {
+    simulationInterface->centrifugate(sourceID, speed, speedUnits);
+}
+
 void CentrifugateOperation::finish(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument) {
     actuatorInterface->stopCentrifugate(sourceID);
+}
+
+void CentrifugateOperation::finish(ActuatorsSimulationInterface* simulationInterface) throw(std::invalid_argument) {
+    simulationInterface->stopCentrifugate(sourceID);
 }

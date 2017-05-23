@@ -41,6 +41,14 @@ void ShakeOperation::execute(ActuatorsExecutionInterface* actuatorInterface) thr
     actuatorInterface->shake(sourceID, shakeValue->getValue() * shakeUnits);
 }
 
+void ShakeOperation::simulate(ActuatorsSimulationInterface* simulationInterface) throw(std::invalid_argument) {
+    simulationInterface->shake(sourceID, shakeValue, shakeUnits);
+}
+
 void ShakeOperation::finish(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument) {
     actuatorInterface->stopShake(sourceID);
+}
+
+void ShakeOperation::finish(ActuatorsSimulationInterface* simulationInterface) throw(std::invalid_argument) {
+    simulationInterface->stopShake(sourceID);
 }

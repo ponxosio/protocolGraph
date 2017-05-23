@@ -19,6 +19,7 @@ public:
 
     //interface implementation
     virtual void execute(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument);
+    virtual void simulate(ActuatorsSimulationInterface* simulationInterface) throw(std::invalid_argument);
 
 protected:
     std::shared_ptr<FinishableOperation> operation;

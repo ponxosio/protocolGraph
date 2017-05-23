@@ -44,6 +44,14 @@ void ApplyTemperature::execute(ActuatorsExecutionInterface* actuatorsInterface) 
     actuatorsInterface->applyTemperature(sourceId, temperature.get()->getValue() * temperatureUnits);
 }
 
+void ApplyTemperature::simulate(ActuatorsSimulationInterface* simulationInterface) throw(std::invalid_argument)  {
+    simulationInterface->applyTemperature(sourceId, temperature, temperatureUnits);
+}
+
 void ApplyTemperature::finish(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument) {
     actuatorInterface->stopApplyTemperature(sourceId);
+}
+
+void ApplyTemperature::finish(ActuatorsSimulationInterface* simulationInterface) throw(std::invalid_argument) {
+    simulationInterface->stopApplyTemperature(sourceId);
 }

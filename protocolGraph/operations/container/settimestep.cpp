@@ -33,3 +33,7 @@ std::string SetTimeStep::toText() {
 void SetTimeStep::execute(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument) {
     actuatorInterface->setTimeStep(timeSlice->getValue() * timeSliceUnits);
 }
+
+void SetTimeStep::simulate(ActuatorsSimulationInterface* simulationInterface) throw(std::invalid_argument) {
+    simulationInterface->setTimeStep(timeSlice->getValue() * timeSliceUnits);
+}

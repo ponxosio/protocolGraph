@@ -39,3 +39,8 @@ void GetVolume::execute(ActuatorsExecutionInterface* actuatorsExecution) throw(s
     units::Volume virtualVolume = actuatorsExecution->getVirtualVolume(sourceId);
     receiver.get()->setValue(Utils::toDefaultUnits(virtualVolume));
 }
+
+void GetVolume::simulate(ActuatorsSimulationInterface* simulationExecution) throw(std::invalid_argument)  {
+    units::Volume virtualVolume = simulationExecution->getVirtualVolume(sourceId);
+    receiver.get()->setValue(Utils::toDefaultUnits(virtualVolume));
+}

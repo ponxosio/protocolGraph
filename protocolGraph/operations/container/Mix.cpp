@@ -76,6 +76,20 @@ void Mix::execute(ActuatorsExecutionInterface* actuatorsInterface) throw(std::in
     opDuration->setValue(Utils::toDefaultUnits(duration));
 }
 
+void Mix::simulate(ActuatorsSimulationInterface* simulationInterface) throw(std::invalid_argument)  {
+    units::Time duration = simulationInterface->mix(
+                            idSource1,
+                            idSource2,
+                            idTarget,
+                            volume1, unitsVolume1,
+                            volume2, unitsVolume2);
+    opDuration->setValue(Utils::toDefaultUnits(duration));
+}
+
 void Mix::finish(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument) {
     actuatorInterface->stopMix(idSource1, idSource2, idTarget);
+}
+
+void Mix::finish(ActuatorsSimulationInterface* simulationInterface) throw(std::invalid_argument) {
+    simulationInterface->stopMix(idSource1, idSource2, idTarget);
 }

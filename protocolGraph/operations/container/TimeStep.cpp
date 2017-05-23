@@ -34,3 +34,9 @@ void TimeStep::execute(ActuatorsExecutionInterface* actuatorsInterface) throw(st
     double newTimeValue = Utils::pround(receiver->getValue() + time(), 5); //set precision to 5 decimals, avoid floating point representation erros in the time variable.
     receiver->setValue(newTimeValue);
 }
+
+void TimeStep::simulate(ActuatorsSimulationInterface* simulationInterface) throw(std::invalid_argument)  {
+    units::Time time = Utils::toDefaultUnits(simulationInterface->timeStep());
+    double newTimeValue = Utils::pround(receiver->getValue() + time(), 5); //set precision to 5 decimals, avoid floating point representation erros in the time variable.
+    receiver->setValue(newTimeValue);
+}

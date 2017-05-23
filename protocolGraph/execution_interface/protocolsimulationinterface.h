@@ -1,6 +1,7 @@
 #ifndef PROTOCOLSIMULATIONINTERFACE_H
 #define PROTOCOLSIMULATIONINTERFACE_H
 
+#include <cstdarg>
 #include <stdexcept>
 
 #include "protocolGraph/execution_interface/actuatorssimulationinterface.h"
@@ -13,9 +14,9 @@ public:
         this->protocol = protocol;
     }
 
-    virtual ~ProtocolSimulatorInterface();
+    virtual ~ProtocolSimulatorInterface(){}
 
-    virtual void simulateProtocol(std::shared_ptr<ActuatorsSimulationInterface> executor) throw (std::runtime_error) = 0;
+    virtual void simulateProtocol(std::shared_ptr<ActuatorsSimulationInterface> executor, int nargs, ...) throw (std::runtime_error) = 0;
 
 protected:
     std::shared_ptr<ProtocolGraph> protocol;

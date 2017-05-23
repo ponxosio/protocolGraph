@@ -58,6 +58,15 @@ void Transfer::execute(ActuatorsExecutionInterface* actuatorInterface) throw(std
     opDuration->setValue(Utils::toDefaultUnits(duration));
 }
 
+void Transfer::simulate(ActuatorsSimulationInterface* simulationInterface) throw(std::invalid_argument)  {
+    units::Time duration = simulationInterface->transfer(idSource, idTarget, volume, volumeUnits);
+    opDuration->setValue(Utils::toDefaultUnits(duration));
+}
+
 void Transfer::finish(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument) {
     actuatorInterface->stopTransfer(idSource, idTarget);
+}
+
+void Transfer::finish(ActuatorsSimulationInterface* simulationInterface) throw(std::invalid_argument) {
+    simulationInterface->stopTransfer(idSource, idTarget);
 }

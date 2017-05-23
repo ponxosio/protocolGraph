@@ -34,7 +34,10 @@ public:
     virtual ~MeasureFluorescence();
 
     virtual void execute(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument);
+    virtual void simulate(ActuatorsSimulationInterface* simulatorInterface) throw(std::invalid_argument);
+
     virtual void finish(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument);
+    virtual void finish(ActuatorsSimulationInterface* simulatorInterface) throw(std::invalid_argument);
 
 protected:
     std::string sourceId;

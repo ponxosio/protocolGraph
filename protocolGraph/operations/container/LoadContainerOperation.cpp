@@ -44,3 +44,7 @@ std::string LoadContainerOperation::toText() {
 void LoadContainerOperation::execute(ActuatorsExecutionInterface* actuatorsInterface) throw(std::invalid_argument)  {
     actuatorsInterface->loadContainer(this->idSource, volume.get()->getValue() * volumeUnits);
 }
+
+void LoadContainerOperation::simulate(ActuatorsSimulationInterface* simulationInterface) throw(std::invalid_argument) {
+    simulationInterface->loadContainer(this->idSource, volume->getValue() * volumeUnits);
+}

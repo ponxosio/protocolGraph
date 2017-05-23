@@ -1,6 +1,7 @@
 #ifndef PROTOCOLEXECUTORINTERFACE_H
 #define PROTOCOLEXECUTORINTERFACE_H
 
+#include <cstdarg>
 #include <stdexcept>
 
 #include "protocolGraph/execution_interface/actuatorsexecutioninterface.h"
@@ -15,10 +16,11 @@ public:
 
     virtual ~ProtocolExecutorInterface(){}
 
-    virtual void executeProtocol(std::shared_ptr<ActuatorsExecutionInterface> executor) throw (std::runtime_error) = 0;
+    virtual void executeProtocol(std::shared_ptr<ActuatorsExecutionInterface> executor,int nargs, ...) throw (std::runtime_error) = 0;
 
 protected:
     std::shared_ptr<ProtocolGraph> protocol;
+
 };
 
 #endif // PROTOCOLEXECUTORINTERFACE_H

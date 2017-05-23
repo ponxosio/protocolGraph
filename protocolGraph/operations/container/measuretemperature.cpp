@@ -41,8 +41,17 @@ void MeasureTemperature::execute(ActuatorsExecutionInterface* actuatorInterface)
     actuatorInterface->startMeasureTemperature(sourceId, measurmentFrequency->getValue() * measurmentFrequencyUnits);
 }
 
+void MeasureTemperature::simulate(ActuatorsSimulationInterface* simulationInterface) throw(std::invalid_argument) {
+    simulationInterface->startMeasureTemperature(sourceId, measurmentFrequency, measurmentFrequencyUnits);
+}
+
 void MeasureTemperature::finish(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument) {
     units::Temperature value = actuatorInterface->getMeasureTemperature(sourceId);
+    receiver->setValue(Utils::toDefaultUnits(value));
+}
+
+void MeasureTemperature::finish(ActuatorsSimulationInterface* simulationInterface) throw(std::invalid_argument) {
+    units::Temperature value = simulationInterface->getMeasureTemperature(sourceId);
     receiver->setValue(Utils::toDefaultUnits(value));
 }
 

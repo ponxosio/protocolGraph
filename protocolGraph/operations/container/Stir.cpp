@@ -45,6 +45,14 @@ void Stir::execute(ActuatorsExecutionInterface* actuatorsInterface) throw(std::i
     actuatorsInterface->stir(sourceId, intensity.get()->getValue() * intensityUnits);
 }
 
+void Stir::simulate(ActuatorsSimulationInterface* simulationInterface) throw(std::invalid_argument) {
+    simulationInterface->stir(sourceId, intensity, intensityUnits);
+}
+
 void Stir::finish(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument) {
     actuatorInterface->stopStir(sourceId);
+}
+
+void Stir::finish(ActuatorsSimulationInterface* simulationInterface) throw(std::invalid_argument) {
+    simulationInterface->stopStir(sourceId);
 }

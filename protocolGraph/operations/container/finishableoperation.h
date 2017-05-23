@@ -13,6 +13,7 @@ public:
 
     //pure virtual
     virtual void finish(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument) = 0;
+    virtual void finish(ActuatorsSimulationInterface* simulationInterface) throw(std::invalid_argument) = 0;
 };
 
 #endif // FINISHABLEOPERATION_H

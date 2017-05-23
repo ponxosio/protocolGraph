@@ -41,8 +41,17 @@ void MeasureVolume::execute(ActuatorsExecutionInterface* actuatorInterface) thro
     actuatorInterface->startMeasureVolume(sourceId, measurmentFrequency->getValue() * measurmentFrequencyUnits);
 }
 
+void MeasureVolume::simulate(ActuatorsSimulationInterface* simulationInterface) throw(std::invalid_argument) {
+    simulationInterface->startMeasureVolume(sourceId, measurmentFrequency, measurmentFrequencyUnits);
+}
+
 void MeasureVolume::finish(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument) {
     units::Volume value = actuatorInterface->getMeasureVolume(sourceId);
+    receiver->setValue(Utils::toDefaultUnits(value));
+}
+
+void MeasureVolume::finish(ActuatorsSimulationInterface* simulationInterface) throw(std::invalid_argument) {
+    units::Volume value = simulationInterface->getMeasureVolume(sourceId);
     receiver->setValue(Utils::toDefaultUnits(value));
 }
 

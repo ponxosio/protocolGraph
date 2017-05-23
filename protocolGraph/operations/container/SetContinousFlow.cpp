@@ -52,6 +52,14 @@ void SetContinousFlow::execute(ActuatorsExecutionInterface* actuatorInterface) t
     actuatorInterface->setContinuosFlow(idSource, idTarget, rate.get()->getValue() * rateUnits);
 }
 
+void SetContinousFlow::simulate(ActuatorsSimulationInterface* simulationInterface) throw(std::invalid_argument)  {
+    simulationInterface->setContinuosFlow(idSource, idTarget, rate, rateUnits);
+}
+
 void SetContinousFlow::finish(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument) {
     actuatorInterface->stopContinuosFlow(idSource, idTarget);
+}
+
+void SetContinousFlow::finish(ActuatorsSimulationInterface* simulationInterface) throw(std::invalid_argument) {
+    simulationInterface->stopContinuosFlow(idSource, idTarget);
 }

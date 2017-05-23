@@ -41,8 +41,17 @@ void MeasureLuminiscence::execute(ActuatorsExecutionInterface* actuatorInterface
     actuatorInterface->startMeasureLuminiscense(sourceId, measurmentFrequency->getValue() * measurmentFrequencyUnits);
 }
 
+void MeasureLuminiscence::simulate(ActuatorsSimulationInterface* simulateInterface) throw(std::invalid_argument) {
+    simulateInterface->startMeasureLuminiscense(sourceId, measurmentFrequency, measurmentFrequencyUnits);
+}
+
 void MeasureLuminiscence::finish(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument) {
     units::LuminousIntensity value = actuatorInterface->getMeasureLuminiscense(sourceId);
+    receiver->setValue(Utils::toDefaultUnits(value));
+}
+
+void MeasureLuminiscence::finish(ActuatorsSimulationInterface* simulateInterface) throw(std::invalid_argument) {
+    units::LuminousIntensity value = simulateInterface->getMeasureLuminiscense(sourceId);
     receiver->setValue(Utils::toDefaultUnits(value));
 }
 

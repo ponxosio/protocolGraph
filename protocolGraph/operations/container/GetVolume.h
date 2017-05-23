@@ -32,6 +32,7 @@ public:
 	virtual ~GetVolume();
 
     virtual void execute(ActuatorsExecutionInterface* actuatorsExecution) throw(std::invalid_argument);
+    virtual void simulate(ActuatorsSimulationInterface* simulationExecution) throw(std::invalid_argument);
 
 protected:
     std::string sourceId;

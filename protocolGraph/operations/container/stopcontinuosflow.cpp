@@ -26,6 +26,10 @@ void StopContinuosFlow::execute(ActuatorsExecutionInterface* actuatorInterface) 
     actuatorInterface->stopContinuosFlow(idSource, idTarget);
 }
 
+void StopContinuosFlow::simulate(ActuatorsSimulationInterface* simulationInterface) throw(std::invalid_argument) {
+    simulationInterface->stopContinuosFlow(idSource, idTarget);
+}
+
 std::string StopContinuosFlow::toText() {
     return std::to_string(containerID) + "[label=\"stopContinousFlow("
             + idSource + ", " + idTarget + ")\"];";

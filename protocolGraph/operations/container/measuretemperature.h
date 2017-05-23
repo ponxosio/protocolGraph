@@ -30,7 +30,10 @@ public:
     virtual ~MeasureTemperature();
 
     virtual void execute(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument);
+    virtual void simulate(ActuatorsSimulationInterface* simulationInterface) throw(std::invalid_argument);
+
     virtual void finish(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument);
+    virtual void finish(ActuatorsSimulationInterface* simulationInterface) throw(std::invalid_argument);
 
 protected:
     std::string sourceId;

@@ -28,7 +28,9 @@ public:
     TimeStep(int containerId, std::shared_ptr<VariableEntry> receiver);
 
 	virtual ~TimeStep();
+
     virtual void execute(ActuatorsExecutionInterface* actuatorsInterface) throw(std::invalid_argument);
+    virtual void simulate(ActuatorsSimulationInterface* simulationInterface) throw(std::invalid_argument);
 
 protected:
 	std::shared_ptr<VariableEntry> receiver;

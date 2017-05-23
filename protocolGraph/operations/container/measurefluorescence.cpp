@@ -69,7 +69,19 @@ void MeasureFluorescence::execute(ActuatorsExecutionInterface* actuatorInterface
                                                 emission->getValue() * emissionUnits);
 }
 
+void MeasureFluorescence::simulate(ActuatorsSimulationInterface* simulatorInterface) throw(std::invalid_argument) {
+    simulatorInterface->startMeasureFluorescence(sourceId,
+                                                measurmentFrequency, measurmentFrequencyUnits,
+                                                excitation, excitationUnits,
+                                                emission, emissionUnits);
+}
+
 void MeasureFluorescence::finish(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument) {
     units::LuminousIntensity value = actuatorInterface->getMeasureFluorescence(sourceId);
+    receiver->setValue(Utils::toDefaultUnits(value));
+}
+
+void MeasureFluorescence::finish(ActuatorsSimulationInterface* simulatorInterface) throw(std::invalid_argument) {
+    units::LuminousIntensity value = simulatorInterface->getMeasureFluorescence(sourceId);
     receiver->setValue(Utils::toDefaultUnits(value));
 }

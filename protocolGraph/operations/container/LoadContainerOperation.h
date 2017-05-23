@@ -31,6 +31,7 @@ public:
 	virtual ~LoadContainerOperation();
 
     virtual void execute(ActuatorsExecutionInterface* actuatorsInterface) throw(std::invalid_argument);
+    virtual void simulate(ActuatorsSimulationInterface* simulationInterface) throw(std::invalid_argument);
 
 protected:
     std::string idSource;

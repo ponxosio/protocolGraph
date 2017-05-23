@@ -56,6 +56,14 @@ void ApplyLight::execute(ActuatorsExecutionInterface* actuatorInterface) throw(s
     actuatorInterface->applyLigth(sourceId, wavelength.get()->getValue() * wavelengthUnits, intensity.get()->getValue() * intensityUnits);
 }
 
+void ApplyLight::simulate(ActuatorsSimulationInterface* simulationInterface) throw(std::invalid_argument)  {
+    simulationInterface->applyLigth(sourceId, wavelength, wavelengthUnits, intensity, intensityUnits);
+}
+
 void ApplyLight::finish(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument) {
     actuatorInterface->stopApplyLigth(sourceId);
+}
+
+void ApplyLight::finish(ActuatorsSimulationInterface* simulationInterface) throw(std::invalid_argument) {
+    simulationInterface->stopApplyLigth(sourceId);
 }

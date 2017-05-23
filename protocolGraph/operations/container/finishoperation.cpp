@@ -32,3 +32,7 @@ std::string FinishOperation::toText() {
 void FinishOperation::execute(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument) {
     operation->finish(actuatorInterface);
 }
+
+void FinishOperation::simulate(ActuatorsSimulationInterface* simulationInterface) throw(std::invalid_argument) {
+    operation->finish(simulationInterface);
+}

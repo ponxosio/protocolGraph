@@ -44,8 +44,16 @@ void ElectrophoresisOperation::execute(ActuatorsExecutionInterface* actuatorInte
     actuatorInterface->startElectrophoresis(sourceId, fieldStrength->getValue() * fieldUnits);
 }
 
+void ElectrophoresisOperation::simulate(ActuatorsSimulationInterface* simulatorInterface) throw(std::invalid_argument) {
+    simulatorInterface->startElectrophoresis(sourceId, fieldStrength, fieldUnits);
+}
+
 void ElectrophoresisOperation::finish(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument) {
     saveElectrophoresisResult(actuatorInterface->stopElectrophoresis(sourceId), dataReference);
+}
+
+void ElectrophoresisOperation::finish(ActuatorsSimulationInterface* simulatorInterface) throw(std::invalid_argument) {
+    saveElectrophoresisResult(simulatorInterface->stopElectrophoresis(sourceId), dataReference);
 }
 
 void ElectrophoresisOperation::saveElectrophoresisResult(std::shared_ptr<ElectrophoresisResult> result, std::shared_ptr<VariableEntry> dataReference) {

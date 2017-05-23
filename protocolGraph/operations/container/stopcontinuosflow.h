@@ -23,6 +23,7 @@ public:
     virtual ~StopContinuosFlow();
 
     virtual void execute(ActuatorsExecutionInterface* actuatorInterface) throw(std::invalid_argument);
+    virtual void simulate(ActuatorsSimulationInterface* simulationInterface) throw(std::invalid_argument);
 
 protected:
     std::string idSource;
