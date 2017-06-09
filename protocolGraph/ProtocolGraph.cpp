@@ -49,7 +49,7 @@ int ProtocolGraph::emplaceAssignation(const std::string & receiver, std::shared_
     int nextId = nodeSerie.getNextValue();
 
     std::shared_ptr<VariableEntry> receiverPtr = getVariableEntry(receiver);
-    //receiverPtr->setPhysical(value->isPhysical() || checkControlStackIsPhysical());
+    receiverPtr->setPhysical(value->isPhysical() /*|| checkControlStackIsPhysical()*/);
 
     std::shared_ptr<Node> nodePtr = std::make_shared<AssignationOperation>(nextId, receiverPtr, value);
     graph->addNode(nodePtr);
