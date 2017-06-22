@@ -134,6 +134,7 @@ debug {
 
 !debug {
     QMAKE_POST_LINK=X:\protocolGraph\protocolGraph\setDLL.bat $$shell_path($$OUT_PWD/release) release
+
     INCLUDEPATH += X:\utils\dll_release\include
     LIBS += -L$$quote(X:\utils\dll_release\bin) -lutils
 }
