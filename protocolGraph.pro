@@ -128,6 +128,7 @@ SOURCES += \
 
 debug {
     QMAKE_POST_LINK=X:\protocolGraph\protocolGraph\setDLL.bat $$shell_path($$OUT_PWD/debug) debug
+
     INCLUDEPATH += X:\utils\dll_debug\include
     LIBS += -L$$quote(X:\utils\dll_debug\bin) -lutils
 }
