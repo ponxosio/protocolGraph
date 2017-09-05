@@ -10,7 +10,7 @@
 ApplyTemperature::ApplyTemperature() : FinishableOperation() {
 	this->sourceId = -1;
 	this->temperature = std::shared_ptr<MathematicOperable>();
-    this->temperatureUnits = units::K;
+    this->temperatureUnits = units::C;
 }
 
 ApplyTemperature::ApplyTemperature(const ApplyTemperature& node) : FinishableOperation(node) {
