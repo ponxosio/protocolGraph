@@ -3,6 +3,7 @@
 
 #include "protocolGraph/operables/comparison/ComparisonOperable.h"
 #include "protocolGraph/operables/mathematics/ArithmeticOperation.h"
+#include "protocolGraph/operables/mathematics/arithmeticarrayoperation.h"
 #include "protocolGraph/operables/mathematics/ConstantNumber.h"
 #include "protocolGraph/operables/mathematics/MathematicOperable.h"
 #include "protocolGraph/operables/mathematics/randomfraction.h"
@@ -49,6 +50,12 @@ public:
     static std::shared_ptr<MathematicOperable> test(std::shared_ptr<ComparisonOperable> condition,
                                                     std::shared_ptr<MathematicOperable> trueValue,
                                                     std::shared_ptr<MathematicOperable> falseValue);
+
+    static std::shared_ptr<MathematicOperable> tryAddNumbers(std::shared_ptr<MathematicOperable> op1, std::shared_ptr<MathematicOperable> op2);
+    static std::shared_ptr<MathematicOperable> addNumbers(std::shared_ptr<ConstantNumber> op1, std::shared_ptr<ConstantNumber> op2);
+
+    static std::shared_ptr<MathematicOperable> tryMaxNumbers(const std::vector<std::shared_ptr<MathematicOperable>> & ops);
+    static std::shared_ptr<MathematicOperable> maxNumbers(std::shared_ptr<ConstantNumber> op1, std::shared_ptr<ConstantNumber> op2);
 };
 
 #endif // PROTOCOLMATHF_H

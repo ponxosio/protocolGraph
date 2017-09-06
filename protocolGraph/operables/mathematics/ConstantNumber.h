@@ -23,6 +23,7 @@
 class CONSTANTNUMBER_EXPORT ConstantNumber: public MathematicOperable {
 public:
     static const double INFINITE;
+    static const double M_INFINITE;
     static std::shared_ptr<ConstantNumber> getInfinite();
 
 	ConstantNumber();

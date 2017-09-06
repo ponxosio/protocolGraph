@@ -83,7 +83,8 @@ HEADERS += protocolGraph/protocolgraph_global.h \
     protocolGraph/execution_interface/actuatorssimulationinterface.h \
     protocolGraph/execution_interface/protocolexecutorinterface.h \
     protocolGraph/execution_interface/protocolsimulationinterface.h \
-    protocolGraph/execution_interface/generalprotocolexecutor.h
+    protocolGraph/execution_interface/generalprotocolexecutor.h \
+    protocolGraph/operables/mathematics/arithmeticarrayoperation.h
 
 SOURCES += \
     protocolGraph/operations/container/ApplyLight.cpp \
@@ -124,7 +125,8 @@ SOURCES += \
     protocolGraph/operations/container/measureluminiscence.cpp \
     protocolGraph/operations/container/measurevolume.cpp \
     protocolGraph/operations/container/measuretemperature.cpp \
-    protocolGraph/execution_interface/generalprotocolexecutor.cpp
+    protocolGraph/execution_interface/generalprotocolexecutor.cpp \
+    protocolGraph/operables/mathematics/arithmeticarrayoperation.cpp
 
 debug {
     QMAKE_POST_LINK=X:\protocolGraph\protocolGraph\setDLL.bat $$shell_path($$OUT_PWD/debug) debug
